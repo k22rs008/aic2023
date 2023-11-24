@@ -10,13 +10,13 @@ SELECT r.*, f.*, u.uname, u.urole, t.uid as master_uid , t.name as master_name
     FROM tbl_facility f, tbl_reserve_test r, tbl_user u, tbl_teacher t 
     WHERE r.facility_id = f.id AND r.uid=u.uid AND t.uid=master_user
 -- 
--- 学部・学科のテーブル化（KsuCode->tbl_code）
+-- 学部・学科等コードのテーブル化（KsuCode->tbl_code）
 CREATE TABLE tbl_code(
     id SERIAL PRIMARY KEY, -- 主キー。主に管理用（編集・削除）
     genre INT NOT NULL, -- 種類、複数種類のコードがあるため
     cd  VARCHAR(16) NOT NULL, -- コード
     val VARCHAR(32) NOT NULL, -- 値
-    ref VARCHAR(16) -- 参照。関連するほかのコードへ参照　　
+    ref VARCHAR(16) -- 参照。上位コードへの参照　
 );
 -- 
 INSERT INTO tbl_code(genre, cd, val, ref) VALUES
