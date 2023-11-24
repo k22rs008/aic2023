@@ -1,0 +1,45 @@
+footer {
+  position: fixed;
+  height: auto;
+  bottom: 0;
+  width: 100%;
+}
+
+.wrapper {
+    margin-right: auto; 
+    margin-left:  auto; 
+    max-width: 960px;  
+    padding-right: 10px; 
+    padding-left:  10px; 
+  }
+  #navbar {
+    background-color: darkgray;
+    color: white;
+    text-align: right;
+    vertical-align:middle;
+    min-height: 20pt;
+  }
+
+  textarea {
+    resize: none;
+    width: 240px;
+    height: 60px;
+  }
+
+  .vis-item.red {
+    color: white;
+    background-color:rgb(255, 72, 72);
+    border-color: darkred;
+  }
+
+  .vis-item.blue {
+    color: white;
+    background-color: lightblue;
+    border-color: lightblue;
+  }
+
+  .vis-item.green {
+    color: white;
+    background-color:rgb(110, 246, 119);
+    border-color: rgb(1, 138, 44);
+  }
