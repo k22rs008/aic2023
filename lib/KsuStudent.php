@@ -37,12 +37,11 @@ class KsuStudent{
     public static function validateSid($str)
     {
         $str = preg_replace("/( |　)/", "", trim($str) );//空白文字を削除
-        if (!preg_match("/^[a-zA-Z0-9ａ-ｚA-Z０-９]+$/", $str)){ 
-            return null;// 英数以外の文字が含まれるなら，無効
-        }
         $str = mb_convert_kana($str, "a");//全角英数を半角英数へ変換
         $str = strtoupper($str);//小文字を大文字に変換
-   
+        if (!preg_match("/^[A-Z0-9]+$/", $str)){ 
+            return null;// 英数以外の文字が含まれるなら，無効
+        }   
         $pattern = implode('|',array_keys(KsuCode::FACULTY_DEPT));//学部IDのパターン
         if (preg_match('/^\d{2}('. $pattern . ')\d{3}$/', $str)){
             return $str;
