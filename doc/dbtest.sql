@@ -72,7 +72,7 @@ INSERT INTO tbl_code(genre, cd, val, ref) VALUES
 (3, 'DKK', '国際文化研究科 国際文化専攻', NULL),
 -- 
 -- genre 二桁以降：人以外、主に物やことに関するコード
--- 
+-- 「その他」は、追加等を見込んで少し離れた番号にする
 -- 申請状態 genre = 10
 (10, '1', '申請中', NULL),
 (10, '2', '審査中', NULL),
@@ -91,7 +91,7 @@ INSERT INTO tbl_code(genre, cd, val, ref) VALUES
 -- 機器状態  genre = 20
 (20, '1', '使用可', NULL),
 (20, '2', '修理中', NULL),
--- 
+
 -- 試料状態  genre = 30
 (30, '1', '固体', NULL),
 (30, '2', '液体', NULL),
@@ -101,4 +101,4 @@ INSERT INTO tbl_code(genre, cd, val, ref) VALUES
 (31, '1', '爆発性', NULL),
 (31, '2', '毒性', NULL),
 (31, '3', '腐食性', NULL),
-(21, '9', 'その他', NULL);
+(31, '9', 'その他', NULL);
