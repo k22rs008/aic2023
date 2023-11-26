@@ -100,7 +100,10 @@ function groupReservationsByDate($reservations, $selectedDate, $facilityID)
     return $groupedReservations;
 }
    
-  $sql = "SELECT * FROM tbl_reserve_test WHERE facility_id = '{$facility_id}'";
+  // $sql = "SELECT * FROM tbl_reserve_test WHERE facility_id = '{$facility_id}'";
+  $sql = "SELECT r.*, u.uname AS master_name FROM tbl_reserve_test r, tbl_user u  
+  WHERE stime>='{$str_selectedDate} 0:00' AND etime<='{$str_selectedDate} 23:59' 
+  AND facility_id={$facility_id} AND u.uid=r.master_user ORDER BY stime";
   $rs = $conn->query($sql);
   if (!$rs) die('エラー: ' . $conn->error);
 
