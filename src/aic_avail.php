@@ -27,14 +27,6 @@ echo '<p><img src="img/facility/'. $row['id'] .'.webp" height="240" class="img-r
 echo '<h3 class="bg-info">'. $fname .'</h3>';
 echo '<p>' .$row['note'].'</p>';
 
-// 機器ごとに予約情報を表示
-echo '<p>';
-echo '<a href="?do=aic_avail&facility_id='.$row['id'].'&date=' . date("Y-m-d", strtotime("-7 days", strtotime($selectedDate))) . '"><button class="btn btn-primary">1週間前</button></a> ';
-echo '<a href="?do=aic_avail&facility_id='.$row['id'].'&date=' . date("Y-m-d", strtotime("-1 day", strtotime($selectedDate))) . '"><button class="btn btn-primary">前の日</button></a> ';
-echo '<a href="?do=aic_avail&facility_id='.$row['id'].'&date=' . date("Y-m-d", strtotime("+1 day", strtotime($selectedDate))) . '"><button class="btn btn-primary">次の日</button></a> ';
-echo '<a href="?do=aic_avail&facility_id='.$row['id'].'&date=' . date("Y-m-d", strtotime("+7 days", strtotime($selectedDate))) . '"><button class="btn btn-primary">1週間後</button></a>';
-echo '</p>';
-
 $sql = "SELECT r.*, u.uname AS master_name FROM tbl_reserve_test r, tbl_user u  
   WHERE stime>='{$str_selectedDate} 0:00' AND etime<='{$str_selectedDate} 23:59' 
   AND facility_id={$facility_id} AND u.uid=r.master_user ORDER BY stime";
@@ -135,8 +127,20 @@ function groupReservationsByDate($reservations, $selectedDate, $facilityID)
   
   #print_r($selectedDate);
   #print_r($end_selectedDate);
+  $selected_time = strtotime($selectedDate);
+  $p7 = date("Y-m-d", strtotime("-7 days", $selected_time));
+  $p1 = date("Y-m-d", strtotime("-1 days", $selected_time));
+  $n1 = date("Y-m-d", strtotime("+1 days", $selected_time));
+  $n7 = date("Y-m-d", strtotime("+7 days", $selected_time));
 ?>
-<br/><br/>
+<p>
+<div class="text-left">
+  <a href="?do=aic_avail&facility_id=<?=$facility_id?>&date=<?=$p7?>" class="btn btn-primary">1週間前</a>
+  <a href="?do=aic_avail&facility_id=<?=$facility_id?>&date=<?=$p1?>" class="btn btn-primary">前の日</a>
+  <a href="?do=aic_avail&facility_id=<?=$facility_id?>&date=<?=$n1?>" class="btn btn-primary">次の日</a>
+  <a href="?do=aic_avail&facility_id=<?=$facility_id?>&date=<?=$n7?>" class="btn btn-primary">1週間後</a>
+</div>
+
 <div id="visualization"></div>
 <br/>
 <div>
@@ -206,8 +210,8 @@ function groupReservationsByDate($reservations, $selectedDate, $facilityID)
     }
     
     const options = {
-      start: s_time,  // timeline軸が表す期間の範囲の開始日
-      end: e_time,    // （同）範囲の終了日
+      start: "<?=$selectedDate.' 00:00'?>",  // timeline軸が表す期間の範囲の開始日
+      end:   "<?=$selectedDate.' 23:50'?>",    // （同）範囲の終了日
       width: '100%',  //timelineの表示
       horizontalScroll: true,
       zoomable: false,  

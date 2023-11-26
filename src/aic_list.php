@@ -1,12 +1,12 @@
 <?php
 require_once('db_config.php');
   
-if (isset($_GET['date'])) {
+  if (isset($_GET['date'])) {
     $selectedDate = $_GET['date'];
-    } else {
-        // デフォルトの日付を設定（必要に応じて変更）
-        $selectedDate = date("Y-m-d");
-    }
+  } else {
+    // デフォルトの日付を設定（必要に応じて変更）
+    $selectedDate = date("Y-m-d");
+  }
 
   $end_selectedDate = date("Y-m-d", strtotime("+1 days", strtotime($selectedDate)));
   
@@ -37,8 +37,19 @@ if (isset($_GET['date'])) {
   
   //print_r($selectedDate);
   //print_r($end_selectedDate);
+  $selected_time = strtotime($selectedDate);
+  $p7 = date("Y-m-d", strtotime("-7 days", $selected_time));
+  $p1 = date("Y-m-d", strtotime("-1 days", $selected_time));
+  $n1 = date("Y-m-d", strtotime("+1 days", $selected_time));
+  $n7 = date("Y-m-d", strtotime("+7 days", $selected_time));
 ?>
-
+<div class="text-left">
+  <a href="?do=aic_list&date=<?=$p7?>" class="btn btn-primary">1週間前</a>
+  <a href="?do=aic_list&date=<?=$p1?>" class="btn btn-primary">前の日</a>
+  <a href="?do=aic_list&date=<?=$n1?>" class="btn btn-primary">次の日</a>
+  <a href="?do=aic_list&date=<?=$n7?>" class="btn btn-primary">1週間後</a>
+</div>
+<p>
 <div id="visualization"></div>
 
 <script type = "text/javascript">
@@ -104,9 +115,9 @@ if (isset($_GET['date'])) {
     }
     
     const options = {
-      start: s_time,  // timeline軸が表す期間の範囲の開始日
-      end: e_time,    // （同）範囲の終了日
-      width: '105%', //timelineの表示
+      start: "<?=$selectedDate.' 0:00'?>",  // timeline軸が表す期間の範囲の開始日
+      end: "<?=$selectedDate.' 23:00'?>",    // （同）範囲の終了日
+      width: '100%', //timelineの表示
       horizontalScroll: true,
       zoomable: false,  
       moveable: false,    // timeline chartのzoomを有効にする
