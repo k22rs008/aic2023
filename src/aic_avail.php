@@ -54,16 +54,12 @@ if ($row_cnt) {
       //echo  '<td><a href="?do=rsv_input" class ="btn btn-secondary">予約</a></td>';
       echo  '</tr>';
   }
-
   echo  '</table>';
 }else{
   // 予約がない場合、予約ボタンを表示
   echo '<p class="bg-info">' . $fname. ' ' . $jpdate . ' の予約はありません</p>';
   //echo '<a href="?do=rsv_input&facility_id='. $facility_id .'&date=' . $selectedDate . '"><button onclick="reserveEquipment(' . $facility_id . ', \'' . $selectedDate . '\')" class = btn btn-secondary>予約する</button></a>';
 }
-echo '<a href="?do=rsv_input&facility_id='. $facility_id .
-  '&date=' . $selectedDate . '" class="btn btn-success">予約する</a>';
-
 
 // 予約情報をデータベースに追加する関数
 function reserveEquipment($facilityID, $selectedDate) {
@@ -136,17 +132,16 @@ function groupReservationsByDate($reservations, $selectedDate, $facilityID)
   $n1 = date("Y-m-d", strtotime("+1 days", $selected_time));
   $n7 = date("Y-m-d", strtotime("+7 days", $selected_time));
 ?>
-<p>
 <div class="text-left">
   <a href="?do=aic_avail&facility_id=<?=$facility_id?>&date=<?=$p7?>" class="btn btn-primary">1週間前</a>
   <a href="?do=aic_avail&facility_id=<?=$facility_id?>&date=<?=$p1?>" class="btn btn-primary">前の日</a>
   <a href="?do=aic_avail&facility_id=<?=$facility_id?>&date=<?=$n1?>" class="btn btn-primary">次の日</a>
   <a href="?do=aic_avail&facility_id=<?=$facility_id?>&date=<?=$n7?>" class="btn btn-primary">1週間後</a>
 </div>
-
 <div id="visualization"></div>
-<br/>
 <div>
+  <a href="?do=rsv_input&facility_id=<?=$facility_id?>&date=<?=$selectedDate?>"
+   class="btn btn-success">予約する</a>
   <a href="?do=aic_list" class="btn btn-primary">　戻る　</a>
 </div>
 <br/><br/><br/><br/>
