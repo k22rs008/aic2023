@@ -105,7 +105,7 @@ echo "<tr><td>希望利用日時※</td>";
 // $wdays = ['日','月','火','水','木','金','土'];
 // $w = $_date->format('w');
 // echo '<td class="text-info">',$_date->format('Y年n月d日'),'(' ,$wdays[$w],')</td>';
-echo '<td><input type="date" name="date" class="form-control" required></td>';
+echo '<td><input type="date" name="date" value="'.$date.'" class="form-control" required></td>';
 echo '<td><input type="time" name="stime" class="form-control" required></td>';
 echo '<td><input type="time" name="etime" class="form-control" required></td>';
 echo '</tr>';
