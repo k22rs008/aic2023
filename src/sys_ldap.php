@@ -3,17 +3,18 @@ function kind_ldap($userlogin, $password, $host=null){
     if (!$host){
         $host = "ldap1.ip.kyusan-u.ac.jp";  //LDAPサーバのホスト
     }
-    $base = "ou=userall,dc=kyusan-u,dc=ac,dc=jp";
-
-    $dn = "uid=" . $userlogin . "," . $base;
     $conn = ldap_connect($host);
     if (!$conn) return false;
+
     ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
     ldap_set_option($conn, LDAP_OPT_REFERRALS, 0);
+
+    $base = "ou=userall,dc=kyusan-u,dc=ac,dc=jp";
+    $dn = "uid=" . $userlogin . "," . $base;
     $ldap_bind = @ldap_bind($conn, $dn, $password);
     if($ldap_bind){  //認証成功処理
         $user = $userlogin;
-        $filter = "uid={$user}";
+        $filter = "uid={$user}"; // 自分以外のユーザ情報も検索可能！
         $result = ldap_search($conn, $base, $filter);
         if (ldap_count_entries($conn, $result) > 0){
             $entries = ldap_get_entries($conn, $result);
