@@ -118,7 +118,7 @@ require_once('db_config.php');
       start: "<?=$selectedDate.' 0:00'?>",  // timeline軸が表す期間の範囲の開始日
       end: "<?=$selectedDate.' 23:00'?>",    // （同）範囲の終了日
       width: '100%', //timelineの表示
-      horizontalScroll: true,
+      horizontalScroll: false,
       zoomable: false,  
       moveable: false,    // timeline chartのzoomを有効にする
       orientation: 'top',   // timeline軸(見出し行）を上側に表示する

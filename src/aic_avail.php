@@ -115,7 +115,7 @@ function groupReservationsByDate($reservations, $selectedDate, $facilityID)
 */
   $json_row = json_encode($data);
     
-  $sql_f = "SELECT * FROM tbl_facility WHERE id = '{$facility_id}'";
+  $sql_f = "SELECT * FROM tbl_facility WHERE id='{$facility_id}'";
   $rs_f = $conn->query($sql_f);
   if (!$rs_f) die('エラー: ' . $conn->error);
   $data_f= $rs_f->fetch_all();
@@ -211,7 +211,7 @@ function groupReservationsByDate($reservations, $selectedDate, $facilityID)
       start: "<?=$selectedDate.' 00:00'?>",  // timeline軸が表す期間の範囲の開始日
       end:   "<?=$selectedDate.' 23:50'?>",    // （同）範囲の終了日
       width: '100%',  //timelineの表示
-      horizontalScroll: true,
+      horizontalScroll: false,
       zoomable: false,  
       moveable: false,    // timeline chartのzoomを有効にする
       orientation: 'top',   // timeline軸(見出し行）を上側に表示する
