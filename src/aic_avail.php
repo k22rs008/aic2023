@@ -5,8 +5,9 @@ include ('lib/func.php');
 if (isset($_GET['date'])) {
     $selectedDate = $_GET['date'];
 } else {
-    // デフォルトの日付を設定（必要に応じて変更）
-    $selectedDate = date("Y-m-d");
+  // デフォルトの日付を設定（必要に応じて変更）
+  // $selectedDate = date("Y-m-d");
+  $selectedDate = '2023-11-27';
 }
 $jpdate = jpdate($selectedDate);//和暦日付
 
@@ -151,11 +152,11 @@ function groupReservationsByDate($reservations, $selectedDate, $facilityID)
 
     let js_row = <?php echo $json_row;?>;
     let js_row_f = <?php echo $json_row_f;?>;
-    let s_time = <?php echo "'".$selectedDate."'";?>;
-    let e_time = <?php echo "'".$end_selectedDate."'";?>;
-    console.log(js_row_f);
-    console.log(js_row_f);
-    console.log(js_row.length);
+    let s_time = "<?=$selectedDate.' 00:00'?>";
+    let e_time = "<?=$selectedDate.' 23:59'?>";
+    //console.log(js_row);
+    //console.log(js_row_f);
+    //console.log(js_row.length);
     
     
     const items = [];
@@ -163,11 +164,14 @@ function groupReservationsByDate($reservations, $selectedDate, $facilityID)
     for (let i = 0; i < js_row.length; i++) {
       const data_tmp = {};
       if (js_row[i][11] == 0){
-      data_tmp.className = 'red';
-      }else if (js_row[i][11] == 2){
-        data_tmp.className = 'blue';
+        data_tmp.className = 'red';
+        data_tmp.decided = '申請';
+      }else if (js_row[i][11] == 1){
+        data_tmp.className = 'green';
+        data_tmp.decided = '保留';
       }else {
-        continue;
+        data_tmp.className = 'blue';
+        data_tmp.decided = '承認';
       }
         
       data_tmp.group = js_row[i][1];
@@ -208,8 +212,8 @@ function groupReservationsByDate($reservations, $selectedDate, $facilityID)
     }
     
     const options = {
-      start: "<?=$selectedDate.' 00:00'?>",  // timeline軸が表す期間の範囲の開始日
-      end:   "<?=$selectedDate.' 23:50'?>",    // （同）範囲の終了日
+      start: s_time,  // timeline軸が表す期間の範囲の開始日
+      end:   e_time,    // （同）範囲の終了日
       width: '100%',  //timelineの表示
       horizontalScroll: false,
       zoomable: false,  

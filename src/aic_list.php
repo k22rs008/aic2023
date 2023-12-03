@@ -5,7 +5,8 @@ require_once('db_config.php');
     $selectedDate = $_GET['date'];
   } else {
     // デフォルトの日付を設定（必要に応じて変更）
-    $selectedDate = date("Y-m-d");
+    // $selectedDate = date("Y-m-d");
+    $selectedDate = '2023-11-27';
   }
 
   $end_selectedDate = date("Y-m-d", strtotime("+1 days", strtotime($selectedDate)));
@@ -60,10 +61,9 @@ require_once('db_config.php');
     let s_time = <?php echo "'".$selectedDate."'";?>;
     let e_time = <?php echo "'".$end_selectedDate."'";?>;
     let flg = <?php echo $flg;?>;
-    console.log(js_row_f);
-    console.log(js_row_f);
-    console.log(js_row[0][6]);
-    console.log(js_row.length);
+    // console.log(js_row_f);
+    // console.log(js_row[0][6]);
+    // console.log(js_row.length);
     const items = [];
     for (let i = 0; i < js_row.length; i++) {
       const data_tmp = {};
