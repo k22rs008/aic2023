@@ -86,9 +86,13 @@ require_once('db_config.php');
       console.log(data_tmp);
       items.push(data_tmp);
     }
-    moment.locale('ja');
+    moment.locale("ja", {
+      weekdays: ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"],
+      weekdaysShort: ["日", "月", "火", "水", "木", "金", "土"]
+    });
     for (let i = 0; i < items.length; i++) {
       const o = items[i];
+      console.log(o);
       o.title = `${moment(o.start).format('MM月DD日HH:mm')} ~ ${moment(o.end).format('MM月DD日HH:mm')} <br>申請者:${o.name} 状態:${o.decided}`;
       }
 
@@ -125,24 +129,18 @@ require_once('db_config.php');
       showCurrentTime: false,
       stack: true,
 
-      timeAxis: {scale: 'hour', step: 1},
+      timeAxis: {scale: 'hour', step: 2},
       format: {
         minorLabels: {
-          //millisecond:'SSS',
-          //second:     'sss',
-          minute:     'HH:mm',
-          hour:       'HH:mm',
-          weekday:    'ddd D',
-          day:        'MMM DD',
-          month:      'MMM/YYYY',
-          year:       'YYYY'
-          /*
-          day: 'YYYY MM DD',  // 日付の表示フォーマットを設定
-          weekday:'ddd D'
-          */
+          hour: 'H',
+        },
+        majorLabels: function (date, scale, step) { 
+          var year = date.format('YYYY');
+          var nengo = year<1988? year: (year < 2019 ? '平成'+(year-1988) : '令和'+(year-2018))
+          return nengo + date.format('年M月D日(dd)');
+          // return date.format('M月D日(dd)');
         },
       },
-      //tack: false,          // イベントが重なった場合にスタックしない
     };
   document.getElementById('visualization').onclick = function (event) {
   var props = timeline.getEventProperties(event)

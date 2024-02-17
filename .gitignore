@@ -7,3 +7,4 @@ bin/_*
 composer.lock
 var
 vendor
+demo
