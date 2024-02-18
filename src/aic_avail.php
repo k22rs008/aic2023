@@ -1,6 +1,7 @@
 <?php
 require_once('db_config.php');
 include ('lib/func.php');
+include ('models/reservation.php');
 
 if (isset($_GET['date'])) {
     $selectedDate = $_GET['date'];

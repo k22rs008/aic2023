@@ -1,9 +1,10 @@
 <?php
-require_once('db_config.php');
+require_once('models/facility.php');
+require_once('models/reserve.php');
 include ('lib/func.php');
 
 $date_curr = '2023-11-27';  //本番なら date("Y-m-d");
-$date_start = isset($_GET['date']) ? $_GET['date'] : $date_curr;
+$date_start = isset($_GET['date'])?$_GET['date'] : $date_curr;
 $date_end = date("Y-m-d", strtotime("+1 days", strtotime($date_start)));
 $jpdate = jpdate($date_start);
 
@@ -13,10 +14,7 @@ $status = [0=>'申請中', 1=>'審査中', 2=>'承認済', 9=>'拒否'];
 $class  = [0=>'red', 1=>'green', 2=>'blue', 9=>'black'];
 
 /////////////////////////////////////
-$sql = "SELECT * FROM tbl_facility WHERE id=$fid";
-$rs = $conn->query($sql);
-if (!$rs) die('エラー: ' . $conn->error);
-$facility = $rs->fetch_assoc();
+$facility = (new Facility)->getDetail($fid);
 $fname = $facility['fname'];
 $groups = [['id'=>$fid, 'content'=>$facility['fname']]];
 
@@ -24,11 +22,7 @@ echo '<p><img src="img/facility/'. $fid .'.webp" height="240" class="img-rounded
 echo '<h3 class="bg-info">'. $fname.'</h3>';
 echo '<p>' .$facility['note'].'</p>';
 ///////////////////////////////
-$sql = "SELECT r.*, u.uname FROM tbl_reserve_test r, tbl_user u WHERE r.facility_id=$fid AND r.master_user=u.uid AND
- (stime BETWEEN '{$date_start}' AND '{$date_end}' OR etime BETWEEN '{$date_start}' AND '{$date_end}')"; // echo $sql;
-$rs = $conn->query($sql);
-if (!$rs) die('エラー: ' . $conn->error);
-$rows= $rs->fetch_all(MYSQLI_ASSOC);
+$rows =  (new Reserve)->getListByFid($fid, $date_start, $date_end);
 if ($rows) {
   echo '<h4>' . $fname . ' の予約一覧 (' . $date_start . ')</h4>';
   echo '<table class="table table-boxed">';
@@ -45,7 +39,7 @@ if ($rows) {
       echo  '<td>' . $row['uname'] . '</td>';
       echo  '<td>' . $row['purpose'] . '</td>';
       echo  '<td>' . $status[$e] . '</td>';
-      //echo  '<td><a href="?do=rsv_input" class ="btn btn-secondary">予約</a></td>';
+      // echo  '<td><a href="?do=rsv_input" class ="btn btn-secondary">予約</a></td>';
       echo  '</tr>';
       $e = $row['decided'];  
       $items[] = [

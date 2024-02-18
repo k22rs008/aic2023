@@ -1,31 +1,26 @@
 <?php
-require_once('db_config.php');
+require_once('models/facility.php');
+require_once('models/reserve.php');
 
 $date_curr = '2023-11-27';  //本番なら date("Y-m-d");
 $date_start = isset($_GET['date']) ? $_GET['date'] : $date_curr;
 $date_end = date("Y-m-d", strtotime("+1 days", strtotime($date_start)));
+list($date_y,$date_m,$date_d) = explode('-', $date_start);
 
 $items = $groups = $facility = [];
 $status = [0=>'申請中', 1=>'審査中', 2=>'承認済', 9=>'拒否'];
 $class  = [0=>'red', 1=>'green', 2=>'blue', 9=>'black'];
 
 /////////////////////////////////////
-$sql = "SELECT * FROM tbl_facility";
-$rs = $conn->query($sql);
-if (!$rs) die('エラー: ' . $conn->error);
-$rows= $rs->fetch_all(MYSQLI_ASSOC);
+$rows = (new Facility)->getList();
 foreach ($rows as $row){
   $fid = $row['id'];
-  $fmt = '<a class="btn btn-info" href="%s?do=aic_availn&fid=%d">%s</a>';
-  $facility[$fid] = $link = sprintf($fmt, $_SERVER['PHP_SELF'], $fid, $row['fname']);
+  $fmt = '<a class="btn btn-info" href="%s?do=aic_availn&fid=%d&date=%s">%s</a>';
+  $facility[$fid] = $link = sprintf($fmt, $_SERVER['PHP_SELF'], $fid,$date_start,$row['fname']);
 }
 
 ///////////////////////////////
-$sql = "SELECT r.*, u.uname FROM tbl_reserve_test r, tbl_user u WHERE r.master_user=u.uid AND
- (stime BETWEEN '{$date_start}' AND '{$date_end}' OR etime BETWEEN '{$date_start}' AND '{$date_end}')"; // echo $sql;
-$rs = $conn->query($sql);
-if (!$rs) die('エラー: ' . $conn->error);
-$rows= $rs->fetch_all(MYSQLI_ASSOC);
+$rows =  (new Reserve)->getAll($date_start, $date_end);
 foreach ($rows as $row){
   $e = $row['decided'];
   $fid = $row['facility_id'];

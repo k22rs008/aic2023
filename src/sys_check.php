@@ -4,7 +4,7 @@ if (isset($_POST['uid'], $_POST['pass'])){
     $uid = htmlspecialchars($_POST['uid']);
     $upass = htmlspecialchars($_POST['pass']);
     // authentication by querying local database
-    $sql = "SELECT * FROM tbl_user WHERE uid= '{$uid}'  AND upass='{$uppass}'";
+    $sql = "SELECT * FROM tbl_user WHERE uid= '{$uid}'  AND upass='{$upass}'";
     $rs = $conn->query($sql);
     if (!$rs) die('エラー: ' . $conn->error);
     $row= $rs->fetch_assoc();
