@@ -10,6 +10,26 @@ class Reserve extends Model{
         return $this->getListByFid(0, $date1, $date2);
     }
 
+    function getItems($date1=null, $date2=null)
+    {
+        $status = [0=>'申請中', 1=>'審査中', 2=>'承認済', 9=>'拒否'];
+        $class  = [0=>'red', 1=>'green', 2=>'blue', 9=>'black'];
+        $rows = $this->getListByFid(0, $date1, $date2);
+        $items = [];
+        foreach ($rows as $row){
+            $e = $row['decided'];
+            $items[] = [
+              'id' => $row['id'],
+              'group'=>$row['facility_id'],
+              'title'=>$row['purpose'] .'（'. $status[$e] . '）'. $row['uname'],
+              'className'=> isset($class[$e]) ? $class[$e] : 'black', 
+              'start'=> $row['stime'],
+              'end'=> $row['etime'],
+            ];
+        }
+        return $items;
+    }
+
     function getListByFid($fid, $date1=null, $date2=null)
     {
         global $conn;
@@ -26,5 +46,10 @@ class Reserve extends Model{
         $rs = $conn->query($sql);
         if (!$rs) die('エラー: ' . $conn->error);
         return $rs->fetch_all(MYSQLI_ASSOC);
+    }
+
+    function getListByDate($fid, $date1=null, $date2=null)
+    {
+        $rows = $this->getListByFid($fid, $date1, $date2);
     }
 }

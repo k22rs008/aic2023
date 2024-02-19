@@ -7,36 +7,17 @@ $date_start = isset($_GET['date']) ? $_GET['date'] : $date_curr;
 $date_end = date("Y-m-d", strtotime("+1 days", strtotime($date_start)));
 list($date_y,$date_m,$date_d) = explode('-', $date_start);
 
-$items = $groups = $facility = [];
-$status = [0=>'申請中', 1=>'審査中', 2=>'承認済', 9=>'拒否'];
-$class  = [0=>'red', 1=>'green', 2=>'blue', 9=>'black'];
-
-/////////////////////////////////////
+//////Prepare items & groups//////
+$groups = [];
 $rows = (new Facility)->getList();
 foreach ($rows as $row){
   $fid = $row['id'];
   $fmt = '<a class="btn btn-info" href="%s?do=aic_availn&fid=%d&date=%s">%s</a>';
-  $facility[$fid] = $link = sprintf($fmt, $_SERVER['PHP_SELF'], $fid,$date_start,$row['fname']);
+  $content = sprintf($fmt, $_SERVER['PHP_SELF'], $fid, $date_start, $row['fname']);
+  $groups[] = ['id'=>$fid, 'content'=>$content];
 }
+$items =  (new Reserve)->getItems($date_start, $date_end);
 
-///////////////////////////////
-$rows =  (new Reserve)->getAll($date_start, $date_end);
-foreach ($rows as $row){
-  $e = $row['decided'];
-  $fid = $row['facility_id'];
-  if (!isset($facility[$fid])) continue;// skip bad row  
-  $items[] = [
-    'id' => $row['id'],
-    'group'=>$row['facility_id'],
-    'title'=>$row['purpose'] .'（'. $status[$e] . '）'. $row['uname'],
-    'className'=> isset($class[$e]) ? $class[$e] : 'black', 
-    'start'=> $row['stime'],
-    'end'=> $row['etime'],
-  ];
-}
-foreach ($facility as $fid=>$content){
-  $groups[] = ['id'=>$fid, 'content'=> $content];
-}
 /////////////////////
 $selected_time = strtotime($date_start);
 $jumpbar = ['-7'=>'1週間前','-1'=>'前の日', '+1'=>'次の日','+7'=>'1週間後'];
