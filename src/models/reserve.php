@@ -4,30 +4,25 @@ require_once('Model.php');
 
 class Reserve extends Model{
     protected $table = "tbl_reserve_test";
+    const status = [0=>'申請中', 1=>'審査中', 2=>'承認済', 9=>'拒否'];
+    const class = [0=>'red', 1=>'green', 2=>'blue', 9=>'black'];
+
 
     function getAll($date1=null, $date2=null)
     {
         return $this->getListByFid(0, $date1, $date2);
     }
 
-    function getItems($date1=null, $date2=null)
+    function getAllItems($date1=null, $date2=null)
     {
-        $status = [0=>'申請中', 1=>'審査中', 2=>'承認済', 9=>'拒否'];
-        $class  = [0=>'red', 1=>'green', 2=>'blue', 9=>'black'];
         $rows = $this->getListByFid(0, $date1, $date2);
-        $items = [];
-        foreach ($rows as $row){
-            $e = $row['decided'];
-            $items[] = [
-              'id' => $row['id'],
-              'group'=>$row['facility_id'],
-              'title'=>$row['purpose'] .'（'. $status[$e] . '）'. $row['uname'],
-              'className'=> isset($class[$e]) ? $class[$e] : 'black', 
-              'start'=> $row['stime'],
-              'end'=> $row['etime'],
-            ];
-        }
-        return $items;
+        return self::toItems($rows);
+    }
+
+    function getItems($fid, $date1=null, $date2=null)
+    {
+        $rows = $this->getListByFid($fid, $date1, $date2);
+        return self::toItems($rows);
     }
 
     function getListByFid($fid, $date1=null, $date2=null)
@@ -52,4 +47,22 @@ class Reserve extends Model{
     {
         $rows = $this->getListByFid($fid, $date1, $date2);
     }
+    
+    static function toItems($rows)
+    {
+        $items = [];
+        foreach ($rows as $row){
+            $e = $row['decided'];
+            $items[] = [
+              'id' => $row['id'],
+              'group'=>$row['facility_id'],
+              'title'=>$row['purpose'] .'（'. self::status[$e] . '）'. $row['uname'],
+              'className'=> isset($class[$e]) ? self::class[$e] : 'black', 
+              'start'=> $row['stime'],
+              'end'=> $row['etime'],
+            ];
+        }
+        return $items;
+    }
+
 }
