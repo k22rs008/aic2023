@@ -2,7 +2,7 @@
 require_once('models/facility.php');
 require_once('models/reserve.php');
 
-$date_curr = '2023-11-2';  //本番なら date("Y-m-d");
+$date_curr = '2023-11-27';  //本番なら date("Y-m-d");
 $date_start = isset($_GET['date']) ? $_GET['date'] : $date_curr;
 $date_end = date("Y-m-d", strtotime("+1 days", strtotime($date_start)));
 list($date_y,$date_m,$date_d) = explode('-', $date_start);

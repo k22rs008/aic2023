@@ -7,15 +7,16 @@ $f_status = Facility::status;
 $f_category = Facility::category;
 $row = (new Facility)->getDetail($f_id);
 
-$id = $code = $status = $category = 0;
+$status = $category = 1;
+$id = $code = "";
 $fname = $fshortname = $maker = $model = "";
-$splace = $place_no = $detail = $memo ="";
+$splace = $place_no = $detail = $memo = "";
 if ($row) { 
     foreach (array_keys($row) as $key){
         $$key = $row[$key];
     }
 }
-$url = "img/facility/{$code}.webp";
+$url = "img/facility/{$f_id}.webp";
 if (!@GetImageSize($url)){
     $url = 'img/dummy-image-square1.webp' ; 
 }
@@ -45,7 +46,7 @@ echo '<tr><th>備考</th><td>',
 echo '<tr><th width="20%">写真ファイル</th><td>',  
  '<input type="file" class="form-control-file border" name="imgfile">', '</td></tr>' . PHP_EOL;
 echo '</table>';
-echo '<button type="submit" class="btn btn-primary">保存</button>' . PHP_EOL;
+echo '<button type="submit" class="btn btn-primary mr-2">保存</button>' . PHP_EOL;
 if ($f_id > 0){
     echo '<a href="?do=inst_detail&id='.$f_id.'" class="btn btn-info">戻る</a>';
 }else{

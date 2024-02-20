@@ -20,10 +20,11 @@ $app_name = '総合機器センター機器設備予約システム (テスト�
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <link rel="stylesheet" href="css/vis-timeline-graph2d.min.css">
 
-<!-- <link href="/ksu/ogr2023/public/css/bootstrap-custom.min.css" rel="stylesheet"> -->
-
-<!-- Font Awesome -->
-<!-- <link href="/ksu/ogr2023/public/css/font-awesome.min.css" rel="stylesheet"> -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="js/vis-timeline-graph2d.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

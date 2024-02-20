@@ -10,7 +10,9 @@ class Html
                 $c_tag = '</select>'. PHP_EOL;
                 $o_tag = '<option value="%s" %s>%s</option>'. PHP_EOL;
             }else{
-                $o_tag = '<input type="' . $tag . '" name="'.$name.'" value="%s" class="form-check-input" %s>%s' . PHP_EOL;
+                $o_tag = '<div class="form-check form-check-inline">';
+                $o_tag .= '<input type="' . $tag . '" name="'.$name.'" value="%s" class="form-check-input" %s>';
+                $o_tag .= '<label class="form-check-label">%s</label></div>' . PHP_EOL;
             }
             $html .= $s_tag;
             foreach ($options as $key=>$value){

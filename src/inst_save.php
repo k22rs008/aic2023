@@ -1,10 +1,11 @@
 <?php
+include 'models/facility.php';
 
 foreach ($_POST as $name=>$value){
-    echo $name, ': ', $value, '<br>' . PHP_EOL;
+    echo '<b>' . $name, ':</b> ', $value, '<br>' . PHP_EOL;
 }
-
-$f_id = 100;
+$id = (new Facility)->write($_POST);
+$f_id = $_POST['id'] > 0 ? $_POST['id'] : $id;
 $webp_name = $f_id . '.webp';
 $upload_dir = 'img/facility/';
 if ($_FILES['imgfile']['size'] > 0){
