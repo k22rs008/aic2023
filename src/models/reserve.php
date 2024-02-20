@@ -5,27 +5,12 @@ require_once('Model.php');
 class Reserve extends Model{
     protected $table = "tbl_reserve_test";
     const status = [0=>'申請中', 1=>'審査中', 2=>'承認済', 9=>'拒否'];
-    const class = [0=>'red', 1=>'green', 2=>'blue', 9=>'black'];
+    const style = [0=>'red', 1=>'green', 2=>'blue', 9=>'black'];
 
-
-    function getAll($date1=null, $date2=null)
-    {
-        return $this->getListByFid(0, $date1, $date2);
-    }
-
-    function getAllItems($date1=null, $date2=null)
-    {
-        $rows = $this->getListByFid(0, $date1, $date2);
-        return self::toItems($rows);
-    }
-
-    function getItems($fid, $date1=null, $date2=null)
-    {
-        $rows = $this->getListByFid($fid, $date1, $date2);
-        return self::toItems($rows);
-    }
-
-    function getListByFid($fid, $date1=null, $date2=null)
+    /**
+     * $fid: int, , facility id, 0 for all facility
+     */
+    function getListByFid($fid=0, $date1=null, $date2=null)
     {
         global $conn;
         $sql = "SELECT r.*, u.uname FROM tbl_reserve_test r, tbl_user u WHERE r.master_user=u.uid";
@@ -42,12 +27,14 @@ class Reserve extends Model{
         if (!$rs) die('エラー: ' . $conn->error);
         return $rs->fetch_all(MYSQLI_ASSOC);
     }
-
-    function getListByDate($fid, $date1=null, $date2=null)
+  
+  
+    function getItems($fid, $date1=null, $date2=null)
     {
         $rows = $this->getListByFid($fid, $date1, $date2);
+        return self::toItems($rows);
     }
-    
+
     static function toItems($rows)
     {
         $items = [];
@@ -57,7 +44,7 @@ class Reserve extends Model{
               'id' => $row['id'],
               'group'=>$row['facility_id'],
               'title'=>$row['purpose'] .'（'. self::status[$e] . '）'. $row['uname'],
-              'className'=> isset($class[$e]) ? self::class[$e] : 'black', 
+              'className'=> isset(self::style[$e]) ? self::style[$e] : 'black', 
               'start'=> $row['stime'],
               'end'=> $row['etime'],
             ];

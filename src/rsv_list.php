@@ -56,7 +56,7 @@ while($row = $rs->fetch_assoc()){ //予約テーブルにある予約の数だ�
     $judgment = array(0=> '未承認', 1=>'審査中', 2=> '承認済み');
     echo '<td>' . $judgment[$decided] . '</td>'; //申請状況を表示
     if($_SESSION['urole'] == 9){
-        echo '<td><a href="?do=rsv_detail&id=' . $row['id'] . '"><button class="btn btn-link">詳細</button></a></td>';//承認ボタンを追加
+        echo '<td><a href="?do=rsv_detail&id=' . $row['id'] . '"><button class="btn btn-info">詳細</button></a></td>';//承認ボタンを追加
     }
 }
 echo '</table>';

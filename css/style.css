@@ -34,12 +34,18 @@ footer {
 
   .vis-item.blue {
     color: white;
-    background-color: lightblue;
+    background-color: rgb(14, 150, 196);
     border-color: lightblue;
   }
 
   .vis-item.green {
     color: white;
     background-color:rgb(110, 246, 119);
+    border-color: rgb(1, 138, 44);
+  }
+
+  .vis-item.black {
+    color: white;
+    background-color:rgb(0, 0, 0);
     border-color: rgb(1, 138, 44);
   }

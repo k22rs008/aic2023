@@ -14,18 +14,19 @@ $jpdate = jpdate($date_start);
 $items = (new Reserve)->getItems($fid, $date_start, $date_end);
 $facility = (new Facility)->getDetail($fid);
 $fname = $facility['fname'];
+$code = $facility['code'];
 $groups = [['id'=>$fid, 'content'=>$fname]];
 
 /////// VIEW /////////////////////////////////
-echo '<p><img src="img/facility/'. $fid .'.webp" height="240" class="img-rounded"></p>';
+echo '<p><img src="img/facility/'. $code .'.webp" height="240" class="img-rounded"></p>';
 echo '<h3 class="bg-info">'. $fname.'</h3>';
-echo '<p>' .$facility['note'].'</p>';
-
-echo '<h4>' . $fname . ' の予約一覧 (' . $date_start . ')</h4>';
+echo '<p>' .$facility['detail'].'</p>';
+echo '<h4>' . $jpdate . $fname . ' の予約一覧</h4>';
 echo '<table class="table table-boxed">';
 echo  '<tr><th width="20%">開始日時</th><th width="20%">終了日時</th>';
 echo  '<th>責任者</th><th>目的</th><th>承認</th></tr>';
 $rows =  (new Reserve)->getListByFid($fid, $date_start, $date_end);
+$status = Reserve::status;
 foreach ($rows as $row) {
   echo  '<tr>';
   $e = $row['decided'];
@@ -41,7 +42,7 @@ echo  '</table>';
 
 $navbar = ['-7'=>'1週間前','-1'=>'前の日', '+1'=>'次の日','+7'=>'1週間後'];
 echo '<div class="text-left">'. PHP_EOL;
-foreach ($navibar as $delta => $label){
+foreach ($navbar as $delta => $label){
   $date = date("Y-m-d", strtotime($delta . " days", strtotime($date_start)));
   echo "<a href=\"?do=aic_availn&fid={$fid}&date={$date}\" class=\"btn btn-primary\">{$label}</a>" . PHP_EOL; 
 } 
