@@ -1,3 +1,17 @@
+CREATE TABLE tb_member(
+    uid VARCHAR(16) PRIMARY KEY COMMENT 'ユーザID',
+	mid VARCHAR(16) COMMENT '学籍番号・職員番号',
+	mail VARCHAR(32) COMMENT 'メールアドレス',
+	en_name VARCHAR(32) COMMENT '英語氏名',
+	en_yomi VARCHAR(32) COMMENT '英語読み',
+	ja_name VARCHAR(32) COMMENT '日本語氏名',
+	ja_yomi VARCHAR(32) COMMENT '日本語読み',
+	deptment INT COMMENT '',
+	dept INT COMMENT '',
+	category INT COMMENT '',
+	last_login DATETIME COMMENT '最近ログイン' 
+)  
+
 CREATE TABLE tb_facility(
 	id SERIAL PRIMARY KEY COMMENT 'ID, DB内部参照用',
 	code INT NOT NULL COMMENT '機器コード, 人間識別用（ソート基準や画像ファイル名に）',

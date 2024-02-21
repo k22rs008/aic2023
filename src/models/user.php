@@ -36,17 +36,18 @@ class User extends Model{
         $base = "ou=userall,dc=kyusan-u,dc=ac,dc=jp";
         $dn = "uid=" . $userid . "," . $base;
         $ldap = ldap_connect($host);
-        if(!$ldap) {echo 'connect failed!'; return false;}
+        if(!$ldap) return false;
         ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
         ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);        
         $ldap_bind = @ldap_bind($ldap, $dn, $passwd);
-        if(!$ldap_bind) {echo 'bind failed!'; return false;}
+        if(!$ldap_bind)  return false;
         $target = 'k21rs034'; // ユーザ情報の取得 
+        // $target = 'yu-haibo';
         // $target = $userid;// 本人認証 
         $filter = "uid={$target}";
         $result = ldap_search($ldap, $base, $filter);
         if (ldap_count_entries($ldap, $result) == 0){
-            echo 'no entries'; return false;
+            return false;
         }
         $info = ldap_get_entries($ldap, $result);
         /*
