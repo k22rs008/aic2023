@@ -1,6 +1,10 @@
 <?php
+
+use kst\KsuStudent;
+
 require_once('db_config.php');
 require_once('Model.php');
+include 'KsuStudent.php';
 
 class User extends Model{
     protected $table = "tbl_user";
@@ -8,10 +12,10 @@ class User extends Model{
         'uid'=>'uid',//※ユーザID
         'sambasid'=>'sid',//※学籍番号・職員番号
         'mail'=>'email',//※メールアドレス
-        'cn'=>'en_name',//※英語氏名
-        'sn'=>'en_yomi',//※英語読み
         'jadisplayname'=>'ja_name',//※日本語氏名
         'jasn' =>'ja_yomi',//※日本語読み
+        'cn'=>'en_name',//※英語氏名
+        'sn'=>'en_yomi',//※英語読み
         'jagivenname'=>'faculty', //所属学部。
         /////////////////////////////////
         'jao'=>'dept',//所属学科。学生の場合。例、情報科学科
@@ -59,23 +63,24 @@ class User extends Model{
         ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);        
         $ldap_bind = @ldap_bind($ldap, $dn, $passwd);
         if(!$ldap_bind)  return false;
-        // $target = 'k22gjk01'; // ユーザ情報の取得 
-        // $target = 'sawada';
-        $target = 'toyosaka';
+        $target = 'k23gjk03'; // 他ユーザ情報の取得 
         // $target = $userid;// 本人認証 
         $filter = "uid={$target}";
         $result = ldap_search($ldap, $base, $filter);
-        if (ldap_count_entries($ldap, $result) == 0){
-            return false;
+        $record = [];
+        if (ldap_count_entries($ldap, $result) > 0){
+            $info = ldap_get_entries($ldap, $result);
+            $info = $info[0];            
+            foreach (self::LDAP_ENTRIES as $key=>$item){
+                if (isset($info[$key])){
+                    $record[$item]= $info[$key][0];
+                } 
+            }
         }
-        $info = ldap_get_entries($ldap, $result);
-        $info = $info[0];
-        $record = [];        
-        foreach (self::LDAP_ENTRIES as $key=>$item){
-            if (isset($info[$key])){
-                $record[$item]= $info[$key][0];
-            } 
-        }
+        // if (isset($record['sid'])){
+        //     $detail = KsuStudent::parseSid($record['sid']);
+        //     $record = array_merge($record, $detail);
+        // }
         return $record;                
     }
 }
