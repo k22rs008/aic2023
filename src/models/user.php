@@ -4,6 +4,24 @@ require_once('Model.php');
 
 class User extends Model{
     protected $table = "tbl_user";
+    const LDAP_ENTRIES = [
+        'uid'=>'uid',//※ユーザID
+        'sambasid'=>'sid',//※学籍番号・職員番号
+        'mail'=>'email',//※メールアドレス
+        'cn'=>'en_name',//※英語氏名
+        'sn'=>'en_yomi',//※英語読み
+        'jadisplayname'=>'ja_name',//※日本語氏名
+        'jasn' =>'ja_yomi',//※日本語読み
+        'jagivenname'=>'faculty', //所属学部。
+        /////////////////////////////////
+        'jao'=>'dept',//所属学科。学生の場合。例、情報科学科
+        'description'=>'category', //カテゴリ。学生の場合。 例：一般学生、
+        /////////////////////////////////
+        'labeleduri'=>'rank', // 役職1。教職員の場合。例：教授、准教授
+        'initials'=>'title', //役職2。教職員の場合。例：学部長、学科主任、大学教育職、その他職員
+        'businesscategory'=>'category',//教職員の場合。例：教育職員、事務職員、業務特別契約職員
+        'carlicense'=>'dept',//所属。教職員の場合。例：理工学部情報科学科、産学連携支援室
+    ];
     function getDetail($id)
     {
         global $conn;
@@ -41,8 +59,9 @@ class User extends Model{
         ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);        
         $ldap_bind = @ldap_bind($ldap, $dn, $passwd);
         if(!$ldap_bind)  return false;
-        $target = 'k21rs034'; // ユーザ情報の取得 
-        // $target = 'yu-haibo';
+        // $target = 'k22gjk01'; // ユーザ情報の取得 
+        // $target = 'sawada';
+        $target = 'toyosaka';
         // $target = $userid;// 本人認証 
         $filter = "uid={$target}";
         $result = ldap_search($ldap, $base, $filter);
@@ -50,10 +69,13 @@ class User extends Model{
             return false;
         }
         $info = ldap_get_entries($ldap, $result);
-        /*
-        mail;
-        jao
-        */
-        return $info;        
+        $info = $info[0];
+        $record = [];        
+        foreach (self::LDAP_ENTRIES as $key=>$item){
+            if (isset($info[$key])){
+                $record[$item]= $info[$key][0];
+            } 
+        }
+        return $record;                
     }
 }
