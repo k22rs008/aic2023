@@ -28,7 +28,6 @@ class Reserve extends Model{
         return $rs->fetch_all(MYSQLI_ASSOC);
     }
   
-  
     function getItems($fid, $date1=null, $date2=null)
     {
         $rows = $this->getListByFid($fid, $date1, $date2);
