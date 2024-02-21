@@ -9,11 +9,10 @@ if (isset($_GET['category'])){
   $where = 'category=' . $_GET['category'];
   $selected = $_GET['category'];
 }
-
 echo '<div class="text-left">'. PHP_EOL;
 foreach ($category as $c=>$label){
   $disable = ($c==$selected) ? 'disabled' : '';
-  echo "<a href=\"?do=inst_list&category={$c}\" class=\"btn btn-primary\" $disable>{$label}</a>" . PHP_EOL; 
+  echo "<a href=\"?do=inst_list&category={$c}\" class=\"btn btn-primary {$disable} mt-1 mb-1 mr-1\">{$label}</a>" . PHP_EOL; 
 } 
 echo '</div>' . PHP_EOL;
 
@@ -32,7 +31,7 @@ foreach($rows as $row) {
    '<div>メーカー・型式: ',$row['maker'], ' ' ,$row['model'], '</div>',
    '<div class="h-50">',$row['detail'], '</div>',
    '<div class="align-self-end">',
-   '<a class="btn btn-info" href="?do=inst_detail&id='.$row['id'].'">詳細</a>',
+   '<a class="btn btn-info mb-1" href="?do=inst_detail&id='.$row['id'].'">詳細</a>',
    '</div></div>';
   echo '</td></tr>'. PHP_EOL;;
 }
