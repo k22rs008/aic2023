@@ -9,6 +9,7 @@ include 'KsuStudent.php';
 class User extends Model{
     protected $table = "tbl_user";
     const LDAP_ENTRIES = [
+        #LDAP ENTRY => New NAME
         'uid'=>'uid',//※ユーザID
         'sambasid'=>'sid',//※学籍番号・職員番号
         'mail'=>'email',//※メールアドレス
