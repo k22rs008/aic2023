@@ -19,7 +19,7 @@ $url = "img/facility/{$fid}.webp";
 if (!@GetImageSize($url)){
     $url = 'img/dummy-image-square1.webp' ; 
 }
-echo '<img src="'. $url . '" height="240" width="320" class="img-rounded">' . PHP_EOL;
+echo '<img src="'. $url . '" height="240" width="320" class="m-1 rounded">' . PHP_EOL;
 echo '<form method="post" action="?do=inst_save" enctype="multipart/form-data">' . PHP_EOL;
 echo Html::input('hidden', 'id', $fid);
 echo '<table class="table table-hover">' . PHP_EOL;

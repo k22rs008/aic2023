@@ -10,7 +10,7 @@ if ($row) {
     if (!@GetImageSize($url)){
         $url = 'img/dummy-image-square1.webp' ; 
     }   
-    echo '<p><img src="'. $url . '" height="240" width="320" class="img-rounded"></p>' . PHP_EOL;
+    echo '<p><img src="'. $url . '" height="240" width="320" class="rounded"></p>' . PHP_EOL;
     echo '<h3 class="text-primary">'. $row['fname'].'</h3>' . PHP_EOL;
     echo '<table class="table table-hover">' . PHP_EOL;
     echo '<tr><th width="20%">機器ID</th><td>' . $row['id'] . '</td></tr>' . PHP_EOL;

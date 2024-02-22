@@ -23,7 +23,7 @@ $url = 'img/facility/'. $fid .'.webp';
 if (!@GetImageSize($url)){
   $url = 'img/dummy-image-square1.webp' ; 
 }   
-echo '<p><img src="'. $url .'" height="240px" width="320px" class="img-rounded"></p>';
+echo '<p><img src="'. $url .'" height="240px" width="320px" class="m-1 rounded"></p>';
 echo '<h3 class="">'. $fname.'</h3>';
 echo '<p>' .$facility['detail'].'</p>';
 echo '<h4>' . $jpdate . $fname . ' の予約一覧</h4>';

@@ -16,27 +16,24 @@ foreach ($f_category as $c=>$label){
 } 
 echo '</div>' . PHP_EOL;
 $rows= (new Facility)->getList($where, $orderby);
+echo '<table class="table table-hover">';
 foreach($rows as $row) {
   $url = 'img/facility/'. $row['id'] .'.webp';
   if (!@GetImageSize($url)){
     $url = 'img/dummy-image-square1.webp' ; 
   }   
-  echo '<div class="row m-1 border border-bottom-0">';
-  echo '<div class="pl-0 col-sm-5 col-md-4">';
-  echo '<img src="' . $url . '" height="200px" width="280px" class="rounded">'. PHP_EOL;
-  echo '</div>';
-  echo '<div class="col-sm-7 col-md-8">';
-  echo '<h4 class="mt-0">'. $row['fname'].'</h4>',
+  echo '<tr><td width="30%">',
+   '<img src="' . $url . '" height="240px" width="320px" class="rounded"></td>'. PHP_EOL;
+  echo '<td><div style="height:240px;">',
+   '<h4 class="bg-infor mt-0">'. $row['fname'].'</h4>',
    '<div><span class="badge badge-hill badge-secondary">主な用途</span> ', $row['purpose'] , '</div>',
    '<div><span class="badge badge-hill badge-secondary">メーカー・型式</span> ',$row['maker'], ' ' ,$row['model'], '</div>',
-   '<div class="small">',$row['detail'], '</div>',
+   '<div class="h-50 small">',$row['detail'], '</div>',
    '<div class="align-self-end">',
    '<a class="btn btn-sm btn-outline-danger m-1" href="?do=inst_detail&id='.$row['id'].'">詳細</a>',
    '<a class="btn btn-sm btn-outline-success m-1" href="?do=aic_detail&id='.$row['id'].'">予約</a>',
-   '</div>';
-  echo '</div>'. PHP_EOL;
-  echo '<hr class="">';
-  echo '</div>' . PHP_EOL;
+   '</div></div>';
+  echo '</td></tr>'. PHP_EOL;;
 }
-
+echo '</table>' . PHP_EOL;
 ?>
