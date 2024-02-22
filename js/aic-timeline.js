@@ -33,7 +33,7 @@ function make_timeline(id,items, groups, start_time, end_time){
         if (elem.tagName =='A'){
             elem.classList.add('btn','btn-outline-info');
         }else{
-            element.classList.add('bg-info', 'text-white');
+            //element.classList.add('text-info');
         }    
     });
     

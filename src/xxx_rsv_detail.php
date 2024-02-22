@@ -1,12 +1,9 @@
 <?php
-require_once('models/Reserve.php');
-require_once('models/Facility.php');
-include 'views/Html.php';
-include 'lib/func.php';
+require_once('db_config.php');
+require_once('lib/KsuCode.php');
+use kst\KsuCode;
 
 $id = $_GET['id'];
-$rsv = (new Reserve)->getDetail($id);
-
 echo '<table class="table table-hover">';
 echo '<tr><td>利用申請者</td>';
 $SQL = "SELECT * FROM tbl_reserve_test WHERE tbl_reserve_test.id=$id"; //予約テーブルを検索

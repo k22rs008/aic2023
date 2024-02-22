@@ -1,6 +1,9 @@
 <?php
-include 'models/facility.php';
-$f_id = $_GET['id'];
+include 'models/Facility.php';
+$f_id = 0;
+if (isset($_GET['id'])){
+  $f_id = $_GET['id'];
+}
 $row= (new Facility)->getDetail($f_id);
 if ($row) {  
     $url = 'img/facility/'. $f_id .'.webp';
@@ -13,12 +16,12 @@ if ($row) {
     echo '<tr><th width="20%">機器ID</th><td>' . $row['id'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th width="20%">機器名称</th><td>' . $row['fname']. '</td></tr>' . PHP_EOL;
     echo '<tr><th>略称</th><td>' . $row['fshortname']. '</td></tr>' . PHP_EOL;
+    $f_status= Facility::status; 
     $i  = $row['status']; 
-    $status= Facility::status; 
-    echo '<tr><th>状態</th><td>' . $status[$i]. '</td></tr>' . PHP_EOL;
+    echo '<tr><th>状態</th><td>' . $f_status[$i]. '</td></tr>' . PHP_EOL;
     $i  = $row['category']; 
-    $category = Facility::category;
-    echo '<tr><th>カテゴリ</th><td>' . $category[$i] . '</td></tr>' . PHP_EOL;
+    $f_category = Facility::category;
+    echo '<tr><th>カテゴリ</th><td>' . $f_category[$i] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>メーカー</th><td>' . $row['maker'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>型式</th><td>' . $row['model'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>導入年月</th><td>' . $row['iyear'] . '</td></tr>' . PHP_EOL;
@@ -26,9 +29,12 @@ if ($row) {
     echo '<tr><th>場所番号</th><td>' . $row['place_no'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>詳細</th><td>' . nl2br($row['detail']) . '</td></tr>' . PHP_EOL;
     echo '</table>' . PHP_EOL;
-    echo '<a class="btn btn-primary mr-2" href="?do=inst_edit&id='.$f_id.'">編集</a>' . PHP_EOL;
-    echo '<a href="#myModal" class="btn btn-danger  mr-2" data-id='.$f_id.' data-toggle="modal">削除</a>' . PHP_EOL;
-    echo '<a href="?do=inst_list" class="btn btn-info">戻る</a>' . PHP_EOL;  
+    echo '<div class="pb-5 mb-5">' . PHP_EOL . 
+      '<a class="btn btn-outline-primary m-1" href="?do=inst_edit&id='.$f_id.'">編集</a>'.
+      '<a href="#myModal" class="btn btn-outline-danger m-1" data-id='.$f_id.' data-toggle="modal">削除</a>' .
+      '<a class="btn btn-outline-success m-1" href="?do=aic_detail&id='.$row['id'].'">予約</a>'.
+      '<a href="?do=inst_list" class="btn btn-outline-info m-1">戻る</a>' . PHP_EOL .  
+      '</div>';
 }else{
     echo 'この機器は存在しません！';
 }

@@ -1,5 +1,5 @@
 <?php
-include 'models/facility.php';
+include 'models/Facility.php';
 if (isset($_GET['id'])){
     $f_id = $_GET['id'];
     (new Facility)->delete($f_id);

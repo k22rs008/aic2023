@@ -1,6 +1,5 @@
 <?php
 require_once('db_config.php');
-
 class Model
 {
     protected $table;

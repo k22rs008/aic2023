@@ -1,5 +1,6 @@
 <?php
-require_once('db_config.php');
+// namespace ksu;
+
 include_once('Model.php');
 
 class Facility extends Model{

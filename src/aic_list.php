@@ -1,11 +1,12 @@
 <?php
-require_once('models/facility.php');
-require_once('models/reserve.php');
+require_once('models/Facility.php');
+require_once('models/Reserve.php');
 
-$date_curr = '2023-11-27';  //本番なら date("Y-m-d");
-$date_start = isset($_GET['date']) ? $_GET['date'] : $date_curr;
+$date_curr = '231127';  //本番なら date("ymd");
+$ymd = isset($_GET['d']) ? $_GET['d'] : $date_curr;
+$start = DateTime::createFromFormat('ymd', $ymd);
+$date_start = $start->format('Y-m-d');
 $date_end = date("Y-m-d", strtotime("+1 days", strtotime($date_start)));
-list($date_y,$date_m,$date_d) = explode('-', $date_start);
 
 ////// MODEL /////////////////
 $items =  (new Reserve)->getItems(0, $date_start, $date_end); //all items 
@@ -14,8 +15,8 @@ $groups = [];
 $rows = (new Facility)->getList();
 foreach ($rows as $row){
   $fid = $row['id'];
-  $fmt = '<a class="btn btn-info" href="%s?do=aic_avail&fid=%d&date=%s">%s</a>';
-  $content = sprintf($fmt, $_SERVER['PHP_SELF'], $fid, $date_start, $row['fname']);
+  $fmt = '<a class="btn btn-info" href="%s?do=aic_detail&id=%d&d=%s">%s</a>';
+  $content = sprintf($fmt, $_SERVER['PHP_SELF'], $fid, $ymd, $row['fname']);
   $groups[] = ['id'=>$fid, 'content'=>$content];
 }
 
@@ -23,8 +24,8 @@ foreach ($rows as $row){
 $navibar = ['-7'=>'1週間前','-1'=>'前の日', '+1'=>'次の日','+7'=>'1週間後'];
 echo '<div class="text-left">'. PHP_EOL;
 foreach ($navibar as $delta => $label){
-  $date = date("Y-m-d", strtotime($delta . " days", strtotime($date_start)));
-  echo "<a href=\"?do=aic_list&date={$date}\" class=\"btn btn-primary\">{$label}</a>" . PHP_EOL; 
+  $ymd = date("ymd", strtotime($delta . " days", strtotime($date_start)));
+  echo "<a href=\"?do=aic_list&d={$ymd}\" class=\"btn btn-outline-primary m-1\">{$label}</a>" . PHP_EOL; 
 } 
 echo '</div>' . PHP_EOL;
 ?>

@@ -1,11 +1,13 @@
 <?php
-require_once('models/facility.php');
-require_once('models/reserve.php');
+require_once('models/Facility.php');
+require_once('models/Reserve.php');
 include ('lib/func.php');
 
-$fid = $_GET['fid'];
-$date_curr = '2023-11-27';  //本番なら date("Y-m-d");
-$date_start = isset($_GET['date'])?$_GET['date'] : $date_curr;
+$fid = $_GET['id'];
+$date_curr = '231127';  //本番なら date("ymd");
+$ymd = isset($_GET['d']) ? $_GET['d'] : $date_curr;
+$_start = DateTime::createFromFormat('ymd', $ymd);
+$date_start = $_start->format('Y-m-d');
 $date_end = date("Y-m-d", strtotime("+1 days", strtotime($date_start)));
 $jpdate = jpdate($date_start);
 
@@ -22,7 +24,7 @@ if (!@GetImageSize($url)){
   $url = 'img/dummy-image-square1.webp' ; 
 }   
 echo '<p><img src="'. $url .'" height="240px" width="320px" class="img-rounded"></p>';
-echo '<h3 class="bg-info">'. $fname.'</h3>';
+echo '<h3 class="">'. $fname.'</h3>';
 echo '<p>' .$facility['detail'].'</p>';
 echo '<h4>' . $jpdate . $fname . ' の予約一覧</h4>';
 echo '<table class="table table-boxed">';
@@ -32,7 +34,7 @@ $rows =  (new Reserve)->getListByFid($fid, $date_start, $date_end);
 $status = Reserve::status;
 foreach ($rows as $row) {
   echo  '<tr>';
-  $e = $row['decided'];
+  $e = $row['status'];
   echo  '<td>' . jpdate($row['stime'], true) . '</td>';
   echo  '<td>' . jpdate($row['etime'], true)  . '</td>';
   echo  '<td>' . $row['uname'] . '</td>';
@@ -46,12 +48,18 @@ echo  '</table>';
 $navbar = ['-7'=>'1週間前','-1'=>'前の日', '+1'=>'次の日','+7'=>'1週間後'];
 echo '<div class="text-left">'. PHP_EOL;
 foreach ($navbar as $delta => $label){
-  $date = date("Y-m-d", strtotime($delta . " days", strtotime($date_start)));
-  echo "<a href=\"?do=aic_avail&fid={$fid}&date={$date}\" class=\"btn btn-primary\">{$label}</a>" . PHP_EOL; 
+  $ymd = date("ymd", strtotime($delta . " days", strtotime($date_start)));
+  echo "<a href=\"?do=aic_detail&id={$fid}&d={$ymd}\" class=\"btn btn-outline-primary m-1\">{$label}</a>" . PHP_EOL; 
 } 
 echo '</div>' . PHP_EOL;
 ?>
 <div id="visualization"></div>
+<?php
+echo '<div class="pb-2 m-2">' . PHP_EOL . 
+ '<a href="?do=inst_list" class="btn btn-outline-info m-1">機器設備一覧へ</a>' . PHP_EOL .  
+ '<a href="?do=aic_list" class="btn btn-outline-info m-1">空き状況一覧へ</a>' . PHP_EOL ; 
+echo '</div>';
+?>
 <script type = "text/javascript">
   const items = <?=json_encode($items)?>;
   const groups = <?=json_encode($groups)?>;

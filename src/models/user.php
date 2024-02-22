@@ -1,13 +1,15 @@
 <?php
+// namespace ksu;
 
 use kst\KsuStudent;
 
-require_once('db_config.php');
 require_once('Model.php');
 include 'KsuStudent.php';
 
 class User extends Model{
-    protected $table = "tbl_user";
+    protected $table = "tb_user";
+    const urole = [1=>'学生', 5=>'教員', 9=>'管理者'];
+
     const LDAP_ENTRIES = [
         #LDAP ENTRY => New NAME
         'uid'=>'uid',//※ユーザID
@@ -17,11 +19,9 @@ class User extends Model{
         'jasn' =>'ja_yomi',//※日本語読み
         'cn'=>'en_name',//※英語氏名
         'sn'=>'en_yomi',//※英語読み
-        'jagivenname'=>'faculty', //所属学部。
-        /////////////////////////////////
+        'jagivenname'=>'faculty', //所属学部。例、理工、芸術
         'jao'=>'dept',//所属学科。学生の場合。例、情報科学科
         'description'=>'category', //カテゴリ。学生の場合。 例：一般学生、
-        /////////////////////////////////
         'labeleduri'=>'rank', // 役職1。教職員の場合。例：教授、准教授
         'initials'=>'title', //役職2。教職員の場合。例：学部長、学科主任、大学教育職、その他職員
         'businesscategory'=>'category',//教職員の場合。例：教育職員、事務職員、業務特別契約職員
