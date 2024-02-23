@@ -1,4 +1,6 @@
 <?php
+// namespace ksu\aic;
+
 require_once('db_config.php');
 class Model
 {

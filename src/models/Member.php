@@ -1,7 +1,11 @@
 <?php
-namespace ksu;
+// namespace ksu\aic;
 
-class KsuCode{
+include_once('Model.php');
+
+class Member extends Model{
+    protected $table = "tb_member";
+
     const FACULTY_DEPT =[  //学科のIDと名称
         'RS'=>'理工学部 情報科学科',
         'RM'=>'理工学部 機械工学科',
@@ -24,9 +28,7 @@ class KsuCode{
         'HP'=>'人間科学部 臨床心理学科',
         'HC'=>'人間科学部 子ども教育学科',
         'HS'=>'人間科学部 スポーツ学科',
-    ];
 
-    const GRADUATE_SCHL = [ //大学院のIDと名称  
         'GBE'=>'経済・ビジネス研究科 経済学専攻',
         'GBM'=>'経済・ビジネス研究科 現代ビジネス専攻',
         'GTI'=>'工学研究科 産業技術デザイン専攻',
@@ -40,5 +42,12 @@ class KsuCode{
         'DJK'=>'情報科学研究科 情報科学専攻',
         'DAC'=>'芸術研究科 造形表現専攻',
         'DKK'=>'国際文化研究科 国際文化専攻',
-    ];
+
+        'AIC'=>'総合機器センター',
+        'CNC'=>'総合情報基盤センター',
+        'SGK'=>'産学連携支援室',
+        'KKC'=>'基礎教育センター',
+        'GKC'=>'語学教育研究センター',
+    ]; 
+
 }

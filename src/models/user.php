@@ -1,14 +1,15 @@
 <?php
-// namespace ksu;
-
-use kst\KsuStudent;
+// namespace ksu\aic;
 
 require_once('Model.php');
 include 'KsuStudent.php';
+use ksu\KsuStudent;
 
 class User extends Model{
     protected $table = "tb_user";
     const urole = [1=>'学生', 5=>'教員', 9=>'管理者'];
+    const ldap_host = "ldap1.ip.kyusan-u.ac.jp";
+    const ldap_base = "ou=userall,dc=kyusan-u,dc=ac,dc=jp";
 
     const LDAP_ENTRIES = [
         #LDAP ENTRY => New NAME
@@ -46,19 +47,18 @@ class User extends Model{
         global $conn;
         $userid = htmlspecialchars($userid);
         $passwd = htmlspecialchars($passwd);
-        $sql = "SELECT * FROM tbl_user WHERE uid= '{$userid}'  AND upass='{$passwd}'";
+        $sql = "SELECT * FROM %s WHERE uid='%s'  AND upass='%s'";
+        $sql = sprintf($sql, $this->table, $userid, $passwd);
         $rs = $conn->query($sql);
         if (!$rs) die('エラー: ' . $conn->error);
         $row = $rs->fetch_assoc();
-        // if ($row) return $row; else return ldap_check()
         return $row;
     }
+
     function ldap_check($userid, $passwd)
     {
-        $host = "ldap1.ip.kyusan-u.ac.jp";
-        $base = "ou=userall,dc=kyusan-u,dc=ac,dc=jp";
-        $dn = "uid=" . $userid . "," . $base;
-        $ldap = ldap_connect($host);
+        $dn = "uid=" . $userid . "," . self::ldap_base;
+        $ldap = ldap_connect(self::ldap_host);
         if(!$ldap) return false;
         ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
         ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);        
@@ -67,21 +67,18 @@ class User extends Model{
         $target = 'k23gjk03'; // 他ユーザ情報の取得 
         // $target = $userid;// 本人認証 
         $filter = "uid={$target}";
-        $result = ldap_search($ldap, $base, $filter);
+        $result = ldap_search($ldap, self::ldap_base, $filter);
         $record = [];
         if (ldap_count_entries($ldap, $result) > 0){
             $info = ldap_get_entries($ldap, $result);
             $info = $info[0];            
             foreach (self::LDAP_ENTRIES as $key=>$item){
+                $record[$item]= null;
                 if (isset($info[$key])){
                     $record[$item]= $info[$key][0];
                 } 
             }
         }
-        // if (isset($record['sid'])){
-        //     $detail = KsuStudent::parseSid($record['sid']);
-        //     $record = array_merge($record, $detail);
-        // }
         return $record;                
     }
 }

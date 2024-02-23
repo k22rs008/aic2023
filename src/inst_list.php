@@ -18,14 +18,14 @@ echo '</div>' . PHP_EOL;
 $rows= (new Facility)->getList($where, $orderby);
 foreach($rows as $row) {
   $url = 'img/facility/'. $row['id'] .'.webp';
-  if (!@GetImageSize($url)){
+  if (!@GetImageSize($url)){// use dummy image for facility w/o image
     $url = 'img/dummy-image-square1.webp' ; 
   }   
-  echo '<div class="row m-1 border border-bottom-0">';
-  echo '<div class="pl-0 col-sm-5 col-md-4">';
+  echo '<div class="row border border-bottom-0 m-1">';
+  echo '<div class="col-md-4 pl-0">';
   echo '<img src="' . $url . '" height="200px" width="280px" class="rounded">'. PHP_EOL;
   echo '</div>';
-  echo '<div class="col-sm-7 col-md-8">';
+  echo '<div class="col-md-8">';
   echo '<h4 class="mt-0">'. $row['fname'].'</h4>',
    '<div><span class="badge badge-hill badge-secondary">主な用途</span> ', $row['purpose'] , '</div>',
    '<div><span class="badge badge-hill badge-secondary">メーカー・型式</span> ',$row['maker'], ' ' ,$row['model'], '</div>',
@@ -38,5 +38,3 @@ foreach($rows as $row) {
   echo '<hr class="">';
   echo '</div>' . PHP_EOL;
 }
-
-?>

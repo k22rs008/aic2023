@@ -2,7 +2,7 @@ function nengo(year){
     return year<1988? year: (year < 2019 ? '平成'+(year-1988) : '令和'+(year-2018))
   }
 
-function make_timeline(id,items, groups, start_time, end_time){
+function make_timeline(id,items, groups, start_time, end_time, step){
     moment.locale("ja");
     const options = {
         start: start_time,  // timeline軸が表す期間の範囲の開始日
@@ -14,7 +14,7 @@ function make_timeline(id,items, groups, start_time, end_time){
         orientation: 'top',   // timeline軸(見出し行）を上側に表示する
         showCurrentTime: false,
         stack: true,
-        timeAxis: {scale: 'hour', step: 2},
+        timeAxis: {scale: 'hour', step: step},// step in hours for time-axis
         format: {
         minorLabels: {
             hour: 'H',

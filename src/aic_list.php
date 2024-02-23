@@ -1,5 +1,5 @@
 <?php
-require_once('models/Facility.php');
+require_once('models/Instrument.php');
 require_once('models/Reserve.php');
 
 $date_curr = '231127';  //本番なら date("ymd");
@@ -12,7 +12,7 @@ $date_end = date("Y-m-d", strtotime("+1 days", strtotime($date_start)));
 $items =  (new Reserve)->getItems(0, $date_start, $date_end); //all items 
 
 $groups = [];
-$rows = (new Facility)->getList();
+$rows = (new Instrument)->getList();
 foreach ($rows as $row){
   $fid = $row['id'];
   $fmt = '<a class="btn btn-info" href="%s?do=aic_detail&id=%d&d=%s">%s</a>';
@@ -34,6 +34,7 @@ echo '</div>' . PHP_EOL;
   const items = <?=json_encode($items)?>;
   const groups = <?=json_encode($groups)?>;
   const start = "<?=$date_start.' 0:00'?>";
-  const end = "<?=$date_start.' 23:59'?>";
-  make_timeline('visualization', items, groups, start, end);   
+  const end = "<?=$date_end.' 23:59'?>";
+  const step = 4; // step in hours for time-axis
+  make_timeline('visualization', items, groups, start, end, step);   
 </script>

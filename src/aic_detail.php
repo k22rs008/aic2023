@@ -1,5 +1,5 @@
 <?php
-require_once('models/Facility.php');
+require_once('models/Instrument.php');
 require_once('models/Reserve.php');
 include ('lib/func.php');
 
@@ -13,7 +13,7 @@ $jpdate = jpdate($date_start);
 
 /////// MODEL /////////////////////////////////
 $items = (new Reserve)->getItems($fid, $date_start, $date_end);
-$facility = (new Facility)->getDetail($fid);
+$facility = (new Instrument)->getDetail($fid);
 $fname = $facility['fname'];
 $code = $facility['code'];
 $groups = [['id'=>$fid, 'content'=>$fname]];
@@ -64,6 +64,7 @@ echo '</div>';
   const items = <?=json_encode($items)?>;
   const groups = <?=json_encode($groups)?>;
   const start = "<?=$date_start.' 0:00'?>";
-  const end = "<?=$date_start.' 23:59'?>";
-  make_timeline('visualization', items, groups, start, end);   
+  const end = "<?=$date_end.' 23:59'?>";
+  const step = 2; // step in hours for time-axis
+  make_timeline('visualization', items, groups, start, end, step);   
 </script>

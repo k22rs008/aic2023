@@ -36,4 +36,3 @@ foreach($rows as $row) {
   echo '</td></tr>'. PHP_EOL;;
 }
 echo '</table>' . PHP_EOL;
-?>

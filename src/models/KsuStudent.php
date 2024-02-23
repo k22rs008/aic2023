@@ -1,5 +1,5 @@
 <?php
-namespace kst;
+// namespace ksu;
 
 include_once 'KsuCode.php';
 use kst\KsuCode;
