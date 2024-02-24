@@ -40,8 +40,9 @@ CREATE TABLE tb_member(
 	ja_yomi VARCHAR(32) COMMENT '日本語読み',
 	en_name VARCHAR(32) COMMENT '英語氏名',
 	en_yomi VARCHAR(32) COMMENT '英語読み',
-	dept_name VARCHAR(64) COMMENT '所属名称, 例: 理工学部 情報科学科',
-	dept_id VARCHAR(16) COMMENT '所属コード,例: RS',
+	sex INT COMMENT '性別(0:未記入,1:男性,2:女性)',
+	-- dept_name VARCHAR(64) COMMENT '所属名称, 例: 理工学部 情報科学科'),
+	dept_code VARCHAR(16) COMMENT '所属コード,例: RS',
 	category INT COMMENT 'カテゴリ(1:学生,2:教員,3:職員,9:その他)',
 	authority INT COMMENT '権限(1:予約権なし,2:予約付き)',
 	granted TIMESTAMP COMMENT '権限付与・撤回日時',
@@ -54,11 +55,19 @@ CREATE TABLE tb_member(
 CREATE TABLE tb_staff(
   id SERIAL PRIMARY KEY COMMENT '通し番号（自動採番, 内部参照用）',
   member_id INT NOT NULL COMMENT '',
-  rank VARCHAR(32) NOT NULL COMMENT '役職1(教授、准教授等)',
-  title VARCHAR(32) NOT NULL COMMENT '役職2(学科主任、大学教育職、その他職員)',
+  title INT NOT NULL COMMENT '役職1:大区分(1:大学教育職員,2:事務職員,3:職員)',
+  rank INT NOT NULL COMMENT '役職2:中区分(1:教授,2:准教授,3:講師,4:助教,5:職員)',
   room_no VARCHAR(32) NOT NULL COMMENT '部屋番号',
   tel_ext VARCHAR(8) COMMENT '内線番号',
-  responsible BOOLEAN COMMENT '責任者か' 
+  responsible BOOLEAN COMMENT '責任者になれるか' 
+);
+
+-- tb_department: 部所テーブル
+
+CREATE TABLE tb_department(
+	id SERIAL PRIMARY KEY COMMENT '通し番号（自動採番, 内部参照用）',
+	dept_code VARCHAR(16) UNIQUE COMMENT '部所コード,例: RS, AIC',
+	dept_name VARCHAR(32) COMMENT '部所,例: 理工学部 情報科学科, 総合機器センター'
 );
 
 -- tb_reserve: 予約テーブル
@@ -97,7 +106,7 @@ CREATE TABLE rsv_sample(
 	id SERIAL PRIMARY KEY COMMENT '通し番号（自動採番, 内部参照用）',
 	reserve_id INT NOT NULL COMMENT '予約番号',
 	tag INT NOT NULL COMMENT '区別（1:状態,2: 特性）', 
-    val INT NOT NULL COMMENT '試料状態特性番号',
+    val INT NOT NULL COMMENT '試料の状態・特性値',
 	other VARCHAR(16) COMMENT 'その他'
 );
 
@@ -116,7 +125,7 @@ CREATE TABLE tb_instrument(
 	code VARCHAR(16) COMMENT '人間識別用番号',
 	fullname VARCHAR(64) NOT NULL COMMENT '名称',
 	shortname VARCHAR(64) NOT NULL COMMENT '略称', 
-	status INT NOT NULL COMMENT '機器状態(1:使用可,2:貸出中,3:使用不可,9:その他)',
+	state INT NOT NULL COMMENT '機器状態(1:使用可,2:貸出中,3:使用不可,9:その他)',
 	category INT COMMENT 'カテゴリ（1:観察, 2:分析,3:計測,4:調製,9:その他）', 
 	purpose VARCHAR(64) COMMENT '主な用途',
 	detail TEXT COMMENT '施設紹介' ,
@@ -132,6 +141,54 @@ CREATE TABLE tb_instrument(
 --　ユーザアカウント情報
 INSERT INTO tb_user VALUES
 ('admin', 9, '管理者', '777-7777');
+
+INSERT INTO tb_department
+(dept_code, dept_name) VALUES
+('RS','理工学部 情報科学科'),
+('RM','理工学部 機械工学科'),
+('RE','理工学部 電気工学科'),
+('LL','生命科学部 生命科学科'),
+('UA','建築都市工学部 建築学科'),
+('UH','建築都市工学部 住居・インテリア学科'),
+('UC','建築都市工学部 都市デザイン工学科'),
+('CB','商学部 経営・流通学科'),
+('EE','経済学部 経済学科'),
+('DT','地域共創学部 観光学科'),
+('DR','地域共創学部 地域づくり学科'),
+('AA','芸術学部 芸術表現学科'),
+('AP','芸術学部 写真・映像メディア学科'),
+('AD','芸術学部 ビジュアルデザイン学科'),
+('AE','芸術学部 生活環境デザイン学科'),
+('AS','芸術学部 ソーシャルデザイン学科'),
+('KK','国際文化学部 国際文化学科'),
+('KN','国際文化学部 日本文化学科'),
+('HP','人間科学部 臨床心理学科'),
+('HC','人間科学部 子ども教育学科'),
+('HS','人間科学部 スポーツ学科'),
+
+('GBE','経済・ビジネス研究科 経済学専攻・博士前期課程'),
+('GBM','経済・ビジネス研究科 現代ビジネス専攻・博士前期課程'),
+('GTI','工学研究科 産業技術デザイン専攻・博士前期課程'),
+('GJK','情報科学研究科 情報科学専攻・博士前期課程'),
+('GAC','芸術研究科 造形表現専攻・博士前期課程'),
+('GKK','国際文化研究科 国際文化専攻・博士前期課程'),
+
+('DBE','経済・ビジネス研究科 経済学専攻・博士後期課程'),
+('DBM','経済・ビジネス研究科 現代ビジネス専攻・博士後期課程'),
+('DTI','工学研究科 産業技術デザイン専攻・博士後期課程'),
+('DJK','情報科学研究科 情報科学専攻・博士後期課程'),
+('DAC','芸術研究科 造形表現専攻・博士後期課程'),
+('DKK','国際文化研究科 国際文化専攻・博士後期課程'),
+
+('AIC','総合機器センター'),
+('CNC','総合情報基盤センター'),
+('KKC','基礎教育センター'),
+('GKC','語学教育研究センター'),
+('SGK','産学連携支援室'),
+-- 架空の学部学科
+('LT','生体医工学部 生体工学科');
+('GLT','生体医工学研究科 生体工学専攻・博士前期課程');
+('DLT','生体医工学研究科 生体工学科・博士後期課程');
 
 -- 設置場所情報
 -- 部屋名,部屋番号
@@ -155,10 +212,10 @@ INSERT INTO tb_room
 
 -- 機器設備情報（NEW）：「設置場所テーブル」と連携する場合
 -- コード.,機器名,略称,状態,カテゴリ,設置場所,備考
--- 状　　態(status) 1:使用可,2:貸出中,3:使用不可
+-- 状　　態(state) 1:使用可,2:貸出中,3:使用不可
 -- カテゴリ(category) 1:観察, 2:分析,3:計測,4:調製,9:その他
 INSERT INTO tb_instrument
-(code,fullname,shortname,status,category,room_id,memo) VALUES
+(code,fullname,shortname,state,category,room_id,memo) VALUES
 (1,'３Ｄデジタルファインスコープ','３ＤＳ',1,1,7, null),
 (2,'原子吸光分析システム','ＡＡ',1,2,8, null),
 (3,'ビジネスプロジェクター','ＢＰ',3,9,15, null),
@@ -207,7 +264,7 @@ INSERT INTO tb_instrument
 (46,'粘度粘弾性測定装置','レオメータ',1,3,10, null);
 
 -- 機器設備情報（OLD）：設置場所テーブルと連携しない場合
--- コード.,機器名,略称,設置場所,設置場所略称,備考
+-- コード,機器名,略称,設置場所,設置場所略称,備考
 INSERT INTO tb_instrument
 (code,fullname,shortname,status,place,place_no,memo) VALUES
 (1,'３Ｄデジタルファインスコープ','３ＤＳ',1,'IR測定室','⑦', null),
