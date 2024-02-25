@@ -1,13 +1,14 @@
 <?php
-include 'models/facility.php';
+include 'models/Instrument.php';
 
-foreach ($_POST as $name=>$value){
-    echo '<b>' . $name, ':</b> ', $value, '<br>' . PHP_EOL;
-}
-$id = (new Facility)->write($_POST);
-$f_id = $_POST['id'] > 0 ? $_POST['id'] : $id;
-$webp_name = $f_id . '.webp';
-$upload_dir = 'img/facility/';
+// foreach ($_POST as $name=>$value){
+//     echo '<b>' . $name, ':</b> ', $value, '<br>' . PHP_EOL;
+// }
+$id = (new Instrument)->write($_POST);
+
+$inst_id = $_POST['id'] > 0 ? $_POST['id'] : $id;
+$webp_name = $inst_id . '.webp';
+$upload_dir = 'img/instrument/';
 if ($_FILES['imgfile']['size'] > 0){
     $img_file = $_FILES['imgfile']['tmp_name'];
     $webp_file = $upload_dir . $webp_name;
@@ -31,3 +32,4 @@ if ($_FILES['imgfile']['size'] > 0){
         echo '<h3 class="text-danger">画像タイプはpng, jpg, gifしかサポートしません。</h3>';
     }
 }
+header('Location:?do=inst_detail&id=' . $inst_id);

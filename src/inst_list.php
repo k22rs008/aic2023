@@ -1,9 +1,9 @@
 <?php
-include 'models/Facility.php';
-// $f_status= Facility::status; 
-$f_category = Facility::category;
+include 'models/Instrument.php';
+// $f_status= Instrument::status; 
+$f_category = Instrument::category;
 $selected = 0;
-$where = 'status=1';
+$where = 'state=1';
 $orderby = 'code';
 if (isset($_GET['category'])){
   $where = 'category=' . $_GET['category'];
@@ -15,10 +15,10 @@ foreach ($f_category as $c=>$label){
   echo "<a href=\"?do=inst_list&category={$c}\" class=\"btn btn-outline-primary {$disable} m-1\">{$label}</a>" . PHP_EOL; 
 } 
 echo '</div>' . PHP_EOL;
-$rows= (new Facility)->getList($where, $orderby);
+$rows= (new Instrument)->getList($where, $orderby);
 foreach($rows as $row) {
-  $url = 'img/facility/'. $row['id'] .'.webp';
-  if (!@GetImageSize($url)){// use dummy image for facility w/o image
+  $url = 'img/instrument/'. $row['id'] .'.webp';
+  if (!@GetImageSize($url)){// use dummy image for instrument w/o image
     $url = 'img/dummy-image-square1.webp' ; 
   }   
   echo '<div class="row border border-bottom-0 m-1">';
@@ -26,7 +26,7 @@ foreach($rows as $row) {
   echo '<img src="' . $url . '" height="200px" width="280px" class="rounded">'. PHP_EOL;
   echo '</div>';
   echo '<div class="col-md-8">';
-  echo '<h4 class="mt-0">'. $row['fname'].'</h4>',
+  echo '<h4 class="mt-0">'. $row['fullname'].'</h4>',
    '<div><span class="badge badge-hill badge-secondary">主な用途</span> ', $row['purpose'] , '</div>',
    '<div><span class="badge badge-hill badge-secondary">メーカー・型式</span> ',$row['maker'], ' ' ,$row['model'], '</div>',
    '<div class="small">',$row['detail'], '</div>',

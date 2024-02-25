@@ -51,7 +51,7 @@ class Model
             $id = $data['id'];
             $sql = sprintf("UPDATE %s SET %s WHERE id=%d", $this->table, $sqlvalues, $id);
         }
-        echo $sql;
+        // echo $sql;
         $rs = $conn->query($sql);
         if (!$rs) die('エラー: ' . $conn->error);
         return ($act=='insert') ? $conn->insert_id : $conn->affected_rows; 

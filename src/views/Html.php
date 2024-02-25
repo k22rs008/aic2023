@@ -27,7 +27,7 @@ class Html
     public static function input($tag, $name, $value=null, $attrs=null)
     {
         if (in_array($tag, ['text','number','date', 'hidden','range'])){
-            return sprintf('<%s name="%s" value="%s" %s>', $tag, $name, $value, $attrs);            
+            return sprintf('<input type="%s" class="form-control" name="%s" value="%s" %s>', $tag, $name, $value, $attrs);            
         }
         return null;
     } 

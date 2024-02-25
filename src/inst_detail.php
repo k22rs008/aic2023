@@ -1,32 +1,32 @@
 <?php
-include 'models/Facility.php';
+include 'models/Instrument.php';
 $f_id = 0;
 if (isset($_GET['id'])){
   $f_id = $_GET['id'];
 }
-$row= (new Facility)->getDetail($f_id);
+$row= (new Instrument)->getDetail($f_id);
 if ($row) {  
-    $url = 'img/facility/'. $f_id .'.webp';
+    $url = 'img/instrument/'. $f_id .'.webp';
     if (!@GetImageSize($url)){
         $url = 'img/dummy-image-square1.webp' ; 
     }   
     echo '<p><img src="'. $url . '" height="240" width="320" class="rounded"></p>' . PHP_EOL;
-    echo '<h3 class="text-primary">'. $row['fname'].'</h3>' . PHP_EOL;
+    echo '<h3 class="text-primary">'. $row['fullname'].'</h3>' . PHP_EOL;
     echo '<table class="table table-hover">' . PHP_EOL;
     echo '<tr><th width="20%">機器ID</th><td>' . $row['id'] . '</td></tr>' . PHP_EOL;
-    echo '<tr><th width="20%">機器名称</th><td>' . $row['fname']. '</td></tr>' . PHP_EOL;
-    echo '<tr><th>略称</th><td>' . $row['fshortname']. '</td></tr>' . PHP_EOL;
-    $f_status= Facility::status; 
-    $i  = $row['status']; 
-    echo '<tr><th>状態</th><td>' . $f_status[$i]. '</td></tr>' . PHP_EOL;
+    echo '<tr><th width="20%">機器名称</th><td>' . $row['fullname']. '</td></tr>' . PHP_EOL;
+    echo '<tr><th>略称</th><td>' . $row['shortname']. '</td></tr>' . PHP_EOL;
+    $f_state= Instrument::state; 
+    $i  = $row['state']; 
+    echo '<tr><th>状態</th><td>' . $f_state[$i]. '</td></tr>' . PHP_EOL;
     $i  = $row['category']; 
-    $f_category = Facility::category;
+    $f_category = Instrument::category;
     echo '<tr><th>カテゴリ</th><td>' . $f_category[$i] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>メーカー</th><td>' . $row['maker'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>型式</th><td>' . $row['model'] . '</td></tr>' . PHP_EOL;
-    echo '<tr><th>導入年月</th><td>' . $row['iyear'] . '</td></tr>' . PHP_EOL;
-    echo '<tr><th>設置場所</th><td>' . $row['splace'] . '</td></tr>' . PHP_EOL;
-    echo '<tr><th>場所番号</th><td>' . $row['place_no'] . '</td></tr>' . PHP_EOL;
+    echo '<tr><th>導入年月</th><td>' . $row['bought_year'] . '</td></tr>' . PHP_EOL;
+    echo '<tr><th>設置場所</th><td>' . $row['room_name'] . '</td></tr>' . PHP_EOL;
+    echo '<tr><th>場所番号</th><td>' . $row['room_no'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>詳細</th><td>' . nl2br($row['detail']) . '</td></tr>' . PHP_EOL;
     echo '</table>' . PHP_EOL;
     echo '<div class="pb-5 mb-5">' . PHP_EOL . 
@@ -39,7 +39,6 @@ if ($row) {
     echo 'この機器は存在しません！';
 }
 ?>
-
 <!-- Modal HTML -->
 <div id="myModal" class="modal fade">
   <div class="modal-dialog modal-confirm">
@@ -61,7 +60,6 @@ if ($row) {
     </div>
   </div>
 </div>
-
 <script>
   $('#myModal').on('shown.bs.modal', function(event) {
     var id = $(event.relatedTarget).data('id');
