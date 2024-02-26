@@ -19,8 +19,10 @@ class Reserve extends Model{
         $rsv = parent::getDetail($id);
         if (!$rsv) return null;
         $reserve_id = $rsv['id'];
+        $instrument = (new Instrument)->getDetail($rsv['instrument_id']); 
         $apply_user = (new Member)->getDetail($rsv['apply_mid']);
         $master_user = (new Member)->getDetail($rsv['master_mid']);
+        $rsv['instrument_name'] = $instrument['fullname'];
         $rsv['apply_uname'] = $apply_user['ja_name'];
         $rsv['master_uname'] = $master_user['ja_name'];
         $rsv_members = (new RsvMember)->getList('reserve_id='.$reserve_id);
