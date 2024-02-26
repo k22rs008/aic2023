@@ -31,7 +31,7 @@ echo '<h4>' . $jpdate . $fname . ' の予約一覧</h4>';
 echo '<table class="table table-boxed">';
 echo  '<tr><th width="20%">開始日時</th><th width="20%">終了日時</th>';
 echo  '<th>責任者</th><th>目的</th><th>承認</th></tr>';
-$rows =  (new Reserve)->getListByFid($inst_id, $date_start, $date_start);
+$rows =  (new Reserve)->getListByInst($inst_id, $date_start, $date_start);
 $status = Reserve::status;
 foreach ($rows as $row) {
   echo  '<tr>';

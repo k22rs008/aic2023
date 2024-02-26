@@ -1,12 +1,12 @@
 <?php
 include 'models/Instrument.php';
-$f_id = 0;
+$inst_id = 0;
 if (isset($_GET['id'])){
-  $f_id = $_GET['id'];
+  $inst_id = $_GET['id'];
 }
-$row= (new Instrument)->getDetail($f_id);
+$row= (new Instrument)->getDetail($inst_id);
 if ($row) {  
-    $url = 'img/instrument/'. $f_id .'.webp';
+    $url = 'img/instrument/'. $inst_id .'.webp';
     if (!@GetImageSize($url)){
         $url = 'img/dummy-image-square1.webp' ; 
     }   
@@ -30,8 +30,8 @@ if ($row) {
     echo '<tr><th>詳細</th><td>' . nl2br($row['detail']) . '</td></tr>' . PHP_EOL;
     echo '</table>' . PHP_EOL;
     echo '<div class="pb-5 mb-5">' . PHP_EOL . 
-      '<a class="btn btn-outline-primary m-1" href="?do=inst_edit&id='.$f_id.'">編集</a>'.
-      '<a href="#myModal" class="btn btn-outline-danger m-1" data-id='.$f_id.' data-toggle="modal">削除</a>' .
+      '<a class="btn btn-outline-primary m-1" href="?do=inst_edit&id='.$inst_id.'">編集</a>'.
+      '<a href="#myModal" class="btn btn-outline-danger m-1" data-id='.$inst_id.' data-toggle="modal">削除</a>' .
       '<a class="btn btn-outline-success m-1" href="?do=aic_detail&id='.$row['id'].'">予約</a>'.
       '<a href="?do=inst_list" class="btn btn-outline-info m-1">戻る</a>' . PHP_EOL .  
       '</div>';

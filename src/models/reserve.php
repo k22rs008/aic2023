@@ -2,6 +2,9 @@
 // namespace ksu/aic;
 
 require_once('Model.php');
+require_once('Member.php');
+require_once('RsvSample.php');
+require_once('RsvMember.php');
 
 class Reserve extends Model{
     protected $table = "tb_reserve";
@@ -10,26 +13,32 @@ class Reserve extends Model{
 
     const status = [1=>'申請中', 2=>'審査中', 3=>'承認済', 9=>'拒否'];
     const style = [1=>'red', 2=>'green', 3=>'blue', 9=>'black'];
-    const sample_property = [1=>'爆発性',2=>'毒性',3=>'腐食性', 9=>'その他'];
-    const sample_state = [1=>'気体',2=>'液体',3=>'固体'];
     
     function getDetail($id)
     {
         $rsv = parent::getDetail($id);
-        if ($rsv) return false;
-        // $apply_user = (new User)->getDetail($rsv['uid']);
-        // $master_user = (new Staff)->getDetail($rsv['master_user']);
+        if (!$rsv) return null;
+        $reserve_id = $rsv['id'];
+        $apply_user = (new Member)->getDetail($rsv['apply_mid']);
+        $master_user = (new Member)->getDetail($rsv['master_mid']);
+        $rsv['apply_uname'] = $apply_user['ja_name'];
+        $rsv['master_uname'] = $master_user['ja_name'];
+        $rsv_members = (new RsvMember)->getList('reserve_id='.$reserve_id);
+        $rsv_samples = (new RsvSample)->getList('reserve_id='.$reserve_id);
+        $rsv['rsv_sample'] = $rsv_samples;
+        $rsv['rsv_member'] = $rsv_members;
+        return $rsv;
     }
 
-    function getListDetail($fid=0, $status=9)
+    function getListDetail($inst_id=0, $status=9)
     {
         global $conn;        
 
-        $sql = "SELECT r.*, f.fullname, f.fshortname,m1.ja_name AS apply_name, m2.ja_name AS master_name
-          FROM %s r, %s f, %s m1, %s m2 WHERE r.mid=m1.mid AND r.master_mid=m2.mid AND f.id=r.instrument_id ";
+        $sql = "SELECT r.*, f.fullname, f.shortname,m1.ja_name AS apply_name, m2.ja_name AS master_name
+          FROM %s r, %s f, %s m1, %s m2 WHERE r.apply_mid=m1.id AND r.master_mid=m2.id AND f.id=r.instrument_id ";
         $sql = sprintf($sql, $this->table, $this->inst_table, $this->member_table, $this->member_table);
-        if ($fid){ // $fid= 0 for all, or 1~ for one specific instrument 
-            $sql .= " AND r.instrument_id=$fid"; 
+        if ($inst_id){ // $inst_id= 0 for all, or 1~ for one specific instrument 
+            $sql .= " AND r.instrument_id=$inst_id"; 
         }
         if ($status < 9){ // $status=9 for all, or 1~ for one specific status
             $sql .= " AND r.status=$status"; 
@@ -41,15 +50,15 @@ class Reserve extends Model{
         return $rs->fetch_all(MYSQLI_ASSOC);
     }
     /**
-     * $fid: int, , instrument id, 0 for all instrument
+     * $inst_id: int, , instrument id, 0 for all instrument
      */
-    function getListByFid($fid=0, $date1=null, $date2=null)
+    function getListByInst($inst_id=0, $date1=null, $date2=null)
     {
         global $conn;
         $sql = "SELECT r.*, m.ja_name as master_name FROM %s r, %s m WHERE r.master_mid=m.id";
         $sql = sprintf($sql, $this->table, $this->member_table);
-        if ($fid){
-            $sql .= " AND r.instrument_id=$fid"; 
+        if ($inst_id){
+            $sql .= " AND r.instrument_id=$inst_id"; 
         }
         if ($date1 and $date2){
             $sql .= " AND GREATEST(stime, '{$date1} 00:00') <= LEAST(etime, '{$date2} 23:59')"; 
@@ -63,9 +72,9 @@ class Reserve extends Model{
         return $rs->fetch_all(MYSQLI_ASSOC);
     }
   
-    function getItems($fid, $date1=null, $date2=null)
+    function getItems($inst_id, $date1=null, $date2=null)
     {
-        $rows = $this->getListByFid($fid, $date1, $date2);
+        $rows = $this->getListByInst($inst_id, $date1, $date2);
         return self::toItems($rows);
     }
 
