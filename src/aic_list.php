@@ -10,7 +10,7 @@ $date_start = $start->format('Y-m-d');
 $date_end = date("Y-m-d", strtotime("+1 days", strtotime($date_start)));
 
 ////// MODEL /////////////////
-$items =  (new Reserve)->getItems(0, $date_start, $date_start); //all items 
+$items =  (new Reserve)->getItems(0, $date_start, $date_start); //0 means all items 
 
 $groups = [];
 $rows = (new Instrument)->getList();
@@ -22,9 +22,9 @@ foreach ($rows as $row){
 }
 
 ////// VIEW ///////////////
-$navibar = ['-7'=>'1週間前','-1'=>'前の日', '+1'=>'次の日','+7'=>'1週間後'];
+$navbar = ['-7'=>'1週間前','-1'=>'前の日', '+1'=>'次の日','+7'=>'1週間後'];
 echo '<div class="text-left">'. PHP_EOL;
-foreach ($navibar as $delta => $label){
+foreach ($navbar as $delta => $label){
   $ymd = date("ymd", strtotime($delta . " days", strtotime($date_start)));
   echo "<a href=\"?do=aic_list&d={$ymd}\" class=\"btn btn-outline-primary m-1\">{$label}</a>" . PHP_EOL; 
 } 
@@ -34,8 +34,8 @@ echo '</div>' . PHP_EOL;
 <script type = "text/javascript">
   const items = <?=json_encode($items)?>;
   const groups = <?=json_encode($groups)?>;
-  const start = "<?=$date_start.' 0:00'?>";
+  const start = "<?=$date_start.' 8:00'?>";
   const end = "<?=$date_start.' 23:59'?>";
-  const step = 4; // step in hours for time-axis
+  const step = 1; // step in hours for time-axis
   make_timeline('visualization', items, groups, start, end, step);   
 </script>

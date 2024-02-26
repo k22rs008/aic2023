@@ -143,7 +143,7 @@ INSERT INTO tb_staff (member_id,title,rank,room_no,tel_ext) VALUES
 (120,1,2,'12号館4階411号室',5420);
 
 INSERT INTO tb_user
-(uid, urole, uname, upass) VALUES
+(uid, urole, uname, upass) 
 SELECT uid, category, ja_name, '1234'
 FROM tb_member;
 

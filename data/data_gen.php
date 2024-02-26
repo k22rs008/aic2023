@@ -7,7 +7,9 @@
  * 3. 会員(member)データを120行生成（学生100+教育職員20）
  * 4. 教育職員(staff)データを20行生成(教育職員15+事務職員5)
  * 5. 会員データに基づきユーザアカウントを作成
- * 6. 予約(reserve)データを生成(40機器X2ヶ月X30日X1日数件)
+ * 6. 予約(reserve)データを生成(40機器X2ヶ月X30日X0~4件/1日)。さらに以下を含む
+ * 　　a. 試料状態性質(rsv_sample) 
+ *     b. 利用代表者(rsv_member)
  */
 include 'data_gen_inc.php';
 date_default_timezone_set('Asia/Tokyo');
@@ -18,10 +20,10 @@ $persons = file('test_data_persons.txt');
 srand(20240224); // 乱数順を固定にする
 shuffle($persons);
 
-$undergrad_num = 90;// 学部生数
-$postgrad_num = 10; // 院生数
+$undergrad_num = 90;// 学部生数 所属学部学科コード: 'LT'
+$postgrad_num = 10; // 院生数 所属学部学科コード: 'GLT'(前期課程), 'DLT'(後期課程)
 $student_num  = $undergrad_num + $postgrad_num; // 学生総数
-$staff_num = 20; // 教育職員数
+$staff_num = 20; // 教育職員数　所属部署コード：'LT'(教員), 'AIC'(職員)
 $s21= 43;// 学籍番号が「21LT」で始まる学生数（残りは「22LT」）
 $g21= 4; // 学籍番号が「21GLT」で始まる前期課程学生数
 $g22= 5; // 学籍番号が「22GLT」で始まる前期課程学生数(残りは後期課程「22DLT」)
@@ -29,11 +31,9 @@ $g22= 5; // 学籍番号が「22GLT」で始まる前期課程学生数(残り�
 // 3. 会員（学部生90＋大学院生10＋教育職員20）
 $members =[];
 $member=[
-    'id'=>0,
-    'uid'=>'','sid'=>'','email'=>'','tel_no'=>'',
+    'id'=>0,'uid'=>'','sid'=>'','email'=>'','tel_no'=>'',
     'ja_name'=>'','sex'=>1, 'dept_code'=>'', 'category'=>1,'authority'=>1,
 ];
-
 for ($i=0; $i <count($persons); $i++) {
     $id = $i + 1;
     $line = trim($persons[$i]);
@@ -68,7 +68,7 @@ for ($i=0; $i <count($persons); $i++) {
     $authority = 1; // 1:予約権なし
 
     foreach(array_keys($member) as $key){
-        $member[$key] = $$key;
+        $member[$key] = $$key; // $$key: 変数$keyの持つ値（例:'hoge'）を変数名($hoge)にする
     }
     $members[] = $member;   
 }
@@ -115,23 +115,11 @@ $r_purposes = ['実験','ゼミ', '見学', '授業'];
 $r_samples = ['キノコ','牛乳','パン','ケーキ','牛肉','サンドイッチ'];
 $r_status= [1=>'申請中', 2=>'審査中', 3=>'承認済', 9=>'拒否'];
 $year = 2024; 
-$timeslices=[
+$timeslices=[//予約時間の選択肢
     ['9:00','12:40'],
     ['13:40','15:20'],
     ['15:40','19:20'],
     ['19:40','21:20'],
-];
-$reserve=[
-    'instrument_id'=>0,
-    'apply_mid'=>'', 'master_mid'=>'', 'purpose'=>'',
-    'stime'=>'', 'etime'=>'','sample_name'=>'',
-    'xray_chk'=>0, 'xray_num'=>'','status'=>1, 'reserved'=>''
-];
-$rsv_member=[
-    'reserve_id'=>0, 'member_id'=>0, 'memo'=>'',
-];
-$rsv_sample=[
-    'reserve_id'=>0, 'tag'=>0, 'val'=>0, 'other'=>'',
 ];
 $reserves = [];
 $rsv_samples = [];
@@ -141,36 +129,66 @@ $staff_mids = range(101,120);
 $xray_chk = 0; 
 $xray_num = '';
 $reserve_id = 1; 
-$reserved=date('Y-m-d H:i');
+$reserved = date('Y-m-d H:i');
+$reserve=[
+    'instrument_id'=>0, 'apply_mid'=>'', 'master_mid'=>'', 'purpose'=>'',
+    'stime'=>'', 'etime'=>'','sample_name'=>'', 'xray_chk'=>0, 'xray_num'=>'',
+    'status'=>1, 'reserved'=>'',
+];
+$rsv_member=[
+    'reserve_id'=>0, 'member_id'=>0, 
+];
+$rsv_sample=[
+    'reserve_id'=>0, 'tag'=>0, 'val'=>0, 'other'=>'',
+];
 foreach ($instruments as $instrument_id){
-    // srand(time()); // uncomment this line, if wish results change every time
+    // srand(time()); // uncomment this line if you wish the results change every time
     foreach (range(3,5) as $month){
-        $t = date('t', strtotime($year.'-'.$month.'-1'));
-        // echo $t . PHP_EOL;
+        $t = date('t', strtotime($year.'-'.$month.'-1'));//今月の日数
+
         foreach(range(1, $t) as $d){
-            $n = rand(-1,4); 
-            if ($n < 1) continue; // skip the day w/o any reserves
+            $n = rand(-1, 4); 
+            if ($n < 1) continue; // skip days (30%) w/o any reserve
             $sampled = sample($timeslices, $n);
             foreach ($sampled as $time){
-                $status = rand(1,3);
                 $apply_mid = rand(1, 100);
                 $master_mid = rand(101, 120);
                 $purpose = sample($r_purposes)[0];
-                $sample_name = sample($r_samples)[0];
-                // rsv_members
-                $n = rand(1,6);
-                $r_members= sample($student_mids, $n);
-                foreach($r_members as $member_id){
-                    // TODO
-                }
-                // rsv_samples
                 $date = sprintf('%d-%d-%d', $year, $month, $d);
                 $stime = $date . ' ' . $time[0];
                 $etime = $date . ' ' . $time[1];
+                $sample_name = sample($r_samples)[0];  
+                $status = rand(1,3);                
                 foreach(array_keys($reserve) as $key){
                     $reserve[$key] = $$key;
                 }
                 $reserves[] = $reserve; 
+                
+                // rsv_members
+                $n = rand(1,6);
+                $r_members= sample($student_mids, $n);
+                foreach($r_members as $member_id){
+                    foreach(array_keys($rsv_member) as $key){
+                        $rsv_member[$key] = $$key;
+                    }
+                    $rsv_members[] = $rsv_member; 
+                }
+
+                // rsv_samples
+                $rsv_sample['reserve_id'] = $reserve_id;
+                $rsv_sample['tag'] = 1; 
+                $rsv_sample['val'] = rand(1,3); 
+                $rsv_sample['other']='';
+                $rsv_samples[] = $rsv_sample;
+
+                $rsv_sample['tag'] = 2;  $n = rand(1,2);
+                $vals = sample(range(1,4),$n);
+                foreach ($vals as $val){
+                    $rsv_sample['val'] = $val;
+                    $rsv_sample['other'] = $val==4 ? '取り扱い注意': '';
+                    $rsv_samples[] = $rsv_sample;            
+                } 
+
                 $reserve_id++;
             }
  
@@ -181,13 +199,15 @@ foreach ($instruments as $instrument_id){
 // Output:
 header('Content-Type: text/plain'); 
 
-$tosql = true;
+$tosql = false;
 $debug = false;
 if ($tosql){
     // echo toSQL('tb_member', $members), ';', PHP_EOL ;
     // echo toSQL('tb_staff', $staffs), ';', PHP_EOL;
     // echo toSQL('tb_user', $users), ';', PHP_EOL;
-    echo toSQL('tb_reserve', $reserves), ';', PHP_EOL;
+    // echo toSQL('tb_reserve', $reserves), ';', PHP_EOL;
+    // echo toSQL('rsv_member', $rsv_members), ';', PHP_EOL;
+    // echo toSQL('rsv_sample', $rsv_samples), ';', PHP_EOL;
 }
 
 if ($debug){

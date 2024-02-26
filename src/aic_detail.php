@@ -64,8 +64,8 @@ echo '</div>';
 <script type = "text/javascript">
   const items = <?=json_encode($items)?>;
   const groups = <?=json_encode($groups)?>;
-  const start = "<?=$date_start.' 0:00'?>";
+  const start = "<?=$date_start.' 8:00'?>";
   const end = "<?=$date_start.' 23:59'?>";
-  const step = 2; // step in hours for time-axis
+  const step = 1; // step in hours for time-axis
   make_timeline('visualization', items, groups, start, end, step);   
 </script>
