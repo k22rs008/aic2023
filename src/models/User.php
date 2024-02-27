@@ -2,13 +2,9 @@
 // namespace ksu\aic;
 
 require_once('Model.php');
-include 'KsuStudent.php';
-use ksu\KsuStudent;
 
 class User extends Model{
-    protected $table = "tb_user";
-    
-    const urole = [1=>'学生', 5=>'教員', 9=>'管理者'];
+    protected $table = "tb_user";    
     const ldap_host = "ldap1.ip.kyusan-u.ac.jp";
     const ldap_base = "ou=userall,dc=kyusan-u,dc=ac,dc=jp";
 

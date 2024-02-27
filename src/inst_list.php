@@ -1,7 +1,6 @@
 <?php
 include 'models/Instrument.php';
-// $f_status= Instrument::status; 
-$f_category = Instrument::category;
+
 $selected = 0;
 $where = 'state=1';
 $orderby = 'code';
@@ -10,13 +9,14 @@ if (isset($_GET['category'])){
   $selected = $_GET['category'];
 }
 echo '<div class="text-left">'. PHP_EOL;
-foreach ($f_category as $c=>$label){
+foreach (KsuCode::INST_CATEGORY as $c=>$label){
   $disable = ($c==$selected) ? 'disabled' : '';
   echo "<a href=\"?do=inst_list&category={$c}\" class=\"btn btn-outline-primary {$disable} m-1\">{$label}</a>" . PHP_EOL; 
 } 
 echo '</div>' . PHP_EOL;
+
 $rows= (new Instrument)->getList($where, $orderby);
-foreach($rows as $row) {
+foreach($rows as $row){
   $url = 'img/instrument/'. $row['id'] .'.webp';
   if (!@GetImageSize($url)){// use dummy image for instrument w/o image
     $url = 'img/dummy-image-square1.webp' ; 

@@ -3,15 +3,14 @@
 
 class KsuCode{
 
+    const USER_ROLE = [1=>'学生', 5=>'教員', 9=>'管理者'];
     const INST_STATE = [1=>'使用可',2=>'貸出中',3=>'使用不可',9=>'その他'];
     const INST_CATEGORY =[1=>'観察', 2=>'分析',3=>'計測',4=>'調製',9=>'その他'];
     const RSV_STATUS = [1=>'申請中', 2=>'審査中', 3=>'承認済', 9=>'拒否'];
-    const RSV_STYLE = [1=>'red', 2=>'green', 3=>'blue', 9=>'black'];
-    
+    const RSV_STYLE = [1=>'red', 2=>'green', 3=>'blue', 9=>'black'];   
     const STAFF_RANK  = [1=>'教授',2=>'准教授',3=>'講師',4=>'助教'];
     const STAFF_TITLE =[1=>'大学教育職員',2=>'事務職員',9=>'その他'];
-
-    const SAMPLE_TAG = [1=>'状態',2=>'特性'];
+    const YESNO = [1=>'有',2=>'無'];
     const SAMPLE_STATE = [1=>'固体',2=>'液体',3=>'気体'];
     const SAMPLE_NATURE = [1=>'爆発性',2=>'毒性',3=>'揮発性',4=>'その他'];
 

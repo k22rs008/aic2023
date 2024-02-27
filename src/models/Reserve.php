@@ -10,9 +10,6 @@ class Reserve extends Model{
     protected $table = "tb_reserve";
     protected $inst_table = 'tb_instrument';
     protected $member_table = 'tb_member';
-
-    const status = [1=>'申請中', 2=>'審査中', 3=>'承認済', 9=>'拒否'];
-    const style = [1=>'red', 2=>'green', 3=>'blue', 9=>'black'];
     
     function getDetail($id)
     {
@@ -88,8 +85,8 @@ class Reserve extends Model{
             $items[] = [
               'id' => $row['id'],
               'group'=>$row['instrument_id'],
-              'title'=>$row['purpose'] .'（'. self::status[$e] . '）'. $row['master_name'],
-              'className'=> isset(self::style[$e]) ? self::style[$e] : 'black', 
+              'title'=>$row['purpose'] .'（'. KsuCode::RSV_STATUS[$e] . '）'. $row['master_name'],
+              'className'=> isset(KsuCode::RSV_STYLE[$e]) ? KsuCode::RSV_STYLE[$e] : 'black', 
               'start'=> $row['stime'],
               'end'=> $row['etime'],
             ];

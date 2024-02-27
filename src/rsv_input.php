@@ -4,14 +4,21 @@ require_once('models/Instrument.php');
 include 'views/Html.php';
 include 'lib/func.php';
 
+$sample_states = KsuCode::SAMPLE_STATE;
+$sample_natures = KsuCode::SAMPLE_NATURE;
+$yesno = KsuCode::YESNO;
+
 $rsv_id = 0;
 if (isset($_GET['id'])){
   $rsv_id = $_GET['id'];
 }
 $rsv= (new Reserve)->getDetail($rsv_id);
-// echo '<pre>';
-// print_r($rsv);
-// echo '</pre>';
+foreach($rsv as $key=>$value){
+    $$key = $value;
+}
+echo '<pre>';
+print_r($rsv);
+echo '</pre>';
 ?>
 <h2>総合機器センター機器設備利用申請</h2>
 <form method="post" action="?do=rsv_save">
@@ -38,24 +45,37 @@ foreach(range(0,2) as $i){
 ?>
 </table>
 </td></tr>
-<tr><td>その他利用者</td><td colspan="4"></td>
+<tr><td>その他利用者</td><td colspan="4"><?= Html::input('text', 'other_users', '')?></td>
 </tr>
 <tr><td>教職員人数</td><td>1人</td>
     <td>学生人数</td><td colspan="2">2人</td>
 </tr>
-<tr><td>希望利用機器</td><td colspan="4"><?=$rsv['instrument_name']?></td>
+<tr><td>希望利用機器</td><td colspan="4"><?=$instrument_name?></td>
 </tr>
-<tr><td>希望利用日時</td><td colspan=4><?=jpdate($rsv['stime'],true)?>～<?=jpdate($rsv['etime'],true)?></td>
+<tr><td>希望利用日時</td>
+<td colspan="2"><?= Html::input('datetime-local', 'stime',$stime)?></td>
+<td colspan="2"><?= Html::input('datetime-local', 'etime',$etime)?></td>
 </tr>
-<tr><td>試料名</td><td colspan=4><?=$rsv['sample_name']?></td>
+<tr><td>試料名</td><td colspan="4"><?=$rsv['sample_name']?></td>
 </tr>
-<tr><td>状態</td><td colspan=4>固体</td>
+<tr><td>状態</td><td colspan="4"><?= Html::select($sample_states,'sample_state',[$sample_state], 'radio') ?></td>
 </tr>
-<tr><td>特性</td><td colspan=4>爆発性</td>
+<tr><td>特性</td><td colspan="3"><?= Html::select($sample_natures,'sample_natue[]',[$sample_state], 'checkbox') ?></td>
+<td><?= Html::input('text', 'sample_other', '', 'placeholder="「その他」の内容"')?></td>
 </tr>
-<tr><td>X線取扱者登録の有無</td><td>無</td>
-    <td>登録者番号</td><td colspan=2></td>
+<tr>
+<td>X線取扱者登録の有無</td><td><?= Html::select($yesno,'xray_chk',[$xray_chk], 'radio') ?></td>
+<td>登録者番号</td><td colspan="2"><?= Html::input('text', 'xray_num')?></td>
 </tr>
-<tr><td>備考</td><td colspan=4></td>
+<tr><td>備考</td><td colspan="4"><?= Html::textarea('memo', $memo, 'class="form-control" rows="4"')?></td>
 </tr>
 </table>
+<div class="pb-5 mb-5"><button type="submit" class="btn btn-outline-primary m-1">保存</button>
+<?php
+if ($rsv_id > 0){
+    echo '<a href="?do=rsv_detail&id='.$rsv_id.'" class="btn btn-outline-info m-1">戻る</a>';
+}else{
+    echo '<a href="?do=rsv_list" class="btn btn-outline-info m-1">戻る</a>';
+}
+?>
+</form>

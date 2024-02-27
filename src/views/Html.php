@@ -1,6 +1,19 @@
 <?php
 class Html
 {
+    public static function input($tag, $name, $value=null, $attrs=null)
+    {
+        if (in_array($tag, ['text','number','date', 'datetime', 'datetime-local', 'hidden','range'])){
+            return sprintf('<input type="%s" class="form-control" name="%s" value="%s" %s>', $tag, $name, $value, $attrs);            
+        }
+        return null;
+    } 
+
+    public static function textarea($name, $value=null, $attrs=null)
+    {
+        return sprintf('<textarea name="%s" %s>%s</textarea>', $name, $attrs, $value);
+    }
+    
     public static function select($options, $name, $selected=[],$tag='select'){
         $tag = strtolower($tag);
         $html = $s_tag = $c_tag = '';
@@ -24,16 +37,5 @@ class Html
         return null;
     }
 
-    public static function input($tag, $name, $value=null, $attrs=null)
-    {
-        if (in_array($tag, ['text','number','date', 'hidden','range'])){
-            return sprintf('<input type="%s" class="form-control" name="%s" value="%s" %s>', $tag, $name, $value, $attrs);            
-        }
-        return null;
-    } 
 
-    public static function textarea($name, $value=null, $attrs=null)
-    {
-        return sprintf('<textarea name="%s" %s>%s</textarea>', $name, $attrs, $value);
-    }
 }

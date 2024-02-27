@@ -1,5 +1,9 @@
 <?php
 include 'models/Instrument.php';
+
+$inst_state = KsuCode::INST_STATE;
+$inst_category = KsuCode::INST_CATEGORY;;
+
 $inst_id = 0;
 if (isset($_GET['id'])){
   $inst_id = $_GET['id'];
@@ -16,12 +20,10 @@ if ($row) {
     echo '<tr><th width="20%">機器ID</th><td>' . $row['id'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th width="20%">機器名称</th><td>' . $row['fullname']. '</td></tr>' . PHP_EOL;
     echo '<tr><th>略称</th><td>' . $row['shortname']. '</td></tr>' . PHP_EOL;
-    $f_state= Instrument::state; 
     $i  = $row['state']; 
-    echo '<tr><th>状態</th><td>' . $f_state[$i]. '</td></tr>' . PHP_EOL;
-    $i  = $row['category']; 
-    $f_category = Instrument::category;
-    echo '<tr><th>カテゴリ</th><td>' . $f_category[$i] . '</td></tr>' . PHP_EOL;
+    echo '<tr><th>状態</th><td>' . $inst_state[$i]. '</td></tr>' . PHP_EOL;
+    $i  = $row['category'];  
+    echo '<tr><th>カテゴリ</th><td>' . $inst_category[$i] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>メーカー</th><td>' . $row['maker'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>型式</th><td>' . $row['model'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>導入年月</th><td>' . $row['bought_year'] . '</td></tr>' . PHP_EOL;

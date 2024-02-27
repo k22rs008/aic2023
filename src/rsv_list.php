@@ -5,8 +5,9 @@ require_once('models/Instrument.php');
 include 'views/Html.php';
 include 'lib/func.php';
 
-$r_status = Reserve::status;
-$r_status[9] = 'すべて';
+$rsv_status = KsuCode::RSV_STATUS;
+
+$rsv_status[9] = 'すべて';
 $inst_id = isset($_POST['id'])? $_POST['id']: 0;
 $status = isset($_POST['s'])? $_POST['s']: 9;
 
@@ -21,7 +22,7 @@ echo '<div class="form-group mb-2">'. PHP_EOL;
 echo Html::select($options, 'id', [$inst_id]);
 echo '</div>'. PHP_EOL;
 echo '<div class="form-group mx-sm-3 mb-2">'. PHP_EOL;
-foreach ($r_status as $s=>$label){
+foreach ($rsv_status as $s=>$label){
   $disable = ($s==$status) ? 'disabled' : '';
   echo '<button type="submit" name="s" value="' . $s .
   '" class="btn btn-outline-primary '. $disable.' mt-1 mb-1 mr-1">'.$label.'</button>' . PHP_EOL; 
@@ -43,7 +44,7 @@ foreach ($rows as $row){ //予約テーブルにある予約の数だけ繰り�
     echo '<td>' . substr($row['stime'], 10,6) . '～' . substr($row['etime'], 10,6) . '</td>'; //利用時間帯を表示
     echo '<td>' . $row['master_name'] . '</td>';//利用代表者氏名を表示
     $i = $row['status'];
-    echo '<td>' . $r_status[$i] . '</td>';//利用代表者氏名を表示
+    echo '<td>' . $rsv_status[$i] . '</td>';//利用代表者氏名を表示
     echo '<td>' .
     '<a class="btn btn-sm btn-outline-success" href="?do=rsv_detail&id='.$row['id'].'">詳細</a>' .
     '</td>';
