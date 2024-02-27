@@ -25,7 +25,8 @@ class Reserve extends Model{
             $rsv['apply_mid'] = 1; //$_SESSION['member_id'];
             $rsv['xray_chk'] = 0;
             $rsv['apply_member'] = (new Member)->getDetail($rsv['apply_mid']);
-            $rsv['rsv_member'] = [];       
+            $rsv['rsv_member'] = $rsv['sample_natures'] = [];  
+            $rsv['sample_other']='';     
             $rsv['stime'] = $rsv['etime'] = date('Y-m-d H:i');
             return $rsv;
         }
@@ -52,10 +53,10 @@ class Reserve extends Model{
             $selected[] = $sample['nature'];
             if ($sample['nature']==4) $other= $sample['other'];
         }
-         $rsv['sample_other'] = $other;
+        $rsv['sample_other'] = $other;
+        $rsv['sample_natures'] = $selected;
         $_natures = array_slice_by_index(KsuCode::SAMPLE_NATURE, $selected);
         $rsv['sample_nature_value'] = implode(', ', $_natures);
-        
         return $rsv;
     }
 

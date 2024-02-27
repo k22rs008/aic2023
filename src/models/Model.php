@@ -68,4 +68,15 @@ class Model
         if (!$rs) die('エラー: ' . $conn->error);
         return $rs->fetch_all(MYSQLI_ASSOC);// Field, TYpe, Null...
     }
+
+    public static function toKVP($data, $key_field, $value_field)
+    {
+        $options = [];
+        foreach($data as $row){
+            $key = $row[$key_field];
+            $value = $row[$value_field];
+            $options[$key] = $value;
+        }
+        return $options;
+    }
 }

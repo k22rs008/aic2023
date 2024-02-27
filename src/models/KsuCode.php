@@ -9,7 +9,7 @@ class KsuCode{
     const RSV_STATUS = [1=>'申請中', 2=>'審査中', 3=>'承認済', 9=>'拒否'];
     const RSV_STYLE = [1=>'red', 2=>'green', 3=>'blue', 9=>'black']; 
     const MBR_CATEGORY = [1=>'一般学生',2=>'教育職員',3=>'事務職員',9=>'その他職員'];  
-    const STAFF_RANK  = [1=>'教授',2=>'准教授',3=>'講師',4=>'助教'];
+    const STAFF_RANK  = [1=>'教授',2=>'准教授',3=>'講師',4=>'助教',5=>'職員'];
     const STAFF_TITLE = [1=>'大学教育職員',2=>'事務職員',9=>'その他職員'];
     const YESNO = [0=>'無', 1=>'有'];
     const SAMPLE_STATE = [1=>'固体',2=>'液体',3=>'気体'];
@@ -76,19 +76,26 @@ class KsuCode{
         return null;
     }
     
-    public static function parseSid($sid)
+    /**
+     * Parse $str to student ids
+     * e.g., parseSid("21rs017,2")
+     */
+    public static function parseSid($str)
     {
-        $sid = preg_replace("/( |　)/", "", trim($sid) );//空白文字を削除
-        $sid = mb_convert_kana($sid, "a");//全角英数を半角英数へ変換
-        $sid = strtoupper($sid);//小文字を大文字に変換
-        if (strlen($sid) != 7) return null;//正しい学生番号ではない
-        if (preg_match('/^(\d{2})('.implode('|', array_keys(self::FACULTY_DEPT)) .')(\d+)$/', $sid, $matches)){
-            $stud_yr = 20+$matches[1];
-            $dept_id = $matches[2];
-            $stud_no = $matches[3];
-            $dept_name = self::FACULTY_DEPT[$dept_id];
-            return [$sid, $stud_yr, $dept_id, $stud_no, $dept_name];
+        $str = trim($str); //空白文字を削除
+        $str = mb_convert_kana($str, "a");//全角英数を半角英数へ変換
+        $str = strtoupper($str);//小文字を大文字に変換
+        $results = [];
+        foreach (explode(',',$str) as $sid){
+            if (strlen($sid) != 7) continue;
+            if (preg_match('/^(\d{2})('.implode('|', array_keys(self::FACULTY_DEPT)) .')(\d+)$/', $sid, $matches)){
+                $stud_yr = $matches[1];
+                $dept_id = $matches[2];
+                $stud_no = $matches[3];
+                $dept_name = self::FACULTY_DEPT[$dept_id];
+                $results[] = [$sid, $stud_yr, $stud_no, $dept_id, $dept_name];
+            }
         }
-        return null;
+        return $results;
     }
 }

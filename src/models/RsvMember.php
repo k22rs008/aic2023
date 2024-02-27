@@ -16,5 +16,14 @@ class RsvMember extends Model{
         if (!$rs) die('エラー: ' . $conn->error);
         return $rs->fetch_all(MYSQLI_ASSOC); 
     }
+
+    public function reset($rsv_id)
+    {
+        global $conn;
+        $sql = sprintf('DELETE FROM %s WHERE reserve_id=%d', $this->table, $rsv_id);
+        $rs = $conn->query($sql);
+        if (!$rs) die('エラー: ' . $conn->error);
+        return $conn->affected_rows;
+    }
     
 }

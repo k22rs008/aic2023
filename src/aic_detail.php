@@ -1,7 +1,7 @@
 <?php
 require_once('models/Instrument.php');
 require_once('models/Reserve.php');
-include ('lib/func.php');
+include_once ('lib/func.php');
 
 $inst_id = $_GET['id'];
 // $date_curr = '240327';  //本番なら date("ymd");

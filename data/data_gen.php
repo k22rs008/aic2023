@@ -146,7 +146,6 @@ foreach ($instruments as $instrument_id){
     // srand(time()); // uncomment this line if you wish the results change every time
     foreach (range(3,5) as $month){
         $t = date('t', strtotime($year.'-'.$month.'-1'));//今月の日数
-
         foreach(range(1, $t) as $d){
             $n = rand(-1, 4); 
             if ($n < 1) continue; // skip days (30%) w/o any reserve

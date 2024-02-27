@@ -2,8 +2,8 @@
 <?php
 require_once('models/Reserve.php');
 require_once('models/Instrument.php');
-include 'views/Html.php';
-include 'lib/func.php';
+include_once 'views/Html.php';
+include_once 'lib/func.php';
 
 $rsv_status = KsuCode::RSV_STATUS;
 
