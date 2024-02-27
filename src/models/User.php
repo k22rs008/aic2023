@@ -2,6 +2,8 @@
 // namespace ksu\aic;
 
 require_once('Model.php');
+include_once('Member.php');
+include_once('Staff.php');
 
 class User extends Model{
     protected $table = "tb_user";    
@@ -19,6 +21,7 @@ class User extends Model{
         'sn'=>'en_yomi',//※英語読み
         'jagivenname'=>'faculty', //所属学部。例、理工、芸術
         'jao'=>'dept',//所属学科。学生の場合。例、情報科学科
+        'jaou'=>'course',
         'description'=>'category', //カテゴリ。学生の場合。 例：一般学生、
         'labeleduri'=>'rank', // 役職1。教職員の場合。例：教授、准教授
         'initials'=>'title', //役職2。教職員の場合。例：学部長、学科主任、大学教育職、その他職員
@@ -61,20 +64,19 @@ class User extends Model{
         ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);        
         $ldap_bind = @ldap_bind($ldap, $dn, $passwd);
         if(!$ldap_bind)  return false;
-        $target = 'k23gjk03'; // 他ユーザ情報の取得 
+        $target = 'k23GJK03'; // 他ユーザ情報の取得 
         // $target = $userid;// 本人認証 
         $filter = "uid={$target}";
         $result = ldap_search($ldap, self::ldap_base, $filter);
         $record = [];
         if (ldap_count_entries($ldap, $result) > 0){
             $info = ldap_get_entries($ldap, $result);
-            $info = $info[0];            
+            $info = $info[0];
             foreach (self::LDAP_ENTRIES as $key=>$item){
-                $record[$item]= null;
                 if (isset($info[$key])){
                     $record[$item]= $info[$key][0];
                 } 
-            }
+            } 
         }
         return $record;                
     }
