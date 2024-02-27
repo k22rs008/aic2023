@@ -16,6 +16,7 @@ class Model
         if (!$rs) die('エラー: ' . $conn->error);
         return $rs->fetch_assoc(); 
     }
+    
     public function getList($where=1, $orderby="id")
     {
         global $conn;

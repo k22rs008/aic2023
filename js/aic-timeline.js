@@ -1,6 +1,6 @@
 function nengo(year){
     return year<1988? year: (year < 2019 ? '平成'+(year-1988) : '令和'+(year-2018))
-  }
+}
 
 function make_timeline(id,items, groups, start_time, end_time, step){
     moment.locale("ja");

@@ -81,7 +81,7 @@ CREATE TABLE tb_reserve(
 	stime DATETIME NOT NULL COMMENT '利用開始日時',
     etime DATETIME NOT NULL COMMENT '利用終了日時',
 	sample_name VARCHAR(64) NOT NULL COMMENT '試料名称',
-	sample_sate INT COMMENT '試料状態(1-個体,2-液体,3-気体)'
+	sample_state INT COMMENT '試料状態(1-個体,2-液体,3-気体)',
     xray_chk BOOLEAN COMMENT 'X線取扱者登録有無',
     xray_num VARCHAR(32) COMMENT 'X線取扱者登録者番号',
     status INT COMMENT '申請状態(1:申請中,2:審査中,3:承認,4:却下)',
@@ -101,8 +101,7 @@ CREATE TABLE rsv_member(
 ); 
 
 -- rsv_sample: 試料情報テーブル
--- 状態：1:気体,2:液体,3:固体 
--- 性質：1:爆発性,2:毒性,3:腐食性,9:その他
+-- 特性：1:爆発性,2:毒性,3:腐食性,9:その他
 CREATE TABLE rsv_sample(
 	id SERIAL PRIMARY KEY COMMENT '通し番号（自動採番, 内部参照用）',
 	reserve_id INT NOT NULL COMMENT '予約番号',

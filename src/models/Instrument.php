@@ -17,5 +17,4 @@ class Instrument extends Model{
         }
         return $detail;
     }
-
 }
