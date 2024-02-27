@@ -2,6 +2,8 @@
 // namespace ksu\aic;
 
 require_once('db_config.php');
+include_once('KsuCode.php');
+
 class Model
 {
     protected $table;

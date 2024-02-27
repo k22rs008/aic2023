@@ -57,3 +57,5 @@ foreach($rsv['rsv_member'] as $row){
 <tr><td>備考</td><td colspan=4></td>
 </tr>
 </table>
+<a class="btn btn-outline-primary m-1" href="?do=rsv_input&id=<?=$rsv_id?>">編集</a>
+<a href="?do=inst_list" class="btn btn-outline-info m-1">戻る</a> 

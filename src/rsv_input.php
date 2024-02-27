@@ -1,4 +1,3 @@
-<h2>総合機器センター機器設備利用申請</h2>
 <?php
 require_once('models/Reserve.php');
 require_once('models/Instrument.php');
@@ -13,9 +12,9 @@ $rsv= (new Reserve)->getDetail($rsv_id);
 // echo '<pre>';
 // print_r($rsv);
 // echo '</pre>';
-
 ?>
-<h3>機器設備利用申請内容詳細</h3>
+<h2>総合機器センター機器設備利用申請</h2>
+<form method="post" action="?do=rsv_save">
 <table class="table table-bordered table-hover">
 <tr><td>利用申請者</td>
     <td><?=$rsv['apply_uname']?></td>

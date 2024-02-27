@@ -126,20 +126,21 @@ $rsv_samples = [];
 $rsv_members = [];
 $student_mids = range(1,100);
 $staff_mids = range(101,120);
+$member_ids = range(1,120);
 $xray_chk = 0; 
 $xray_num = '';
 $reserve_id = 1; 
 $reserved = date('Y-m-d H:i');
 $reserve=[
     'instrument_id'=>0, 'apply_mid'=>'', 'master_mid'=>'', 'purpose'=>'',
-    'stime'=>'', 'etime'=>'','sample_name'=>'', 'xray_chk'=>0, 'xray_num'=>'',
-    'status'=>1, 'reserved'=>'',
+    'stime'=>'', 'etime'=>'','sample_name'=>'', 'sample_state'=>0,
+    'xray_chk'=>0, 'xray_num'=>'','status'=>1, 'reserved'=>'',
 ];
 $rsv_member=[
     'reserve_id'=>0, 'member_id'=>0, 
 ];
 $rsv_sample=[
-    'reserve_id'=>0, 'tag'=>0, 'val'=>0, 'other'=>'',
+    'reserve_id'=>0, 'nature'=>0, 'other'=>'',
 ];
 foreach ($instruments as $instrument_id){
     // srand(time()); // uncomment this line if you wish the results change every time
@@ -158,6 +159,7 @@ foreach ($instruments as $instrument_id){
                 $stime = $date . ' ' . $time[0];
                 $etime = $date . ' ' . $time[1];
                 $sample_name = sample($r_samples)[0];  
+                $sample_state = rand(1,3);
                 $status = rand(1,3);                
                 foreach(array_keys($reserve) as $key){
                     $reserve[$key] = $$key;
@@ -166,7 +168,7 @@ foreach ($instruments as $instrument_id){
                 
                 // rsv_members
                 $n = rand(1,6);
-                $r_members= sample($student_mids, $n);
+                $r_members= sample($member_ids, $n);
                 foreach($r_members as $member_id){
                     foreach(array_keys($rsv_member) as $key){
                         $rsv_member[$key] = $$key;
@@ -176,15 +178,10 @@ foreach ($instruments as $instrument_id){
 
                 // rsv_samples
                 $rsv_sample['reserve_id'] = $reserve_id;
-                $rsv_sample['tag'] = 1; 
-                $rsv_sample['val'] = rand(1,3); 
-                $rsv_sample['other']='';
-                $rsv_samples[] = $rsv_sample;
-
-                $rsv_sample['tag'] = 2;  $n = rand(1,2);
-                $vals = sample(range(1,4),$n);
+                $n = rand(1,2);
+                $vals = sample(range(1, 4), $n);
                 foreach ($vals as $val){
-                    $rsv_sample['val'] = $val;
+                    $rsv_sample['nature'] = $val;
                     $rsv_sample['other'] = $val==4 ? '取り扱い注意': '';
                     $rsv_samples[] = $rsv_sample;            
                 } 
@@ -199,15 +196,15 @@ foreach ($instruments as $instrument_id){
 // Output:
 header('Content-Type: text/plain'); 
 
-$tosql = false;
+$tosql = true;
 $debug = false;
 if ($tosql){
     // echo toSQL('tb_member', $members), ';', PHP_EOL ;
     // echo toSQL('tb_staff', $staffs), ';', PHP_EOL;
     // echo toSQL('tb_user', $users), ';', PHP_EOL;
     // echo toSQL('tb_reserve', $reserves), ';', PHP_EOL;
-    // echo toSQL('rsv_member', $rsv_members), ';', PHP_EOL;
-    // echo toSQL('rsv_sample', $rsv_samples), ';', PHP_EOL;
+    echo toSQL('rsv_member', $rsv_members), ';', PHP_EOL;
+    echo toSQL('rsv_sample', $rsv_samples), ';', PHP_EOL;
 }
 
 if ($debug){
