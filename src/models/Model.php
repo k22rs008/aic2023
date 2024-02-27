@@ -59,4 +59,13 @@ class Model
         if (!$rs) die('エラー: ' . $conn->error);
         return ($act=='insert') ? $conn->insert_id : $conn->affected_rows; 
     }
+
+    public function getFileds()
+    {
+        global $conn;
+        $sql = sprintf("SHOW COLUMNS FROM %s",$this->table);
+        $rs = $conn->query($sql);
+        if (!$rs) die('エラー: ' . $conn->error);
+        return $rs->fetch_all(MYSQLI_ASSOC);// Field, TYpe, Null...
+    }
 }

@@ -5,13 +5,13 @@ class KsuCode{
 
     const USER_ROLE = [1=>'学生', 5=>'教員', 9=>'管理者'];
     const INST_STATE = [1=>'使用可',2=>'貸出中',3=>'使用不可',9=>'その他'];
-    const INST_CATEGORY =[1=>'観察', 2=>'分析',3=>'計測',4=>'調製',9=>'その他'];
+    const INST_CATEGORY = [1=>'観察', 2=>'分析',3=>'計測',4=>'調製',9=>'その他'];
     const RSV_STATUS = [1=>'申請中', 2=>'審査中', 3=>'承認済', 9=>'拒否'];
     const RSV_STYLE = [1=>'red', 2=>'green', 3=>'blue', 9=>'black']; 
-    const MBR_CATEGORY =[1=>'一般学生',2=>'教育職員',3=>'事務職員',9=>'その他職員'];  
+    const MBR_CATEGORY = [1=>'一般学生',2=>'教育職員',3=>'事務職員',9=>'その他職員'];  
     const STAFF_RANK  = [1=>'教授',2=>'准教授',3=>'講師',4=>'助教'];
-    const STAFF_TITLE =[1=>'大学教育職員',2=>'事務職員',9=>'その他職員'];
-    const YESNO = [1=>'有',2=>'無'];
+    const STAFF_TITLE = [1=>'大学教育職員',2=>'事務職員',9=>'その他職員'];
+    const YESNO = [0=>'無', 1=>'有'];
     const SAMPLE_STATE = [1=>'固体',2=>'液体',3=>'気体'];
     const SAMPLE_NATURE = [1=>'爆発性',2=>'毒性',3=>'揮発性',4=>'その他'];
 
@@ -54,13 +54,35 @@ class KsuCode{
         'DJK'=>'情報科学研究科（D） 情報科学（後）',
         'DAC'=>'芸術研究科（D） 造形表現（後）',
         'DKK'=>'国際文化研究科（D） 国際文化（後）',
+
+        // その部署
+        'AIC'=>'総合機器センター',
+        'CNC'=>'総合情報基盤センター',
+        'KKC'=>'基礎教育センター',
+        'GKC'=>'語学教育研究センター',
+        'SGK'=>'産学連携支援室',
+
+        //-- 架空の学部学科
+        'LT'=>'生体医工学部 生体工学科',
+        'GLT'=>'生体医工学研究科 生体工学専攻・博士前期課程',
+        'DLT'=>'生体医工学研究科 生体工学科・博士後期課程',
     ];
-    public static function parseSid($sid){
+
+    public static function getDeptName($dept_code)
+    {
+        if (array_key_exists($dept_code, self::FACULTY_DEPT)){
+            return self::FACULTY_DEPT[$dept_code];
+        }
+        return null;
+    }
+    
+    public static function parseSid($sid)
+    {
         $sid = preg_replace("/( |　)/", "", trim($sid) );//空白文字を削除
         $sid = mb_convert_kana($sid, "a");//全角英数を半角英数へ変換
         $sid = strtoupper($sid);//小文字を大文字に変換
         if (strlen($sid) != 7) return null;//正しい学生番号ではない
-        if (preg_match('/^(\d{2})('.implode('|', array_keys(self::FACULTY_DEPT)) .')(\d+)$/', $str, $matches)){
+        if (preg_match('/^(\d{2})('.implode('|', array_keys(self::FACULTY_DEPT)) .')(\d+)$/', $sid, $matches)){
             $stud_yr = 20+$matches[1];
             $dept_id = $matches[2];
             $stud_no = $matches[3];

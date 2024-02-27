@@ -12,7 +12,7 @@
 	
 <Thing> Relationships
 . tb_reserve: 予約
-	. rsv_sample: 試料性質・状態
+	. rsv_sample: 試料特性
 	. rsv_member: 利用代表者名簿
 *********************************************/ 
 
@@ -78,6 +78,7 @@ CREATE TABLE tb_reserve(
     apply_mid VARCHAR(16) NOT NULL COMMENT '申請者会員ID',
     master_mid VARCHAR(16) NOT NULL COMMENT '責任者会員ID',
     purpose VARCHAR(16) COMMENT '利用目的',
+	other_user VARCHAR(64) COMMENT 'その他利用者',
 	stime DATETIME NOT NULL COMMENT '利用開始日時',
     etime DATETIME NOT NULL COMMENT '利用終了日時',
 	sample_name VARCHAR(64) NOT NULL COMMENT '試料名称',

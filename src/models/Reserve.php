@@ -5,6 +5,7 @@ require_once('Model.php');
 require_once('Member.php');
 require_once('RsvSample.php');
 require_once('RsvMember.php');
+require_once('lib/func.php');
 
 class Reserve extends Model{
     protected $table = "tb_reserve";
@@ -13,19 +14,48 @@ class Reserve extends Model{
     
     function getDetail($id)
     {
-        $rsv = parent::getDetail($id);
-        if (!$rsv) return null;
-        $reserve_id = $rsv['id'];
+        $rsv = parent::getDetail($id);        
+        if (!$rsv){ // return an empty blank  
+            $filefds = $this->getFileds();
+            foreach ($filefds as $f){
+                $key = $f['Field'];
+                $rsv[$key] = '';
+            }
+            $rsv['id'] = 0;
+            $rsv['apply_mid'] = 1; //$_SESSION['member_id'];
+            $rsv['xray_chk'] = 0;
+            $rsv['apply_member'] = (new Member)->getDetail($rsv['apply_mid']);
+            $rsv['rsv_member'] = [];       
+            $rsv['stime'] = $rsv['etime'] = date('Y-m-d H:i');
+            return $rsv;
+        }
+
         $instrument = (new Instrument)->getDetail($rsv['instrument_id']); 
-        $apply_user = (new Member)->getDetail($rsv['apply_mid']);
-        $master_user = (new Member)->getDetail($rsv['master_mid']);
         $rsv['instrument_name'] = $instrument['fullname'];
-        $rsv['apply_uname'] = $apply_user['ja_name'];
-        $rsv['master_uname'] = $master_user['ja_name'];
-        $rsv_members = (new RsvMember)->getList('reserve_id='.$reserve_id);
-        $rsv_samples = (new RsvSample)->getList('reserve_id='.$reserve_id);
-        $rsv['rsv_sample'] = $rsv_samples;
-        $rsv['rsv_member'] = $rsv_members;
+        $rsv['apply_member'] = (new Member)->getDetail($rsv['apply_mid']);
+        $rsv['master_member'] = (new Member)->getDetail($rsv['master_mid']);
+        $_dept_code = $rsv['master_member']['dept_code'];
+        $rsv['dept_name'] = KsuCode::FACULTY_DEPT[$_dept_code];
+
+        $rsv['rsv_member'] = (new RsvMember)->getList('reserve_id='.$id);
+        $students = array_filter($rsv['rsv_member'], function($a){ return $a['category']==1; });
+        $rsv['student_n'] = count($students);
+        $rsv['staff_n'] = count($rsv['rsv_member'])- count($students); 
+
+        $rsv['sample_state_value'] = KsuCode::SAMPLE_STATE[$rsv['sample_state']];
+        $rsv['xray_chk_value'] = KsuCode::YESNO[$rsv['xray_chk']]; 
+
+        $samples = (new RsvSample)->getList('reserve_id='.$id);
+        $selected = [];
+        $other = '';
+        foreach ($samples as $sample){
+            $selected[] = $sample['nature'];
+            if ($sample['nature']==4) $other= $sample['other'];
+        }
+         $rsv['sample_other'] = $other;
+        $_natures = array_slice_by_index(KsuCode::SAMPLE_NATURE, $selected);
+        $rsv['sample_nature_value'] = implode(', ', $_natures);
+        
         return $rsv;
     }
 

@@ -14,7 +14,7 @@ class Html
         return sprintf('<textarea name="%s" %s>%s</textarea>', $name, $attrs, $value);
     }
     
-    public static function select($options, $name, $selected=[],$tag='select'){
+    public static function select($options, $name, $selected=[], $tag='select'){
         $tag = strtolower($tag);
         $html = $s_tag = $c_tag = '';
         if (in_array($tag, ['select', 'radio', 'checkbox'])){

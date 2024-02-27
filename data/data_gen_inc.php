@@ -52,7 +52,7 @@ function rand_prob($items) {
         }
     }  
     return null;
-  }
+}
 
 
 function disp_table($data)

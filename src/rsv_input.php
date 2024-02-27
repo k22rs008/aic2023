@@ -1,8 +1,8 @@
 <?php
 require_once('models/Reserve.php');
 require_once('models/Instrument.php');
-include 'views/Html.php';
-include 'lib/func.php';
+include_once 'views/Html.php';
+include_once 'lib/func.php';
 
 $sample_states = KsuCode::SAMPLE_STATE;
 $sample_natures = KsuCode::SAMPLE_NATURE;
@@ -10,64 +10,72 @@ $yesno = KsuCode::YESNO;
 
 $rsv_id = 0;
 if (isset($_GET['id'])){
-  $rsv_id = $_GET['id'];
+    $rsv_id = $_GET['id'];
 }
-$rsv= (new Reserve)->getDetail($rsv_id);
+$rsv = (new Reserve)->getDetail($rsv_id);
+if ($rsv_id==0 and isset($_GET['inst'])){
+    $rsv['instrument_id'] = $_GET['inst'];
+    $instrument = (new Instrument)->getDetail($rsv['instrument_id']);
+    $rsv['instrument_name'] = $instrument['fullname']; 
+}
+// echo '<pre>';print_r($rsv);echo '</pre>';
 foreach($rsv as $key=>$value){
     $$key = $value;
 }
-echo '<pre>';
-print_r($rsv);
-echo '</pre>';
+$master_sid = isset($rsv['master_member']) ? $rsv['master_member']['sid'] : '';
+
+$staffs = (new Member)->getStaffItems();
+
 ?>
 <h2>総合機器センター機器設備利用申請</h2>
 <form method="post" action="?do=rsv_save">
 <table class="table table-bordered table-hover">
-<tr><td>利用申請者</td>
-    <td><?=$rsv['apply_uname']?></td>
-    <td>学籍番号</td>
-    <td colspan="2">21LL001</td>
+<input type="hidden" name="instrument_id" value="<?=$rsv['instrument_id']?>">    
+<input type="hidden" name="apply_mid" value="<?=$rsv['apply_member']['id']?>">
+<tr><td width="20%" class="text-info">利用申請者</td>
+    <td><?=$rsv['apply_member']['ja_name']?></td>
+    <td class="text-info">学籍番号</td>
+    <td colspan="2"><?=$rsv['apply_member']['sid']?></td>
 </tr>
-<tr><td>利用責任者氏名</td>
-    <td><?=Html::input('text', 'master_mid', $rsv['master_mid'])?></td>
-    <td>学部学科</td>
-    <td>生命科学部 生命科学科</td>
-    <td>Tel. 090-5540-0862</td>
+<tr><td class="text-info">利用目的</td><td colspan="4"><?=Html::input('text','purpose', $rsv['purpose'])?></td></tr>
+<tr><td class="text-info">利用責任者</td>
+    <td colspan="4"><?=Html::select($staffs, 'master_sid', [$master_sid])?></td>
 </tr>
-<tr><td>利用代表者氏名</td><td class="pt-0 pb-0" colspan="4">
+
+<tr><td class="text-info">利用代表者</td><td class="pt-0 pb-0" colspan="4">
 <table class="table table-light" width="100%">
 <?php
+$n = count($rsv['rsv_member']);
 foreach(range(0,2) as $i){
-    list($k1, $k2) = [2*$i,2*$i+1];
-    printf('<tr><td>%s</td>',Html::input('text',"rsv_member[$k1]", $k1, 'placeholder="(例)21LL999"' ));
-    printf('<td>%s</td></tr>',Html::input('text',"rsv_member[$k2]", $k2,'placeholder="(例)21LL999"' ));
+    list($k1, $k2) = [2*$i, 2*$i+1];
+    $sid1 = $k1 < $n ? $rsv['rsv_member'][$k1]['sid'] : '';
+    $sid2 = $k2 < $n ? $rsv['rsv_member'][$k2]['sid'] : ''; 
+    printf('<tr><td>%s</td>', Html::input('text',"rsv_member[]", $sid1, 'placeholder="学籍番号・職員番号 (例:21LL999)"' ));
+    printf('<td>%s</td></tr>',Html::input('text',"rsv_member[]", $sid2, 'placeholder="学籍番号・職員番号 (例:21LL999)"' ));
 }
 ?>
 </table>
 </td></tr>
-<tr><td>その他利用者</td><td colspan="4"><?= Html::input('text', 'other_users', '')?></td>
+<tr><td class="text-info">その他利用者</td><td colspan="4"><?= Html::input('text', 'other_users', '')?></td>
 </tr>
-<tr><td>教職員人数</td><td>1人</td>
-    <td>学生人数</td><td colspan="2">2人</td>
+<tr><td class="text-info">希望利用機器</td><td colspan="4"><?=$instrument_name?></td>
 </tr>
-<tr><td>希望利用機器</td><td colspan="4"><?=$instrument_name?></td>
+<tr><td class="text-info">希望利用日時</td>
+<td colspan="2"><?= Html::input('datetime-local', 'stime', $rsv['stime'])?></td>
+<td colspan="2"><?= Html::input('datetime-local', 'etime', $rsv['etime'])?></td>
 </tr>
-<tr><td>希望利用日時</td>
-<td colspan="2"><?= Html::input('datetime-local', 'stime',$stime)?></td>
-<td colspan="2"><?= Html::input('datetime-local', 'etime',$etime)?></td>
+<tr><td class="text-info">試料名</td><td colspan="4"><?= Html::input('text', 'sample_name', $rsv['sample_name']) ?></td>
 </tr>
-<tr><td>試料名</td><td colspan="4"><?=$rsv['sample_name']?></td>
+<tr><td class="text-info">状態</td><td colspan="4"><?= Html::select($sample_states,'sample_state',[$sample_state], 'radio') ?></td>
 </tr>
-<tr><td>状態</td><td colspan="4"><?= Html::select($sample_states,'sample_state',[$sample_state], 'radio') ?></td>
-</tr>
-<tr><td>特性</td><td colspan="3"><?= Html::select($sample_natures,'sample_natue[]',[$sample_state], 'checkbox') ?></td>
+<tr><td class="text-info">特性</td><td colspan="3"><?= Html::select($sample_natures,'rsv_sample[]',[$sample_state], 'checkbox') ?></td>
 <td><?= Html::input('text', 'sample_other', '', 'placeholder="「その他」の内容"')?></td>
 </tr>
 <tr>
-<td>X線取扱者登録の有無</td><td><?= Html::select($yesno,'xray_chk',[$xray_chk], 'radio') ?></td>
-<td>登録者番号</td><td colspan="2"><?= Html::input('text', 'xray_num')?></td>
+<td class="text-info">X線取扱者登録の有無</td><td><?= Html::select($yesno,'xray_chk',[$xray_chk], 'radio') ?></td>
+<td class="text-info">登録者番号</td><td colspan="2"><?= Html::input('text', 'xray_num')?></td>
 </tr>
-<tr><td>備考</td><td colspan="4"><?= Html::textarea('memo', $memo, 'class="form-control" rows="4"')?></td>
+<tr><td class="text-info">備考</td><td colspan="4"><?= Html::textarea('memo', $memo, 'class="form-control" rows="4"')?></td>
 </tr>
 </table>
 <div class="pb-5 mb-5"><button type="submit" class="btn btn-outline-primary m-1">保存</button>
