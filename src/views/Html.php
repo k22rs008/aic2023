@@ -1,6 +1,17 @@
 <?php
 class Html
 {
+    public static function toList($data, $view='table')
+    {
+        if (in_array($view, ['table', 'ul', 'ol'])){
+            $html = '<table class="table table-hover">'. PHP_EOL;
+            foreach ($data as $key=>$value){
+                $html .= sprintf('<tr><th>%s</th><td>%s</td></tr>', $key, $value). PHP_EOL;
+            }
+            return $html . '</table>'. PHP_EOL;
+        }
+        return '<pre>' . print_r($data, true) . '</pre>';
+    }
     public static function input($tag, $name, $value=null, $attrs=null)
     {
         if (in_array($tag, ['text','number','date', 'datetime', 'datetime-local', 'hidden','range'])){
@@ -37,5 +48,37 @@ class Html
         return null;
     }
 
+    public static function pagination($total_rows, $page_rows, $page)
+    {
+        $url = $_SERVER['PHP_SELF'];
+        $qstr = $_SERVER['QUERY_STRING'];
+        $total_pages = ceil($total_rows / $page_rows);
+        $first_page = floor(($page-1)/10)*10 + 1;
+        $last_page = min($first_page + 9, $total_pages);
+        $prev = $first_page - 10;
+        $next = $first_page + 10;
+        parse_str($qstr, $query);
+    
+        $html = '<ul class="pagination">' . PHP_EOL;
+        $item = '<li class="page-item %s"><a class="page-link" href="%s">%s</a></li>' . PHP_EOL;
+        $_label = 'Previous';
+        $query['page'] = $prev;
+        $_url = $url . '?' .http_build_query($query); 
+        $_disabled = ($first_page < 10) ? 'disabled' : '';
+        $html .= sprintf($item, $_disabled, $_url, $_label);
+        
+        for($p = $first_page; $p<=$last_page; $p++){
+            $query['page'] = $p;
+            $_url = $url . '?' .http_build_query($query); 
+            $_disabled = ($p==$page) ? 'disabled' : '';
+            $html .= sprintf ($item,  $_disabled, $_url, $p);
+        }
+        $_label = 'Next';
+        $query['page'] = $next;
+        $_url = $url . '?' .http_build_query($query); 
+        $_disabled = ($next > $total_pages ) ? 'disabled' : '';
+        $html .= sprintf($item, $_disabled, $_url, $_label);
+        return $html . '</ul>' . PHP_EOL;
+    }
 
 }

@@ -32,7 +32,7 @@ $g22= 5; // 学籍番号が「22GLT」で始まる前期課程学生数(残り�
 $members =[];
 $member=[
     'id'=>0,'uid'=>'','sid'=>'','email'=>'','tel_no'=>'',
-    'ja_name'=>'','sex'=>1, 'dept_code'=>'', 'category'=>1,'authority'=>1,
+    'ja_name'=>'','sex'=>1, 'dept_code'=>'', 'dept_name'=>'','category'=>1,'authority'=>1,
 ];
 for ($i=0; $i <count($persons); $i++) {
     $id = $i + 1;
@@ -42,6 +42,7 @@ for ($i=0; $i <count($persons); $i++) {
     if ($i < $student_num){ // 学生
         if ($i < $undergrad_num){ // 学部生
             $dept_code = 'LT';
+            $dept_name = '生体医工学部 生体工学科';
             list($yy, $num)= $i < $s21 ? [21,$id] : [22, $id-$s21];
             $sid = sprintf('%d%s%03d', $yy, $dept_code, $num) ;
         }else{ // 院生
@@ -49,6 +50,7 @@ for ($i=0; $i <count($persons); $i++) {
             list($yy, $dept_code, $num) = $j <= $g21 ? [21,'GLT',$j] :
             ($j <= $g21 + $g22 ? [22,'GLT',$j-$g21] : [22,'DLT',$j-$g21-$g22]); 
             $sid = sprintf('%d%s%02d', $yy, $dept_code, $num) ;
+            $dept_name = '生体医工学研究科 生体工専攻';
         }
         $uid = 'k' . strtolower($sid);
         $email = $uid . '@st.kyusan-u.ac.jp';
@@ -59,9 +61,11 @@ for ($i=0; $i <count($persons); $i++) {
         $email = $uid . '@ip.kyusan-u.ac.jp';
         if (rand(1,10) <= 8){ //教員80%
             $dept_code = 'LT';
+            $dept_name = '生体医工学部 生体工学科';
             $category = 2;
         }else{//職員20%
             $dept_code = 'AIC';
+            $dept_name = '総合機器センター';
             $category = 3;
         }
     } 
@@ -86,10 +90,10 @@ foreach(array_slice($members, $student_num, $staff_num) as $row){
     $member_id = $row['id'];
     $r_title = rand_prob([1=>80, 2=>15, 3=>5]);//教育職員80%
     $r_rank = $r_title==1 ? rand(1,4) : 5;
-    // $title = $s_title[$r_title]; // 役職1:大区分
-    // $rank = $s_rank[$r_rank];   // 役職2:中区分（主に教育職員）
-    $title = $r_title;
-    $rank = $r_rank;
+    $title = $s_title[$r_title]; // 役職1:大区分
+    $rank = $s_rank[$r_rank];   // 役職2:中区分（主に教育職員）
+    // $title = $r_title;
+    // $rank = $r_rank;
     list($b, $f, $r) = [rand(7,12), rand(4,8), rand(10,30)];
     $room_no = sprintf('%d号館%d階%d%d号室', $b, $f, $f, $r);
     $tel_ext = rand(5401, 5899); // 内線番号
@@ -198,12 +202,12 @@ header('Content-Type: text/plain');
 $tosql = true;
 $debug = false;
 if ($tosql){
-    // echo toSQL('tb_member', $members), ';', PHP_EOL ;
+    echo toSQL('tb_member', $members), ';', PHP_EOL ;
     // echo toSQL('tb_staff', $staffs), ';', PHP_EOL;
     // echo toSQL('tb_user', $users), ';', PHP_EOL;
     // echo toSQL('tb_reserve', $reserves), ';', PHP_EOL;
-    echo toSQL('rsv_member', $rsv_members), ';', PHP_EOL;
-    echo toSQL('rsv_sample', $rsv_samples), ';', PHP_EOL;
+    // echo toSQL('rsv_member', $rsv_members), ';', PHP_EOL;
+    // echo toSQL('rsv_sample', $rsv_samples), ';', PHP_EOL;
 }
 
 if ($debug){

@@ -34,7 +34,7 @@ if ($row) {
     echo '<div class="pb-5 mb-5">' . PHP_EOL . 
       '<a class="btn btn-outline-primary m-1" href="?do=inst_input&id='.$inst_id.'">編集</a>'.
       '<a href="#myModal" class="btn btn-outline-danger m-1" data-id='.$inst_id.' data-toggle="modal">削除</a>' .
-      '<a class="btn btn-outline-success m-1" href="?do=aic_detail&id='.$row['id'].'">予約</a>'.
+      '<a class="btn btn-outline-success m-1" href="?do=rsv_input&inst='.$row['id'].'">予約</a>'.
       '<a href="?do=inst_list" class="btn btn-outline-info m-1">戻る</a>' . PHP_EOL .  
       '</div>';
 }else{

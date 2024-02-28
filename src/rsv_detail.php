@@ -46,16 +46,46 @@ foreach($rsv['rsv_member'] as $row){
 </tr>
 <tr><td class="text-info">試料名</td><td colspan=4><?=$rsv['sample_name']?></td>
 </tr>
-<tr><td class="text-info">状態</td><td colspan=4><?= $rsv['sample_state_value'] ?></td>
+<tr><td class="text-info">状態</td><td colspan=4><?= $rsv['sample_state_str'] ?></td>
 </tr>
-<tr><td class="text-info">特性</td><td colspan=2><?= $rsv['sample_nature_value'] ?></td>
+<tr><td class="text-info">特性</td><td colspan=2><?= $rsv['sample_nature_str'] ?></td>
 <td colspan=2><?=$rsv['sample_other']?></td>
 </tr>
-<tr><td class="text-info">X線取扱者登録の有無</td><td colspan=2><?=$rsv['xray_chk_value'] ?></td>
+<tr><td class="text-info">X線取扱者登録の有無</td><td colspan=2><?=$rsv['xray_chk_str'] ?></td>
     <td class="text-info">登録者番号</td><td colspan=2><?=$rsv['xray_num'] ?></td>
 </tr>
 <tr style="height:80px;"><td class="text-info">備考</td><td colspan=4><?= $rsv['memo'] ?></td>
 </tr>
 </table>
 <a class="btn btn-outline-primary m-1" href="?do=rsv_input&id=<?=$rsv_id?>">編集</a>
+<a href="#myModal" class="btn btn-outline-danger m-1" data-id=<?=$rsv_id?> data-toggle="modal">削除</a>
 <a href="?do=inst_list" class="btn btn-outline-info m-1">戻る</a> 
+
+<!-- Modal HTML -->
+<div id="myModal" class="modal fade">
+  <div class="modal-dialog modal-confirm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="icon-box">
+          <i class="material-icons">&#xE5CD;</i>
+        </div>
+        <h4 class="text-info">この予約を削除しますか？</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>「はい」を押したら、この予約を削除します。</p>
+      </div>
+      <div class="modal-footer">
+        <a href="" data-url="?do=rsv_delete" class="btn btn-danger" id="deleteBtn">はい</a>
+        <button type="button" class="btn btn-info" data-dismiss="modal">いいえ</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $('#myModal').on('shown.bs.modal', function(event) {
+    var id = $(event.relatedTarget).data('id');
+    var href = $(this).find('#deleteBtn').data('url') +'&id=' + id;
+    $(this).find('#deleteBtn').attr('href', href);
+  });
+</script>

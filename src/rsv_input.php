@@ -71,7 +71,7 @@ foreach(range(0,2) as $i){
     <td colspan="4"><?= Html::select(KsuCode::SAMPLE_STATE,'sample_state',[$rsv['sample_state']], 'radio') ?></td>
 </tr>
 <tr><td class="text-info">特性</td>
-    <td colspan="3"><?= Html::select(KsuCode::SAMPLE_NATURE,'rsv_sample[]',$rsv['sample_natures'], 'checkbox') ?></td>
+    <td colspan="3"><?= Html::select(KsuCode::SAMPLE_NATURE,'rsv_sample[]',$rsv['sample_nature'], 'checkbox') ?></td>
     <td><?= Html::input('text', 'sample_other', $rsv['sample_other'], 'placeholder="「その他」の内容"')?></td>
 </tr>
 <tr>
@@ -82,7 +82,8 @@ foreach(range(0,2) as $i){
     <td colspan="4"><?= Html::textarea('memo', $memo, 'class="form-control" rows="4"')?></td>
 </tr>
 </table>
-<div class="pb-5 mb-5"><button type="submit" class="btn btn-outline-primary m-1">保存</button>
+<div class="pb-5 mb-5">
+<button type="submit" class="btn btn-outline-primary m-1">保存</button>
 <?php
 if ($rsv_id > 0){
     echo '<a href="?do=rsv_detail&id='.$rsv_id.'" class="btn btn-outline-info m-1">戻る</a>';

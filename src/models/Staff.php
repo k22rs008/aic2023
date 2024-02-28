@@ -18,10 +18,8 @@ class Staff extends Model{
       $items = [];
       foreach ($rows as $row){
            $sid = $row['sid'];
-           $rank = $row['rank'];
-           $dept_code = $row['dept_code'];
-           $rank_name = KsuCode::STAFF_RANK[$rank];
-           $dept_name = KsuCode::FACULTY_DEPT[$dept_code];
+           $rank_name = $row['rank'];
+           $dept_name = $row['dept_name'];      
            $items[$sid] = sprintf('%s (%s) %s', $row['ja_name'], $dept_name, $rank_name);
        }
        return $items;

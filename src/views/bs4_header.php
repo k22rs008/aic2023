@@ -1,5 +1,5 @@
 <?php
-$app_name = '総合機器センター機器設備予約システム (テスト運用中)';
+$app_name = '総合機器センター機器設備予約システム';
 ?>
 <!DOCTYPE html>
 <html lang="jp">
@@ -48,36 +48,33 @@ $app_name = '総合機器センター機器設備予約システム (テスト�
  <li class="nav-item active">
  <a class="nav-link" href="index.php"><i class="material-icons">home</i><span class="sr-only">(current)</span></a>
  </li></ul>
+
  <ul class="navbar-nav">
- <li class="navbar-brand text-muted"></li>
+ <li class="navbar-brand text-muted"><?=isset($_SESSION['member_name'])?$_SESSION['member_name']:'ゲスト'?></li> 
 <?php
 if (isset($_SESSION['urole'])){
   $menu = array();
-  if (($_SESSION['urole']==1 )||($_SESSION['urole']==5)){  //利用者
+  if (($_SESSION['urole']==1 )||($_SESSION['urole']==2)){  //利用者
     $menu = array(   //申請者メニュー
-      //'機器設備一覧'  => 'eps_grade',
+      '機器設備一覧'  => 'inst_list',
       '空き状況一覧'  => 'aic_list',
       '利用申請一覧'  => 'rsv_list',
     );
   }
-
   if($_SESSION['urole']==9) { //管理者
     $menu = array(   //管理者メニュー
       //'利用者一覧'  => '',
-      //'機器設備一覧'  => '',
+      '機器設備一覧'  => 'inst_list',
       //'年間スケジュール'  => '',
       //'お知らせ一覧' => '',
       '利用申請一覧' => 'rsv_list',
       //'利用状況集計' => ''
     );
   }
-
   foreach($menu as $label=>$action){ 
     echo  '<li class="nav-item"><a class="nav-link" href="?do=' . $action . '">' . $label . '</a></li>' ;
   }
-
   echo  '<li class="nav-item"><a class="nav-link" href="?do=sys_logout">ログアウト</a></li>' ;
-
 }else{
   echo  '<li class="nav-item"><a class="nav-link" href="?do=sys_login">ログイン</a></li>' ;
 }

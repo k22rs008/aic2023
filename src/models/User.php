@@ -47,7 +47,7 @@ class User extends Model{
         global $conn;
         $userid = htmlspecialchars($userid);
         $passwd = htmlspecialchars($passwd);
-        $sql = "SELECT * FROM %s WHERE uid='%s'  AND upass='%s'";
+        $sql = "SELECT * FROM %s WHERE uid='%s' AND upass='%s'";
         $sql = sprintf($sql, $this->table, $userid, $passwd);
         $rs = $conn->query($sql);
         if (!$rs) die('エラー: ' . $conn->error);
@@ -64,7 +64,7 @@ class User extends Model{
         ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);        
         $ldap_bind = @ldap_bind($ldap, $dn, $passwd);
         if(!$ldap_bind)  return false;
-        $target = 'k23GJK03'; // 他ユーザ情報の取得 
+        $target = 'k23gjk03'; // 他ユーザ情報の取得 
         // $target = $userid;// 本人認証 
         $filter = "uid={$target}";
         $result = ldap_search($ldap, self::ldap_base, $filter);

@@ -3,6 +3,7 @@
 
 class KsuCode{
 
+    const PAGE_ROWS = 15;
     const USER_ROLE = [1=>'学生', 5=>'教員', 9=>'管理者'];
     const INST_STATE = [1=>'使用可',2=>'貸出中',3=>'使用不可',9=>'その他'];
     const INST_CATEGORY = [1=>'観察', 2=>'分析',3=>'計測',4=>'調製',9=>'その他'];
@@ -84,18 +85,18 @@ class KsuCode{
     {
         $str = trim($str); //空白文字を削除
         $str = mb_convert_kana($str, "a");//全角英数を半角英数へ変換
-        $str = strtoupper($str);//小文字を大文字に変換
-        $results = [];
-        foreach (explode(',',$str) as $sid){
-            if (strlen($sid) != 7) continue;
-            if (preg_match('/^(\d{2})('.implode('|', array_keys(self::FACULTY_DEPT)) .')(\d+)$/', $sid, $matches)){
-                $stud_yr = $matches[1];
-                $dept_id = $matches[2];
-                $stud_no = $matches[3];
-                $dept_name = self::FACULTY_DEPT[$dept_id];
-                $results[] = [$sid, $stud_yr, $stud_no, $dept_id, $dept_name];
-            }
+        $sid = strtoupper($str);//小文字を大文字に変換
+        if (strlen($sid) != 7) return null;
+        if (preg_match('/^(\d{2})('.implode('|', array_keys(self::FACULTY_DEPT)) .')(\d+)$/', $sid, $matches)){
+            $stud_yr = $matches[1];
+            $dept_id = $matches[2];
+            $stud_no = $matches[3];
+            $dept_name = self::FACULTY_DEPT[$dept_id];
+            return [
+                'sid'=>$sid, 'syear'=>$stud_yr, 'sno'=>$stud_no, 
+                'dept_code'=>$dept_id, 'dept_name'=>$dept_name
+            ];
         }
-        return $results;
+        return null;
     }
 }

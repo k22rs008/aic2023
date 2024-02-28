@@ -1,2 +1,2 @@
 <?php
-header('Location:?do=aic_list');
+header('Location:?do=inst_list');

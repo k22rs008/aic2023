@@ -60,15 +60,17 @@ class Model
         return ($act=='insert') ? $conn->insert_id : $conn->affected_rows; 
     }
 
+    /** get information about fields of the table*/
     public function getFileds()
     {
         global $conn;
         $sql = sprintf("SHOW COLUMNS FROM %s",$this->table);
         $rs = $conn->query($sql);
         if (!$rs) die('エラー: ' . $conn->error);
-        return $rs->fetch_all(MYSQLI_ASSOC);// Field, TYpe, Null...
+        return $rs->fetch_all(MYSQLI_ASSOC);// Field, Type, Null...
     }
 
+    /** transform a row list to a KVP list: Key-Value Pair */
     public static function toKVP($data, $key_field, $value_field)
     {
         $options = [];

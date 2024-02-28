@@ -32,7 +32,7 @@ foreach($rows as $row){
    '<div class="small">',$row['detail'], '</div>',
    '<div class="align-self-end">',
    '<a class="btn btn-sm btn-outline-danger m-1" href="?do=inst_detail&id='.$row['id'].'">詳細</a>',
-   '<a class="btn btn-sm btn-outline-success m-1" href="?do=aic_detail&id='.$row['id'].'">予約</a>',
+   '<a class="btn btn-sm btn-outline-success m-1" href="?do=rsv_input&inst='.$row['id'].'">予約</a>',
    '</div>';
   echo '</div>'. PHP_EOL;
   echo '<hr class="">';

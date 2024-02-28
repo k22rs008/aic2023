@@ -41,7 +41,7 @@ CREATE TABLE tb_member(
 	en_name VARCHAR(32) COMMENT '英語氏名',
 	en_yomi VARCHAR(32) COMMENT '英語読み',
 	sex INT COMMENT '性別(0:未記入,1:男性,2:女性)',
-	-- dept_name VARCHAR(64) COMMENT '所属名称, 例: 理工学部 情報科学科'),
+	dept_name VARCHAR(64) COMMENT '所属名称, 例: 理工学部 情報科学科',
 	dept_code VARCHAR(16) COMMENT '所属コード,例: RS',
 	category INT COMMENT 'カテゴリ(1:一般学生,2:教育職員,3:事務職員,9:その他職員)',
 	authority INT COMMENT '権限(1:予約権なし,2:予約付き)',
@@ -55,9 +55,9 @@ CREATE TABLE tb_member(
 CREATE TABLE tb_staff(
   id SERIAL PRIMARY KEY COMMENT '通し番号（自動採番, 内部参照用）',
   member_id INT NOT NULL COMMENT '',
-  title INT NOT NULL COMMENT '役職1:大区分(1:大学教育職員,2:事務職員,3:職員)',
-  rank INT NOT NULL COMMENT '役職2:中区分(1:教授,2:准教授,3:講師,4:助教,5:職員)',
-  room_no VARCHAR(32) NOT NULL COMMENT '部屋番号',
+  title VARCHAR(32)  COMMENT '役職1:大区分(大学教育職員,事務職員,職員)',
+  rank VARCHAR(32)  COMMENT '役職2:中区分(教授,准教授,講師,助教,職員)',
+  room_no VARCHAR(32) COMMENT '部屋番号',
   tel_ext VARCHAR(8) COMMENT '内線番号',
   responsible BOOLEAN COMMENT '責任者になれるか' 
 );
@@ -85,7 +85,7 @@ CREATE TABLE tb_reserve(
 	sample_state INT COMMENT '試料状態(1-個体,2-液体,3-気体)',
     xray_chk BOOLEAN COMMENT 'X線取扱者登録有無',
     xray_num VARCHAR(32) COMMENT 'X線取扱者登録者番号',
-    status INT COMMENT '申請状態(1:申請中,2:審査中,3:承認,4:却下)',
+    status INT NOT NULL DEFAULT 1 COMMENT '申請状態(1:申請中,2:審査中,3:承認,4:却下)',
     memo TEXT COMMENT '備考',
     reserved DATETIME COMMENT '予約日',
 	approved DATETIME COMMENT '承認日',

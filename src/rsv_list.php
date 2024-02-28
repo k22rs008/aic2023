@@ -6,19 +6,31 @@ include_once 'views/Html.php';
 include_once 'lib/func.php';
 
 $rsv_status = KsuCode::RSV_STATUS;
-
 $rsv_status[9] = 'すべて';
-$inst_id = isset($_POST['id'])? $_POST['id']: 0;
-$status = isset($_POST['s'])? $_POST['s']: 9;
+
+$page = isset($_GET['page']) ? $_GET['page'] : 1; 
+
+if (isset($_POST['id'])){
+  $inst_id = $_POST['id'];
+  $status = $_POST['s'];
+  $_SESSION['selected_inst'] = $inst_id;
+  $_SESSION['selected_status'] = $status;
+}else if(isset($_SESSION['selected_inst'])){
+  $inst_id = $_SESSION['selected_inst'];
+  $status = $_SESSION['selected_status'];
+}else{
+  $inst_id = 0; 
+  $status =9;
+}
 
 echo '<div class="text-left">'. PHP_EOL;
+echo '<form method="post" action="?do=rsv_list" class="form-inline">'. PHP_EOL;
+echo '<div class="form-group mb-2">'. PHP_EOL;
 $rows = (new Instrument)->getList();
-$options=[0=>'～機器選択～'];
+$options = [0=>'～機器選択～'];
 foreach ($rows as $row){
   $options[$row['id']] = $row['shortname'];
 }
-echo '<form method="post" action="?do=rsv_list" class="form-inline">'. PHP_EOL;
-echo '<div class="form-group mb-2">'. PHP_EOL;
 echo Html::select($options, 'id', [$inst_id]);
 echo '</div>'. PHP_EOL;
 echo '<div class="form-group mx-sm-3 mb-2">'. PHP_EOL;
@@ -31,7 +43,12 @@ echo '</div>' . PHP_EOL;
 echo '</form>'. PHP_EOL;
 echo '</div>' . PHP_EOL;
 
-$rows= (new Reserve)->getListDetail($inst_id, $status);
+// pagination
+$num_rows = (new Reserve)->getNumRows($inst_id, null, null, $status);
+echo Html::pagination($num_rows, KsuCode::PAGE_ROWS, $page);
+// end of pagination
+
+$rows= (new Reserve)->getListByInst($inst_id, null, null, $status, $page);
 echo '<table class="table table-hover">';
 echo '<tr><th>申請日時</th><th>申請者</th><th>利用機器名</th><th>利用予定日</th>
     <th>利用時間帯</th><th>利用代表者</th><th>承認状態</th><th>詳細</th></tr>';
@@ -51,3 +68,4 @@ foreach ($rows as $row){ //予約テーブルにある予約の数だけ繰り�
     echo '</tr>' . PHP_EOL;
 }
 echo '</table>';
+echo Html::pagination($num_rows, KsuCode::PAGE_ROWS, $page);
