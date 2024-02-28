@@ -54,10 +54,10 @@ echo '<tr><th>申請日時</th><th>申請者</th><th>利用機器名</th><th>利
     <th>利用時間帯</th><th>利用代表者</th><th>承認状態</th><th>詳細</th></tr>';
 
 foreach ($rows as $row){ //予約テーブルにある予約の数だけ繰り返す
-    echo '<tr><td>' . jpdate($row['reserved']) . '</td>' . PHP_EOL;; //申請日時を表示
-    echo '<td>' . $row['apply_name'] . '</td>' . PHP_EOL;; //申請者氏名を表示
-    echo '<td>' . $row['shortname'] . '</td>' . PHP_EOL;; //利用機器名(省略)を表示
-    echo '<td>' . jpdate($row['stime']) . '</td>' . PHP_EOL;; //利用日を表示
+    echo '<tr><td>' . jpdate($row['reserved']) . '</td>' . PHP_EOL; //申請日時を表示
+    echo '<td>' . $row['apply_name'] . '</td>' . PHP_EOL; //申請者氏名を表示
+    echo '<td>' . $row['shortname'] . '</td>' . PHP_EOL; //利用機器名(省略)を表示
+    echo '<td>' . jpdate($row['stime']) . '</td>' . PHP_EOL; //利用日を表示
     echo '<td>' . substr($row['stime'], 10,6) . '～' . substr($row['etime'], 10,6) . '</td>'; //利用時間帯を表示
     echo '<td>' . $row['master_name'] . '</td>';//利用代表者氏名を表示
     $i = $row['status'];

@@ -44,7 +44,7 @@ CREATE TABLE tb_member(
 	dept_name VARCHAR(64) COMMENT '所属名称, 例: 理工学部 情報科学科',
 	dept_code VARCHAR(16) COMMENT '所属コード,例: RS',
 	category INT COMMENT 'カテゴリ(1:一般学生,2:教育職員,3:事務職員,9:その他職員)',
-	authority INT COMMENT '権限(1:予約権なし,2:予約付き)',
+	authority INT DEFAULT 1 COMMENT '権限(1:予約権なし,2:予約付き)',
 	granted TIMESTAMP COMMENT '権限付与・撤回日時',
 	memo TEXT COMMENT '備考'
 );
@@ -59,7 +59,7 @@ CREATE TABLE tb_staff(
   rank VARCHAR(32)  COMMENT '役職2:中区分(教授,准教授,講師,助教,職員)',
   room_no VARCHAR(32) COMMENT '部屋番号',
   tel_ext VARCHAR(8) COMMENT '内線番号',
-  responsible BOOLEAN COMMENT '責任者になれるか' 
+  responsible BOOLEAN DEFAULT 0 COMMENT '責任者になれるか' 
 );
 
 -- tb_department: 部所テーブル

@@ -8,7 +8,7 @@ $data = $_POST;
 $rsv_id = $data['id'];
 $rsv = [
     'id'=>0,'instrument_id'=>0,'apply_mid'=>0,'master_mid'=>0,
-    'purpose'=>'','other_user'=>'','stime'=>'','etime'=>'','sample_name'=>'','sample_state'=>0,
+    'purpose'=>'','other_user'=>'','stime'=>'','etime'=>'','sample_name'=>'','sample_state'=>1,
     'xray_chk'=>0, 'xray_num'=>'', 'memo'=>'',
 ];
 foreach($rsv as $key=>$val){

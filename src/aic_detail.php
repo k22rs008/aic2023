@@ -24,32 +24,39 @@ $url = 'img/instrument/'. $inst_id .'.webp';
 if (!@GetImageSize($url)){
   $url = 'img/dummy-image-square1.webp' ; 
 }   
-echo '<p><img src="'. $url .'" height="240px" width="320px" class="m-1 rounded"></p>';
-echo '<h3 class="">'. $fname.'</h3>';
-echo '<p>' .$instrument['detail'].'</p>';
-echo '<h4>' . $jpdate . $fname . ' の予約一覧</h4>';
-echo '<table class="table table-boxed">';
-echo  '<tr><th width="20%">開始日時</th><th width="20%">終了日時</th>';
-echo  '<th>責任者</th><th>目的</th><th>承認</th></tr>';
+echo '<p><img src="'. $url .'" height="240px" width="320px" class="m-1 rounded"></p>' . PHP_EOL;
+echo '<h3 class="">'. $fname.'</h3>' . PHP_EOL;
+echo '<p>' .$instrument['detail'].'</p>' . PHP_EOL;
+echo '<h4>' . $jpdate . $fname . ' の予約一覧</h4>' . PHP_EOL;
 $rows =  (new Reserve)->getListByInst($inst_id, $date_start, $date_start);
-foreach ($rows as $row) {
-  echo  '<tr>';
-  $e = $row['status'];
-  echo  '<td>' . jpdate($row['stime'], true) . '</td>';
-  echo  '<td>' . jpdate($row['etime'], true)  . '</td>';
-  echo  '<td>' . $row['master_name'] . '</td>';
-  echo  '<td>' . $row['purpose'] . '</td>';
-  echo  '<td>' . KsuCode::RSV_STATUS[$e] . '</td>';
-  echo  '</tr>';
+if (count($rows) > 0){
+  echo '<table class="table table-boxed">' . PHP_EOL;
+  echo  '<tr><th width="20%">開始日時</th><th width="20%">終了日時</th>' . PHP_EOL;
+  echo  '<th>責任者</th><th>目的</th><th>承認</th></tr>' . PHP_EOL;
+  foreach ($rows as $row) {
+    echo  '<tr>' . PHP_EOL;
+    $e = $row['status'];
+    echo  '<td>' . jpdate($row['stime'], true) . '</td>';
+    echo  '<td>' . jpdate($row['etime'], true)  . '</td>';
+    echo  '<td>' . $row['master_name'] . '</td>';
+    echo  '<td>' . $row['purpose'] . '</td>';
+    echo  '<td>' . KsuCode::RSV_STATUS[$e] . '</td>' . PHP_EOL;
+    echo  '</tr>' . PHP_EOL;
+  }
+  echo  '</table>' . PHP_EOL;
+}else{
+  echo '<p class="text-info">本日は、まだ予約はありません</p>';
 }
-echo  '</table>';
 
 $navbar = ['-7'=>'1週間前','-1'=>'前の日', '+1'=>'次の日','+7'=>'1週間後'];
 echo '<div class="text-left">'. PHP_EOL;
 foreach ($navbar as $delta => $label){
   $ymd = date("ymd", strtotime($delta . " days", strtotime($date_start)));
-  echo "<a href=\"?do=aic_detail&id={$inst_id}&d={$ymd}\" class=\"btn btn-outline-primary m-1\">{$label}</a>" . PHP_EOL; 
+  $link='<a href="?do=aic_detail&id=%d&d=%s" class="btn btn-outline-primary m-1">%s</a>' . PHP_EOL;
+  printf($link, $inst_id, $ymd, $label);
 } 
+$link = '<a href="?do=rsv_input&inst=%d&d=%s" class="btn btn-outline-info float-right m-1">予約する</a>' . PHP_EOL;
+printf($link, $inst_id, $ymd);
 echo '</div>' . PHP_EOL;
 ?>
 <div id="visualization"></div>

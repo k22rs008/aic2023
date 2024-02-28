@@ -26,7 +26,8 @@ class Reserve extends Model{
             $rsv['xray_chk'] = 0;
             $rsv['apply_member'] = (new Member)->getDetail($rsv['apply_mid']);
             $rsv['rsv_member'] = $rsv['sample_nature'] = [];  
-            $rsv['sample_other']='';     
+            $rsv['sample_other']='';    
+            $rsv['sample_state']=1; 
             $rsv['stime'] = $rsv['etime'] = date('Y-m-d H:i');
             return $rsv;
         }
@@ -60,13 +61,14 @@ class Reserve extends Model{
         return $rsv;
     }
 
-    
+     // $inst_id= 0 for all, or 1~ for one specific instrument 
+    // $status=9 for all, or 1~ for one specific status
     function getNumRows($inst_id=0, $date1=null, $date2=null, $status=9)
     {
         global $conn; 
         $sql = "SELECT *  FROM %s WHERE 1 ";
         $sql = sprintf($sql, $this->table, $this->inst_table, $this->member_table, $this->member_table);
-        if ($inst_id){ // $inst_id= 0 for all, or 1~ for one specific instrument 
+        if ($inst_id){  
             $sql .= " AND instrument_id=$inst_id"; 
         }
         if ($date1 and $date2){
@@ -74,7 +76,7 @@ class Reserve extends Model{
         }elseif($date1 and !$date2){
             $sql .= " AND etime >= '{$date1}'";
         }
-        if ($status < 9){ // $status=9 for all, or 1~ for one specific status
+        if ($status < 9){ 
             $sql .= " AND status=$status"; 
         }
         $rs = $conn->query($sql);
@@ -82,6 +84,7 @@ class Reserve extends Model{
         return $rs->num_rows;
     }
 
+   
     function getListByInst($inst_id=0, $date1=null, $date2=null, $status=9, $page=0)
     {
         global $conn;        
@@ -89,15 +92,15 @@ class Reserve extends Model{
         $sql = "SELECT r.*, f.fullname, f.shortname,m1.ja_name AS apply_name, m2.ja_name AS master_name
           FROM %s r, %s f, %s m1, %s m2 WHERE r.apply_mid=m1.id AND r.master_mid=m2.id AND f.id=r.instrument_id ";
         $sql = sprintf($sql, $this->table, $this->inst_table, $this->member_table, $this->member_table);
-        if ($inst_id){ // $inst_id= 0 for all, or 1~ for one specific instrument 
+        if ($inst_id){ 
             $sql .= " AND r.instrument_id=$inst_id"; 
         }
         if ($date1 and $date2){
             $sql .= " AND GREATEST(stime, '{$date1} 00:00') <= LEAST(etime, '{$date2} 23:59')"; 
         }elseif($date1 and !$date2){
-            $sql .= " AND etime > '{$date1}'";
+            $sql .= " AND etime>'{$date1}'";
         }
-        if ($status < 9){ // $status=9 for all, or 1~ for one specific status
+        if ($status < 9){ 
             $sql .= " AND r.status=$status"; 
         }
         $sql .= ' ORDER BY instrument_id, stime, etime';

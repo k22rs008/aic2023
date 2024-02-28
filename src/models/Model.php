@@ -17,13 +17,26 @@ class Model
         return $rs->fetch_assoc(); 
     }
     
-    public function getList($where=1, $orderby="id")
+    public function getList($where=1, $orderby="id", $page=0)
+    {
+        global $conn;
+        $sql = sprintf("SELECT * FROM %s WHERE %s ORDER BY %s", $this->table, $where, $orderby);
+        if ($page > 0){
+            $n = KsuCode::PAGE_ROWS;
+            $sql .= sprintf(' LIMIT %d OFFSET %d', $n, ($page-1) * $n);
+        }
+        $rs = $conn->query($sql);
+        if (!$rs) die('エラー: ' . $conn->error);
+        return $rs->fetch_all(MYSQLI_ASSOC); 
+    }
+    
+    public function getNumRows($where=1, $orderby="id")
     {
         global $conn;
         $sql = sprintf("SELECT * FROM %s WHERE %s ORDER BY %s", $this->table, $where, $orderby);
         $rs = $conn->query($sql);
         if (!$rs) die('エラー: ' . $conn->error);
-        return $rs->fetch_all(MYSQLI_ASSOC); 
+        return $rs->num_rows;
     }
 
     public function delete($id)

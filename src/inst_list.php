@@ -10,8 +10,9 @@ if (isset($_GET['category'])){
 }
 echo '<div class="text-left">'. PHP_EOL;
 foreach (KsuCode::INST_CATEGORY as $c=>$label){
-  $disable = ($c==$selected) ? 'disabled' : '';
-  echo "<a href=\"?do=inst_list&category={$c}\" class=\"btn btn-outline-primary {$disable} m-1\">{$label}</a>" . PHP_EOL; 
+  $disabled = ($c==$selected) ? 'disabled' : '';
+  $link = '<a href="?do=inst_list&category=%d" class="btn btn-outline-primary %s m-1">%s</a>' . PHP_EOL;
+  printf($link,  $c, $disabled, $label);
 } 
 echo '</div>' . PHP_EOL;
 

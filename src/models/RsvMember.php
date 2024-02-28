@@ -7,7 +7,7 @@ class RsvMember extends Model{
     protected $table = "rsv_member";
     protected $member_table = "tb_member";
 
-    public function getList($where=1, $orderby='id')
+    public function getList($where=1, $orderby='id', $page=0)
     {
         global $conn;
         $sql = "SELECT mm.* FROM %s rm, %s mm WHERE %s AND rm.member_id=mm.id ORDER BY %s";

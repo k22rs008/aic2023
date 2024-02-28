@@ -10,10 +10,19 @@ if (isset($_GET['id'])){
     $rsv_id = $_GET['id'];
 }
 $rsv = (new Reserve)->getDetail($rsv_id);
-if ($rsv_id==0 and isset($_GET['inst'])){
+if (isset($_GET['inst'])){
     $rsv['instrument_id'] = $_GET['inst'];
     $instrument = (new Instrument)->getDetail($rsv['instrument_id']);
     $rsv['instrument_name'] = $instrument['fullname']; 
+}
+$stime = date('Y-m-d H:i');
+if (isset($_GET['d'])){
+    $ymd = DateTime::createFromFormat('ymd', $_GET['d']);
+    $stime = $ymd->format('Y-m-d H:i');
+}
+if ($rsv_id == 0){
+    $rsv['stime'] = $stime;
+    $rsv['etime'] = $stime;
 }
 // echo '<pre>';print_r($rsv);echo '</pre>';
 foreach($rsv as $key=>$value){
@@ -21,11 +30,11 @@ foreach($rsv as $key=>$value){
 }
 $master_sid = isset($rsv['master_member']) ? $rsv['master_member']['sid'] : '';
 
-$staffs = (new Staff)->getOptions();
+$staffs = (new Staff)->getOptions('responsible');
 
 ?>
 <h2>総合機器センター機器設備利用申請</h2>
-<form method="post" action="?do=rsv_save">
+<form class="needs-validation" method="post" action="?do=rsv_save">
 <table class="table table-bordered table-hover">
 <input type="hidden" name="id" value="<?=$rsv_id?>">  
 <input type="hidden" name="instrument_id" value="<?=$rsv['instrument_id']?>">    
@@ -35,8 +44,8 @@ $staffs = (new Staff)->getOptions();
     <td class="text-info">学籍番号</td>
     <td colspan="2"><?=$rsv['apply_member']['sid']?></td>
 </tr>
-<tr><td class="text-info">利用目的</td>
-    <td colspan="4"><?=Html::input('text','purpose', $rsv['purpose'])?></td></tr>
+<tr><td class="text-info form-group">利用目的※</td>
+    <td colspan="4"><?=Html::input('text','purpose', $rsv['purpose'],'required')?></td></tr>
 <tr><td class="text-info">利用責任者</td>
     <td colspan="4"><?=Html::select($staffs, 'master_sid', [$master_sid])?></td>
 </tr>
@@ -60,9 +69,9 @@ foreach(range(0,2) as $i){
 <tr><td class="text-info">希望利用機器</td>
     <td colspan="4"><?=$instrument_name?></td>
 </tr>
-<tr><td class="text-info">希望利用日時</td>
-    <td colspan="2"><?= Html::input('datetime-local', 'stime', $rsv['stime'])?></td>
-    <td colspan="2"><?= Html::input('datetime-local', 'etime', $rsv['etime'])?></td>
+<tr><td class="text-info form-group">希望利用日時</td>
+    <td colspan="2"><?= Html::input('datetime-local', 'stime', $rsv['stime'], 'id="stime"')?></td>
+    <td colspan="2"><?= Html::input('datetime-local', 'etime', $rsv['etime'], 'id="etime"')?></td>
 </tr>
 <tr><td class="text-info">試料名</td>
     <td colspan="4"><?= Html::input('text', 'sample_name', $rsv['sample_name']) ?></td>
@@ -93,3 +102,57 @@ if ($rsv_id > 0){
 ?>
 </div>
 </form>
+<?php
+  $occupied_periods=[['2024-3-11 8:30', '2024-3-11 10:40'],['2024-3-11 15:00', '2024-3-11 18:0']]
+?>
+<script>
+const occupied = <?= json_encode($occupied_periods) ?>; 
+$.validator.setDefaults({
+  errorClass: "text-danger",
+  validClass: "text-success",
+  focusCleanup: true,
+  highlight : function(element, errorClass, validClass) {
+    $(element).closest(".form-group").addClass(errorClass).removeClass(validClass);
+  },
+  unhighlight : function(element, errorClass, validClass) {
+    $(element).closest(".form-group").removeClass(errorClass).addClass(validClass);
+  }
+});
+$( "form" ).validate({
+  rules: {
+    purpose: "required",
+    stime : {
+        required: true,
+    },
+    etime : {
+        required : true,
+        afterStartTime: true,
+    },
+  },  
+  messages: {
+    purpose: "利用目的が必須です"
+  },
+});
+function overlaped(a1, a2, b1, b2){
+    return Math.max(a1, b1)<Math.min(a2,b2);
+}
+var now = moment(new Date()).format("YYYY/MM/DD HH:mm");
+$.validator.addMethod(
+    "afterStartTime",
+    function(value, element) {
+        const stime = new Date($('#stime').val());
+        const etime = new Date($('#etime').val());
+        if (stime > etime) return false; 
+        occupied.forEach((period)=>{
+            var p0 = new Date(period[0]);
+            var p1 = new Date(period[1]);
+            if (overlaped(stime, etime, p0, p1)){
+                console.log(period[0],period[1]);
+                return false;
+            }
+        });
+        return true;
+    },
+    "有効な期間ではありません。"
+  );
+</script>
