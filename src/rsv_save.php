@@ -2,7 +2,7 @@
 // namespace ksu\aic;
 
 require_once ('models/Reserve.php');
-
+require_once ('lib/func.php');
 // echo '<pre>'; print_r($_POST); echo '</pre>';
 $data = $_POST;
 $rsv_id = $data['id'];
@@ -15,35 +15,65 @@ foreach($rsv as $key=>$val){
     if (array_key_exists($key, $data)){
         $rsv[$key] = $data[$key];
     }
-} 
-
-$member = (new Member)->getDetailBySid($data['master_sid']);
-$rsv['master_mid'] = $member['id']; 
-
-echo '<pre>'; print_r($rsv); echo '</pre>';
-
-$rs = (new Reserve)->write($rsv);
-
-if ($rsv_id == 0){
-    $rsv_id = $rs;
 }
-
-(new RsvMember)->reset($rsv_id);
-(new RsvSample)->reset($rsv_id);
-
+ 
+$errors = [];
+$existed_rsv = (new Reserve)->getListByInst($rsv['instrument_id'], $rsv['stime'], $rsv['etime']);
+if (count($existed_rsv) > 0 ){
+    $errors[] = sprintf("ほかの予約時間帯と被っています：%s～%s：", jpdate($rsv['stime'],true), jpdate($rsv['etime'],true));
+}
+$member = (new Member)->getDetailBySid($data['master_sid']);
+// if ($member){
+//     $rsv['master_mid'] = $member['id']; 
+// }else{
+//     $errors[] = sprintf("'%s'：無効な教職員IDです", $data['master_sid']);
+// }
+$rsv_members = [];
 foreach ($data['rsv_member'] as $sid){
     if (empty($sid)) continue;
     $member = (new Member)->getDetailBySid($sid);
-    $record = ['id'=>0, 'reserve_id'=>$rsv_id, 'member_id'=>$member['id']];
-    // echo '<pre>'; print_r($record); echo '</pre>';
-    $rs = (new RsvMember)->write($record);
+    if ($member){
+        $rsv_members[] = $member;
+    }else{
+        $errors[] = sprintf("'%s'：無効な利用代表者IDです", $sid);
+    }
 }
+if (count($rsv_members) == 0){
+    $errors[] = "有効な利用代表者が指定されていません";
+}
+if (count($errors) > 0){
+    echo '<h3 class="text-danger">以下の理由により登録できません</h3>';
+    foreach ($errors as $error){
+        echo '<p class="text-info">エラー：' . $error . '！</p>' . PHP_EOL;
+    }
+    echo '<button class="btn btn-primary m-2" onclick="history.back();">戻る</button>';
+}else{
+    $rs = (new Reserve)->write($rsv);
 
+    if ($rsv_id == 0){
+        $rsv_id = $rs;
+    }
 
-foreach ($data['rsv_sample'] as $val){
-    $other = $val==4 ?$other = $data['sample_other'] : '';
-    $record = ['id'=>0, 'reserve_id'=>$rsv_id, 'nature'=>$val, 'other'=>$other];
-    echo '<pre>'; print_r($record); echo '</pre>';
-    $rs = (new RsvSample)->write($record);
+    (new RsvMember)->reset($rsv_id);
+    (new RsvSample)->reset($rsv_id);
 
+    foreach ($data['rsv_member'] as $sid){
+        if (empty($sid)) continue;
+        $member = (new Member)->getDetailBySid($sid);
+        if ($member){
+            $record = ['id'=>0, 'reserve_id'=>$rsv_id, 'member_id'=>$member['id']];
+            $rs = (new RsvMember)->write($record);
+        }
+    }
+
+    foreach ($data['rsv_sample'] as $val){
+        $other = $val==4 ?$other = $data['sample_other'] : '';
+        $record = ['id'=>0, 'reserve_id'=>$rsv_id, 'nature'=>$val, 'other'=>$other];
+        // echo '<pre>'; print_r($record); echo '</pre>';
+        $rs = (new RsvSample)->write($record);
+    }
+    foreach ($rsv_members as $member){
+        $record = ['id'=>0, 'reserve_id'=>$rsv_id, 'member_id'=>$member['id']];
+        $rs = (new RsvMember)->write($record);
+    }
 }

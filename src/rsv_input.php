@@ -102,11 +102,8 @@ if ($rsv_id > 0){
 ?>
 </div>
 </form>
-<?php
-  $occupied_periods=[['2024-3-11 8:30', '2024-3-11 10:40'],['2024-3-11 15:00', '2024-3-11 18:0']]
-?>
 <script>
-const occupied = <?= json_encode($occupied_periods) ?>; 
+const occupied = <?= isset($occupied_periods)?json_encode($occupied_periods):[] ?>; 
 $.validator.setDefaults({
   errorClass: "text-danger",
   validClass: "text-success",
@@ -126,32 +123,35 @@ $( "form" ).validate({
     },
     etime : {
         required : true,
-        afterStartTime: true,
+        validateTimePeriod: true,
     },
   },  
   messages: {
     purpose: "利用目的が必須です"
   },
 });
-function overlaped(a1, a2, b1, b2){
+var overlaped = function (a1, a2, b1, b2){
     return Math.max(a1, b1)<Math.min(a2,b2);
 }
 var now = moment(new Date()).format("YYYY/MM/DD HH:mm");
 $.validator.addMethod(
-    "afterStartTime",
+    "validateTimePeriod",
     function(value, element) {
         const stime = new Date($('#stime').val());
         const etime = new Date($('#etime').val());
-        if (stime > etime) return false; 
+        if (stime > etime) return false;
+        var ok = true; 
         occupied.forEach((period)=>{
             var p0 = new Date(period[0]);
             var p1 = new Date(period[1]);
+            // console.log(period[0],period[1], 'overlaped?');
             if (overlaped(stime, etime, p0, p1)){
-                console.log(period[0],period[1]);
-                return false;
+                // console.log(period[0],period[1], 'overlaped');
+                ok = false;
+                return;
             }
         });
-        return true;
+        return ok;
     },
     "有効な期間ではありません。"
   );
