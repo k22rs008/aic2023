@@ -1,11 +1,10 @@
 <?php
-// namespace ksu/aic;
+namespace aic\models;
 
-require_once('Model.php');
-require_once('Member.php');
-require_once('RsvSample.php');
-require_once('RsvMember.php');
-require_once('lib/func.php');
+use aic\models\Member;
+use aic\models\RsvSample;
+use aic\models\RsvMember;
+use aic\models\Util;
 
 class Reserve extends Model{
     protected $table = "tb_reserve";
@@ -27,7 +26,7 @@ class Reserve extends Model{
             $rsv['apply_member'] = (new Member)->getDetail($rsv['apply_mid']);
             $rsv['rsv_member'] = $rsv['sample_nature'] = [];  
             $rsv['sample_other']='';    
-            $rsv['sample_state']=1; 
+            $rsv['sample_state']=1;
             $rsv['stime'] = $rsv['etime'] = date('Y-m-d H:i');
             return $rsv;
         }
@@ -56,8 +55,10 @@ class Reserve extends Model{
         }
         $rsv['sample_other'] = $other;
         $rsv['sample_nature'] = $selected;
-        $_natures = array_slice_by_index(KsuCode::SAMPLE_NATURE, $selected);
+        $_natures = Util::array_slice_by_index(KsuCode::SAMPLE_NATURE, $selected);
         $rsv['sample_nature_str'] = implode(', ', $_natures);
+        $status = $rsv['status'];
+        $rsv['status_name'] = KsuCode::RSV_STATUS[$status];
         return $rsv;
     }
 
@@ -65,7 +66,7 @@ class Reserve extends Model{
     // $status=9 for all, or 1~ for one specific status
     function getNumRows($inst_id=0, $date1=null, $date2=null, $status=9)
     {
-        global $conn; 
+        $conn = $this->db; 
         $sql = "SELECT *  FROM %s WHERE 1 ";
         $sql = sprintf($sql, $this->table, $this->inst_table, $this->member_table, $this->member_table);
         if ($inst_id){  
@@ -87,8 +88,7 @@ class Reserve extends Model{
    
     function getListByInst($inst_id=0, $date1=null, $date2=null, $status=9, $page=0)
     {
-        global $conn;        
-
+        $conn = $this->db; 
         $sql = "SELECT r.*, f.fullname, f.shortname,m1.ja_name AS apply_name, m2.ja_name AS master_name
           FROM %s r, %s f, %s m1, %s m2 WHERE r.apply_mid=m1.id AND r.master_mid=m2.id AND f.id=r.instrument_id ";
         $sql = sprintf($sql, $this->table, $this->inst_table, $this->member_table, $this->member_table);
@@ -108,7 +108,7 @@ class Reserve extends Model{
             $n = KsuCode::PAGE_ROWS;
             $sql .= sprintf(' LIMIT %d OFFSET %d', $n, ($page-1) * $n);
         }
-        
+        // echo $sql;
         $rs = $conn->query($sql);
         if (!$rs) die('エラー: ' . $conn->error);
         return $rs->fetch_all(MYSQLI_ASSOC);

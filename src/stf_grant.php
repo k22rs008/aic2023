@@ -1,5 +1,7 @@
 <?php
-include 'models/Staff.php';
+// namespace aic;
+
+use aic\models\Staff;
 
 $id = $_GET['id'];
 $record = (new Staff)->getDetail($id);

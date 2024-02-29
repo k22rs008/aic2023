@@ -1,7 +1,5 @@
 <?php
-// namespace ksu\aic;
-
-require_once('Model.php');
+namespace aic\models;
 
 class RsvMember extends Model{
     protected $table = "rsv_member";
@@ -9,7 +7,7 @@ class RsvMember extends Model{
 
     public function getList($where=1, $orderby='id', $page=0)
     {
-        global $conn;
+        $conn = $this->db; 
         $sql = "SELECT mm.* FROM %s rm, %s mm WHERE %s AND rm.member_id=mm.id ORDER BY %s";
         $sql = sprintf($sql, $this->table, $this->member_table, $where, $orderby);
         $rs = $conn->query($sql);
@@ -19,7 +17,7 @@ class RsvMember extends Model{
 
     public function reset($rsv_id)
     {
-        global $conn;
+        $conn = $this->db; 
         $sql = sprintf('DELETE FROM %s WHERE reserve_id=%d', $this->table, $rsv_id);
         $rs = $conn->query($sql);
         if (!$rs) die('エラー: ' . $conn->error);

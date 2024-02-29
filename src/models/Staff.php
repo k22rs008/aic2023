@@ -1,7 +1,5 @@
 <?php
-// namespace ksu\aic;
-
-require_once('Model.php');
+namespace aic\models;
 
 class Staff extends Model{
    protected $table = 'tb_staff';
@@ -9,7 +7,7 @@ class Staff extends Model{
 
    public function getOptions($where=1)
    {
-      global $conn;
+      $conn = $this->db; 
       $sql = 'SELECT m.*, s.rank FROM %s s, %s m WHERE %s AND s.member_id=m.id ORDER BY dept_code DESC';
       $sql = sprintf($sql, $this->table, $this->member_table, $where);
       $rs = $conn->query($sql);

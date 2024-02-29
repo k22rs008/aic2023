@@ -1,6 +1,8 @@
 <?php
-include_once 'models/Member.php';
-include_once 'views/Html.php';
+namespace aic;
+
+use aic\models\Member;
+use aic\views\Html;
 
 $mbr_id = 0;
 if (isset($_GET['id'])){

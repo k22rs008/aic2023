@@ -1,5 +1,7 @@
 <?php
-include 'models/Instrument.php';
+// namespace aic;
+
+use aic\models\Instrument;
 
 // foreach ($_POST as $name=>$value){
 //     echo '<b>' . $name, ':</b> ', $value, '<br>' . PHP_EOL;

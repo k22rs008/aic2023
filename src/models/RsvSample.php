@@ -1,14 +1,12 @@
 <?php
-// namespace ksu\aic;
-
-require_once('Model.php');
+namespace aic\models;
 
 class RsvSample extends Model{
     protected $table = "rsv_sample";
 
     public function reset($rsv_id)
     {
-        global $conn;
+        $conn = $this->db; 
         $sql = sprintf('DELETE FROM %s WHERE reserve_id=%d', $this->table, $rsv_id);
         $rs = $conn->query($sql);
         if (!$rs) die('エラー: ' . $conn->error);

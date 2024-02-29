@@ -1,7 +1,11 @@
-<h3>会員一覧</h3>
+
 <?php
-include_once 'models/Member.php';
-include_once 'views/Html.php';
+namespace aic;
+
+use aic\models\Member;
+use aic\models\KsuCode;
+
+use aic\views\Html;
 
 $category = 0;
 if (isset($_POST['category'])){
@@ -10,6 +14,7 @@ if (isset($_POST['category'])){
 }else if(isset($_SESSION['selected_category'])){
   $category = $_SESSION['selected_category'];
 }
+echo '<h3>会員一覧</h3>' . PHP_EOL;
 echo '<div class="text-left">'. PHP_EOL;
 echo '<form method="post" action="?do=mbr_list" class="form-inline">'. PHP_EOL;
 echo '<div class="form-group mb-2">'. PHP_EOL;

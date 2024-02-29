@@ -1,8 +1,11 @@
 <?php
-// namespace ksu\aic;
+// namespace aic;
 
-require_once ('models/Reserve.php');
-require_once ('lib/func.php');
+use aic\models\Reserve;
+use aic\models\Member;
+use aic\models\RsvMember;
+use aic\models\RsvSample;
+
 // echo '<pre>'; print_r($_POST); echo '</pre>';
 $data = $_POST;
 $rsv_id = $data['id'];

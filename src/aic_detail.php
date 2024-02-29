@@ -1,13 +1,15 @@
 <?php
-require_once('models/Instrument.php');
-require_once('models/Reserve.php');
-include_once ('lib/func.php');
+namespace aic;
+
+use aic\models\Instrument;
+use aic\models\Reserve;
+use aic\models\KsuCode;
 
 $inst_id = $_GET['id'];
 // $date_curr = '240327';  //本番なら date("ymd");
 $date_curr = date("ymd");
 $ymd = isset($_GET['d']) ? $_GET['d'] : $date_curr;
-$_start = DateTime::createFromFormat('ymd', $ymd);
+$_start = \DateTime::createFromFormat('ymd', $ymd);
 $date_start = $_start->format('Y-m-d');
 $date_end = date("Y-m-d", strtotime("+1 days", strtotime($date_start)));
 $jpdate = jpdate($date_start);

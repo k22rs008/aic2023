@@ -6,6 +6,7 @@
 bin/_*
 composer.lock
 var
-vendor
+vendor/
+composer.lock
 demo
 data/xxx_*.*

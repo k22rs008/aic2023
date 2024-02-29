@@ -1,9 +1,12 @@
 <?php
-require_once('models/Reserve.php');
-require_once('models/Instrument.php');
-require_once('models/Staff.php');
-include_once 'views/Html.php';
-include_once 'lib/func.php';
+// namespace aic;
+
+use aic\models\Reserve;
+use aic\models\Instrument;
+use aic\models\Staff;
+use aic\models\KsuCode;
+
+use aic\views\Html;
 
 $rsv_id = 0;
 if (isset($_GET['id'])){

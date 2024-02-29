@@ -1,5 +1,7 @@
 <?php
-include 'models/Member.php';
+namespace aic;
+
+use aic\models\Member;
 
 $mbr_id = 0;
 if (isset($_GET['id'])){

@@ -1,5 +1,7 @@
 <?php
-require_once('db_config.php');
+namespace aic;
+
+use aic\models\Reserve;
 
 $id = $_POST['id'];
 $decide = $_POST['judge'];
@@ -17,4 +19,3 @@ if($decide=='承認'){
 }
 
 header('Location:?do=rsv_list');
-?>

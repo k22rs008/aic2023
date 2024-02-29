@@ -1,5 +1,8 @@
 <?php
-include 'models/Instrument.php';
+// namespace aic;
+
+use aic\models\Instrument;
+
 if (isset($_GET['id'])){
     $inst_id = $_GET['id'];
     (new Instrument)->delete($inst_id);

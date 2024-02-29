@@ -1,5 +1,8 @@
 <?php
-include 'models/Instrument.php';
+namespace aic;
+
+use aic\models\Instrument;
+use aic\models\KsuCode;
 
 $inst_id = 0;
 if (isset($_GET['id'])){

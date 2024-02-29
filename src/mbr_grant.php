@@ -1,5 +1,7 @@
 <?php
-include 'models/Member.php';
+namespace aic;
+
+use aic\models\Member;
 
 $id = $_GET['id'];
 $member = (new Member)->getDetail($id);

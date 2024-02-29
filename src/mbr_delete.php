@@ -1,6 +1,8 @@
 <?php
-require_once 'models/Member.php';
-require_once 'models/Staff.php';
+// namespace aic;
+
+use aic\models\Member;
+use aic\models\Staff;
 
 if (isset($_GET['id'])){
     $mbr_id = $_GET['id'];

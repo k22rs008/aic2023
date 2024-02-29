@@ -1,8 +1,7 @@
 <?php
-// namespace ksu\aic;
+namespace aic\models;
 
-include_once('Model.php');
-include_once('Room.php');
+use aic\models\Room;
 
 class Instrument extends Model{
     protected $table = "tb_instrument";

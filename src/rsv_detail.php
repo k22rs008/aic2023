@@ -1,8 +1,8 @@
 <?php
-require_once('models/Reserve.php');
-require_once('models/Instrument.php');
-include_once 'views/Html.php';
-include_once 'lib/func.php';
+namespace aic;
+
+use aic\models\Reserve;
+use aic\models\Util;
 
 $rsv_id = 0;
 if (isset($_GET['id'])){
@@ -10,6 +10,9 @@ if (isset($_GET['id'])){
 }
 $rsv= (new Reserve)->getDetail($rsv_id);
 // echo '<pre>'; print_r($rsv); echo '</pre>';
+$status = $rsv['status'];
+
+$label = ($status==1 or $status==3) ? '承認' : '却下';
 ?>
 <h3>機器設備利用申請内容詳細</h3>
 <table class="table table-bordered table-hover">
@@ -42,21 +45,25 @@ foreach($rsv['rsv_member'] as $row){
 <td colspan="4"><?=$rsv['instrument_name']?></td>
 </tr>
 <tr><td class="text-info">希望利用日時</td>
-<td colspan=4><?=jpdate($rsv['stime'],true)?>～<?=jpdate($rsv['etime'],true)?></td>
+<td colspan=4><?=Util::jpdate($rsv['stime'],true)?>～<?=Util::jpdate($rsv['etime'],true)?></td>
 </tr>
 <tr><td class="text-info">試料名</td><td colspan=4><?=$rsv['sample_name']?></td>
 </tr>
-<tr><td class="text-info">状態</td><td colspan=4><?= $rsv['sample_state_str'] ?></td>
+<tr><td class="text-info">試料状態</td><td colspan=4><?= $rsv['sample_state_str'] ?></td>
 </tr>
-<tr><td class="text-info">特性</td><td colspan=2><?= $rsv['sample_nature_str'] ?></td>
+<tr><td class="text-info">試料特性</td><td colspan=2><?= $rsv['sample_nature_str'] ?></td>
 <td colspan=2><?=$rsv['sample_other']?></td>
 </tr>
 <tr><td class="text-info">X線取扱者登録の有無</td><td colspan=2><?=$rsv['xray_chk_str'] ?></td>
     <td class="text-info">登録者番号</td><td colspan=2><?=$rsv['xray_num'] ?></td>
 </tr>
-<tr style="height:80px;"><td class="text-info">備考</td><td colspan=4><?= $rsv['memo'] ?></td>
+<tr><td class="text-info">備考</td><td colspan=4><?= $rsv['memo'] ?></td>
+</tr>
+<tr><td class="text-info">承認状態</td><td colspan=4><?= $rsv['status_name'] ?></td>
 </tr>
 </table>
+
+<a class="btn btn-outline-success m-1" href="?do=rsv_grant&id=<?=$rsv_id?>"><?=$label?></a>
 <a class="btn btn-outline-primary m-1" href="?do=rsv_input&id=<?=$rsv_id?>">編集</a>
 <a href="#myModal" class="btn btn-outline-danger m-1" data-id=<?=$rsv_id?> data-toggle="modal">削除</a>
 <a href="?do=inst_list" class="btn btn-outline-info m-1">戻る</a> 

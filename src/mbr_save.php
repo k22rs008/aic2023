@@ -1,5 +1,5 @@
 <?php
-include 'models/Member.php';
+use aic\models\Member;
 
 foreach ($_POST as $name=>$value){
     echo '<b>' . $name, ':</b> ', $value, '<br>' . PHP_EOL;

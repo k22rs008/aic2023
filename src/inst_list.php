@@ -1,5 +1,6 @@
 <?php
-include 'models/Instrument.php';
+use aic\models\Instrument;
+use aic\models\KsuCode;
 
 $selected = 0;
 $where = 'state=1';

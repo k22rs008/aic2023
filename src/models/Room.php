@@ -1,7 +1,7 @@
 <?php
-// namespace ksu\aic;
+namespace aic\models;
 
-require_once('Model.php');
+// use aic\models\Model;
 
 class Room extends Model{
     protected $table = "tb_room";

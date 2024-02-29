@@ -1,5 +1,10 @@
 <?php
-include 'models/Reseve.php';
+namespace aic;
+
+use aic\models\Reserve;
+use aic\models\RsvMember;
+use aic\models\RsvSample;
+
 if (isset($_GET['id'])){
     $rsv_id = $_GET['id'];
     (new Reserve)->delete($rsv_id);

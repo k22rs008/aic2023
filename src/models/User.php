@@ -1,9 +1,9 @@
 <?php
-// namespace ksu\aic;
+namespace aic\models;
 
-require_once('Model.php');
-include_once('Member.php');
-include_once('Staff.php');
+use aic\models\Member;
+use aic\models\Staff;
+use aic\models\KsuCode;
 
 class User extends Model{
     protected $table = "tb_user";    
@@ -28,23 +28,38 @@ class User extends Model{
         'businesscategory'=>'category',//教職員の場合。例：教育職員、事務職員、業務特別契約職員
         'carlicense'=>'dept',//所属。教職員の場合。例：理工学部情報科学科、産学連携支援室
     ];
-    function getDetail($id)
+    const LDAP_NAMES=[
+        'uid'=>'ログインID',
+        'sid'=>'会員番号',
+        'email'=>'メールアドレス',
+        'ja_name'=>'日本語氏名',
+        'ja_yomi'=>'日本語読み',
+        'en_name'=>'英語氏名',
+        'en_yomi'=>'英語読み',
+        'dept'=>'所属',
+        'title'=>'種別',
+        'rank'=>'役職',
+        'category'=>'身分',
+        'course'=>'専攻・コース',
+        'faculty'=>'部署',
+    ];
+    public function getDetail($id)
     {
-        global $conn;
+        $conn = $this->db; 
         $sql = sprintf("SELECT * FROM %s WHERE uid='{$id}'", self::$table);
         $rs = $conn->query($sql);
         if (!$rs) die('エラー: ' . $conn->error);
         return $rs->fetch_assoc(); 
     }
 
-    function getList($where=1, $orderby='uid')
+    public function getList($where=1, $orderby='uid',$page=0)
     {
         return parent::getList($where, $orderby);
     }
 
-    function check($userid, $passwd)
+    public function check($userid, $passwd)
     {
-        global $conn;
+        $conn = $this->db; 
         $userid = htmlspecialchars($userid);
         $passwd = htmlspecialchars($passwd);
         $sql = "SELECT * FROM %s WHERE uid='%s' AND upass='%s'";
@@ -55,7 +70,7 @@ class User extends Model{
         return $row;
     }
 
-    function ldap_check($userid, $passwd)
+    public function ldap_check($userid, $passwd)
     {
         $dn = "uid=" . $userid . "," . self::ldap_base;
         $ldap = ldap_connect(self::ldap_host);
@@ -64,8 +79,8 @@ class User extends Model{
         ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);        
         $ldap_bind = @ldap_bind($ldap, $dn, $passwd);
         if(!$ldap_bind)  return false;
-        $target = 'k23gjk03'; // 他ユーザ情報の取得 
-        // $target = $userid;// 本人認証 
+        // $target = 'k23gjk03'; // 他ユーザ情報の取得 
+        $target = $userid;// 本人認証 
         $filter = "uid={$target}";
         $result = ldap_search($ldap, self::ldap_base, $filter);
         $record = [];
@@ -79,5 +94,57 @@ class User extends Model{
             } 
         }
         return $record;                
+    }
+
+    public function addLdapUser($info)
+    {
+        $category = 4; // その他職員
+        $urole = 0;
+        if ($info['category']=='一般学生') {
+            $category = $urole = 1;
+        }
+        if ($info['category']=='教育職員') {
+            $category = $urole = 2;
+        }
+        if ($info['category']=='事務職員') {
+            $category = $urole = 3;
+        }
+        $uid = $info['uid'];
+        $sid = $info['sid'];
+        // $_SESSION['uid'] = $uid;
+        // $_SESSION['urole'] = $urole;
+    
+        $student = KsuCode::parseSid($sid);
+        if ($student){
+            $dept_code = $student['dept_code'];
+            $dept_name = $student['dept_name'];
+        }else{
+            $dept_code = 'NA';
+            $dept_name = $info['dept'];
+        }
+      
+        $user = [
+            'uid'=>$uid, 'uname'=>$info['ja_name'], 'urole'=>$urole,
+            'last_login'=>date('Y-m-d H:i')
+        ];
+        (new User)->write($user);
+
+        $member = [
+            'id'=>0,
+            'uid'=>$uid, 'sid'=>$sid,'email'=>$info['email'],
+            'dept_code'=>$dept_code,'dept_name'=>$dept_name,
+            'ja_name'=>$info['ja_name'],'ja_yomi'=>$info['ja_yomi'],
+            'en_name'=>$info['en_name'],'en_yomi'=>$info['en_yomi'], 
+            'category'=>$category,
+        ];
+        $member_id = (new Member)->write($member);
+        if ($urole > 1){ //教職員
+            $staff = [
+                'id'=>0,
+                'member_id'=>$member_id, 'title'=>$info['title'],'rank'=>$info['rank'],
+            ];
+            (new Staff)->write($staff);
+        }
+        return (new Member)->getDetail($member_id);
     }
 }

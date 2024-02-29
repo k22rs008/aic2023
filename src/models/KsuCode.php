@@ -1,5 +1,5 @@
 <?php
-//namespace ksu\aic;
+namespace aic\models;
 
 class KsuCode{
 
@@ -7,7 +7,7 @@ class KsuCode{
     const USER_ROLE = [1=>'学生', 5=>'教員', 9=>'管理者'];
     const INST_STATE = [1=>'使用可',2=>'貸出中',3=>'使用不可',9=>'その他'];
     const INST_CATEGORY = [1=>'観察', 2=>'分析',3=>'計測',4=>'調製',9=>'その他'];
-    const RSV_STATUS = [1=>'申請中', 2=>'審査中', 3=>'承認済', 9=>'拒否'];
+    const RSV_STATUS = [1=>'申請中', 2=>'承認済', 3=>'却下済'];
     const RSV_STYLE = [1=>'red', 2=>'green', 3=>'blue', 9=>'black']; 
     const MBR_SEX = [0=>'未登録',1=>'男性',2=>'女性'];
     const MBR_CATEGORY = [1=>'一般学生',2=>'教育職員',3=>'事務職員',9=>'その他職員'];  

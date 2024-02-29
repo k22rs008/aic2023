@@ -1,6 +1,10 @@
 <?php
-include 'models/Instrument.php';
-include 'views/Html.php';
+// namespace aic;
+
+use aic\models\Instrument;
+use aic\models\Room;
+use aic\models\KsuCode;
+use aic\views\Html;
 
 $inst_id = isset($_GET['id']) ? $_GET['id'] : 0;;
 $status = $category = $room_id = 1;

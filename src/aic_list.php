@@ -1,6 +1,8 @@
 <?php
-require_once('models/Instrument.php');
-require_once('models/Reserve.php');
+// namespace aic;
+
+use aic\models\Instrument;
+use aic\models\Reserve;
 
 // $date_curr = '240327';  //本番なら date("ymd");
 $date_curr = date("ymd");

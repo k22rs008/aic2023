@@ -1,8 +1,7 @@
 <?php
-require_once('models/Reserve.php');
-require_once('models/Instrument.php');
-include 'views/Html.php';
-include 'lib/func.php';
+namespace aic;
+
+use aic\models\Reserve;
 
 $rsv_id = 0;
 if (isset($_GET['id'])){

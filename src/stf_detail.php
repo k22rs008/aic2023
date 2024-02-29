@@ -1,6 +1,9 @@
 <?php
-include_once 'models/Member.php';
-include_once 'models/Staff.php';
+// namespace aic;
+
+use aic\models\Member;
+use aic\models\Staff;
+use aic\models\KsuCode;
 
 $mbr_id = 0;
 if (isset($_GET['id'])){

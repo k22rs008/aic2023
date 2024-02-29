@@ -1,0 +1,28 @@
+{
+    "name": "ksu/aic",
+    "description":"Instrument reservation system for AIC (Advanced Instruments Center)",
+    "version": "1.1.1-dev",
+    "type": "project",
+    "time":"2024-2-29",
+    "authors": [
+      {
+        "name": "kuhaha",
+        "email": "kuhaha@gmail.com",
+        "role" : "Developer"
+      }
+    ],
+    "support": {
+        "email": "kaiser.k.cheng@gmail.com"
+    },
+    "autoload": {
+        "psr-4": {
+            "aic\\": "src/",
+            "lib\\": "lib/"
+        }
+    },
+    "require": {
+      "php": "^8.0",
+      "phpoffice/phpspreadsheet": "^1.24"
+     }
+  }
+  

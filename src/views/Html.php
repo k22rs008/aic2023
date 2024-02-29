@@ -1,16 +1,16 @@
 <?php
+namespace aic\views;
 class Html
 {
-    public static function toList($data, $view='table')
+    public static function toList($data, $names=[])
     {
-        if (in_array($view, ['table', 'ul', 'ol'])){
-            $html = '<table class="table table-hover">'. PHP_EOL;
-            foreach ($data as $key=>$value){
-                $html .= sprintf('<tr><th>%s</th><td>%s</td></tr>', $key, $value). PHP_EOL;
-            }
-            return $html . '</table>'. PHP_EOL;
+        $html = '<table class="table table-hover">'. PHP_EOL;
+        foreach ($data as $key=>$value){
+            $name = isset($names[$key]) ? $names[$key] : $key;
+            $html .= sprintf('<tr><th>%s</th><td>%s</td></tr>', $name, $value). PHP_EOL;
         }
-        return '<pre>' . print_r($data, true) . '</pre>';
+        return $html . '</table>'. PHP_EOL;
+
     }
     public static function input($tag, $name, $value=null, $attrs=null)
     {
