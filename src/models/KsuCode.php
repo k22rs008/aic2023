@@ -20,6 +20,7 @@ class KsuCode{
     const SAMPLE_STATE = [1=>'固体',2=>'液体',3=>'気体'];
     const SAMPLE_NATURE = [1=>'爆発性',2=>'毒性',3=>'揮発性',4=>'その他'];
 
+    const WEEKDAY =['日', '月', '火', '水', '木', '金', '土'];
 
     const FACULTY_DEPT =[  
         //学科のIDと名称

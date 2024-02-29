@@ -1,5 +1,5 @@
 <?php
-// namespace aic;
+namespace aic;
 
 use aic\models\Instrument;
 use aic\models\Reserve;
@@ -8,7 +8,7 @@ use aic\models\Reserve;
 $date_curr = date("ymd");
 $ymd = isset($_GET['d']) ? $_GET['d'] : $date_curr;
 
-$start = DateTime::createFromFormat('ymd', $ymd);
+$start = \DateTime::createFromFormat('ymd', $ymd);
 $date_start = $start->format('Y-m-d');
 $date_end = date("Y-m-d", strtotime("+1 days", strtotime($date_start)));
 

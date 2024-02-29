@@ -113,6 +113,38 @@ class Reserve extends Model{
         if (!$rs) die('エラー: ' . $conn->error);
         return $rs->fetch_all(MYSQLI_ASSOC);
     }
+
+    function getReport($inst_id=0, $date1=null, $date2=null)
+    {
+        $report=[];
+        $rows = (new Instrument)->getList(1, 'code');
+        foreach ($rows as $row){
+            $id = $row['id'];
+            $room_id = $row['room_id'];
+            $room = (new Room)->getDetail($room_id);
+            $report[$id] = ['rsv'=>[], 'room_no'=>$room['room_no'], 'shortname'=>$row['shortname']];
+        }
+        $_date1 = new \DateTimeImmutable($date1);
+        $_date2 = new \DateTimeImmutable($date2);
+        $interval = \DateInterval::createFromDateString('1 day');
+        $daterange = new \DatePeriod($_date1, $interval ,$_date2);
+        $data = [];
+        foreach($daterange as $date){
+            $d = $date->format('Y/m/d');
+            $w = $date->format('w');
+            $data[$d]=['weekday'=>KsuCode::WEEKDAY[$w]];
+        }
+
+        $rows = $this->getListByInst($inst_id, $date1, $date2);
+        foreach ($rows as $row){
+            $id = $row['instrument_id'];
+            $_stime = new \DateTimeImmutable($row['stime']);
+            $_etime = new \DateTimeImmutable($row['etime']);
+            $d = $_stime->format('Y/m/d');
+            //TODO: combine all data
+        }
+
+    }
       
     function getItems($inst_id, $date1=null, $date2=null)
     {

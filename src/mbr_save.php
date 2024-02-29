@@ -1,4 +1,6 @@
 <?php
+namespace aic;
+
 use aic\models\Member;
 
 foreach ($_POST as $name=>$value){

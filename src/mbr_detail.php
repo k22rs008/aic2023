@@ -2,6 +2,7 @@
 namespace aic;
 
 use aic\models\Member;
+use aic\models\KsuCode;
 
 $mbr_id = 0;
 if (isset($_GET['id'])){

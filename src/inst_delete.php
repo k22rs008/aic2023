@@ -1,5 +1,5 @@
 <?php
-// namespace aic;
+namespace aic;
 
 use aic\models\Instrument;
 

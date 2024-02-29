@@ -1,10 +1,8 @@
 <?php
-// namespace ksu\aic;
+namespace aic;
 
 use aic\models\User;
 use aic\models\Member;
-use aic\models\Staff;
-use aic\models\KsuCode;
 
 use aic\views\Html;
 

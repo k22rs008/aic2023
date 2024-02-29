@@ -1,4 +1,6 @@
 <?php
+namespace aic;
+
 use aic\models\Instrument;
 use aic\models\KsuCode;
 

@@ -1,4 +1,4 @@
 <?php
-// namespace aic;
+namespace aic;
 
 header('Location:?do=inst_list');
