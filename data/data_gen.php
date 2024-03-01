@@ -117,7 +117,7 @@ foreach ($members as $row){
 $instruments = [1,2,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21,22,23,24,25,26,28,29,30,31,32,33,34,35,36,37,38,39,40,41,46];
 $r_purposes = ['実験','ゼミ', '見学', '授業'];
 $r_samples = ['キノコ','牛乳','パン','ケーキ','牛肉','サンドイッチ'];
-$r_status= [1=>'申請中', 2=>'審査中', 3=>'承認済', 9=>'拒否'];
+$r_status= [1=>'申請中', 2=>'承認済', 3=>'却下'];
 $year = 2024; 
 $timeslices=[//予約時間の選択肢
     ['9:00','12:40'],
@@ -202,7 +202,7 @@ header('Content-Type: text/plain');
 $tosql = true;
 $debug = false;
 if ($tosql){
-    echo toSQL('tb_member', $members), ';', PHP_EOL ;
+    // echo toSQL('tb_member', $members), ';', PHP_EOL ;
     // echo toSQL('tb_staff', $staffs), ';', PHP_EOL;
     // echo toSQL('tb_user', $users), ';', PHP_EOL;
     // echo toSQL('tb_reserve', $reserves), ';', PHP_EOL;

@@ -52,7 +52,7 @@ $app_name = '総合機器センター機器設備予約システム';
  </li></ul>
 
  <ul class="navbar-nav">
- <li class="navbar-brand text-muted"><?=isset($_SESSION['member_name'])?$_SESSION['member_name']:'ゲスト'?></li> 
+ <li class="navbar-brand text-muted"><?=isset($_SESSION['uname'])?$_SESSION['uname']:'ゲスト'?></li> 
 <?php
 if (isset($_SESSION['urole'])){
   $menu = array();

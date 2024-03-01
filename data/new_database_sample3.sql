@@ -1,3 +1,5 @@
+/** GENERATED FAKE DATA */
+
 INSERT INTO rsv_member (reserve_id,member_id) VALUES
 (1,11),
 (1,21),

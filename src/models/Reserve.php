@@ -30,9 +30,15 @@ class Reserve extends Model{
             $rsv['stime'] = $rsv['etime'] = date('Y-m-d H:i');
             return $rsv;
         }
-        // real reservation for edit
-        $instrument = (new Instrument)->getDetail($rsv['instrument_id']); 
-        $rsv['instrument_name'] = $instrument['fullname'];
+        // real reservation for edit or show
+        $inst_id = $rsv['instrument_id'];        
+        $instrument = (new Instrument)->getDetail($inst_id); 
+        $room_id = $instrument['room_id'];
+        $room = (new Room)->getDetail($room_id);
+        $rsv['room_no'] =$room['room_no'];
+        $rsv['room_name'] =$room['room_name'];
+        $rsv['instrument_fullname'] = $instrument['fullname'];
+        $rsv['instrument_shortname'] = $instrument['shortname'];
         $rsv['apply_member'] = (new Member)->getDetail($rsv['apply_mid']);
         $rsv['master_member'] = (new Member)->getDetail($rsv['master_mid']);
         $_dept_code = $rsv['master_member']['dept_code'];
@@ -64,7 +70,7 @@ class Reserve extends Model{
 
      // $inst_id= 0 for all, or 1~ for one specific instrument 
     // $status=9 for all, or 1~ for one specific status
-    function getNumRows($inst_id=0, $date1=null, $date2=null, $status=9)
+    function getNumRows($inst_id=0, $date1=null, $date2=null, $status=0)
     {
         $conn = $this->db; 
         $sql = "SELECT *  FROM %s WHERE 1 ";
@@ -77,19 +83,20 @@ class Reserve extends Model{
         }elseif($date1 and !$date2){
             $sql .= " AND etime >= '{$date1}'";
         }
-        if ($status < 9){ 
+        if ($status > 0){ 
             $sql .= " AND status=$status"; 
         }
+        // echo $sql;
         $rs = $conn->query($sql);
         if (!$rs) die('エラー: ' . $conn->error);
         return $rs->num_rows;
     }
 
    
-    function getListByInst($inst_id=0, $date1=null, $date2=null, $status=9, $page=0)
+    function getListByInst($inst_id=0, $date1=null, $date2=null, $status=0, $page=0)
     {
         $conn = $this->db; 
-        $sql = "SELECT r.*, f.fullname, f.shortname,m1.ja_name AS apply_name, m2.ja_name AS master_name
+        $sql = "SELECT r.*, f.room_id, f.fullname, f.shortname,m1.ja_name AS apply_name, m2.ja_name AS master_name
           FROM %s r, %s f, %s m1, %s m2 WHERE r.apply_mid=m1.id AND r.master_mid=m2.id AND f.id=r.instrument_id ";
         $sql = sprintf($sql, $this->table, $this->inst_table, $this->member_table, $this->member_table);
         if ($inst_id){ 
@@ -100,7 +107,7 @@ class Reserve extends Model{
         }elseif($date1 and !$date2){
             $sql .= " AND etime>'{$date1}'";
         }
-        if ($status < 9){ 
+        if ($status > 0){ 
             $sql .= " AND r.status=$status"; 
         }
         $sql .= ' ORDER BY instrument_id, stime, etime';

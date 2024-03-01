@@ -1,5 +1,8 @@
 <?php
 namespace aic\views;
+
+use aic\models\KsuCode;
+
 class Html
 {
     public static function toList($data, $names=[])
@@ -25,6 +28,34 @@ class Html
         return sprintf('<textarea name="%s" %s>%s</textarea>', $name, $attrs, $value);
     }
     
+    public static function toOptions($rows, $key_item, $value_item, $special=[])
+    {
+        $options = [];
+        foreach ($rows as $row){
+            $key = $row[$key_item];
+            $options[$key] = $row[$value_item];
+        }
+        foreach ($special as $key=>$value){
+            $options[$key] = $value;
+        }
+        ksort($options);
+        return $options;
+    }
+
+    /** Return a range as options */
+    public static function rangeOptions($start, $end, $label='', $special=[],$step=1)
+    {
+        $range = range($start, $end, $step);
+        $labels = array_map(fn($v):string=>$v. $label, $range);
+        $options = array_combine($range, $labels);
+        foreach ($special as $key=>$value){
+            $options[$key] = $value;
+        }
+        ksort($options);
+        return $options;
+    }
+
+    /** Option selection from options */
     public static function select($options, $name, $selected=[], $tag='select'){
         $tag = strtolower($tag);
         $html = $s_tag = $c_tag = '';
@@ -50,6 +81,9 @@ class Html
 
     public static function pagination($total_rows, $page_rows, $page)
     {
+        if ($total_rows <= KsuCode::PAGE_ROWS){
+            return null;
+        }
         $url = $_SERVER['PHP_SELF'];
         $qstr = $_SERVER['QUERY_STRING'];
         $total_pages = ceil($total_rows / $page_rows);

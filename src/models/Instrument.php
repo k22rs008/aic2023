@@ -5,6 +5,7 @@ use aic\models\Room;
 
 class Instrument extends Model{
     protected $table = "tb_instrument";
+    
     public function getDetail($id)
     {
         $detail = parent::getDetail($id);

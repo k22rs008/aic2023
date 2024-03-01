@@ -62,8 +62,8 @@ class User extends Model{
         $conn = $this->db; 
         $userid = htmlspecialchars($userid);
         $passwd = htmlspecialchars($passwd);
-        $sql = "SELECT * FROM %s WHERE uid='%s' AND upass='%s'";
-        $sql = sprintf($sql, $this->table, $userid, $passwd);
+        $sql = "SELECT * FROM %s WHERE md5(uid)='%s' AND upass='%s'";
+        $sql = sprintf($sql, $this->table, md5($userid), md5($passwd));
         $rs = $conn->query($sql);
         if (!$rs) die('エラー: ' . $conn->error);
         $row = $rs->fetch_assoc();

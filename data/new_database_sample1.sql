@@ -1,3 +1,4 @@
+/** GENERATED FAKE DATA */
 INSERT INTO tb_member (id,uid,sid,email,tel_no,ja_name,sex,dept_code,dept_name,category,authority) VALUES
 (1,'k21lt001','21LT001','k21lt001@st.kyusan-u.ac.jp',' 090-1393-3920','久保 洋介',1,'LT','生体医工学部 生体工学科',1,1),
 (2,'k21lt002','21LT002','k21lt002@st.kyusan-u.ac.jp',' 080-0805-0084','武田 琴',2,'LT','生体医工学部 生体工学科',1,1),
@@ -166,8 +167,9 @@ INSERT INTO tb_staff (member_id,title,rank,room_no,tel_ext) VALUES
 
 INSERT INTO tb_user
 (uid, urole, uname, upass) 
-SELECT uid, category, ja_name, '1234'
+SELECT uid, category, ja_name, md5('1234')
 FROM tb_member;
 
 
-UPDATE tb_instrument SET detail='絶縁物試料も金属コーティングせずに、そのまま観察できる。また、付属したエネルギー分散型X線分析装置（Bruker Quantax70）により、試料の軽元素分析ができる。試料は、最大寸法70mm,厚さ50mmまで観察可能。倍率は、15倍〜30,000倍。画像の記録媒体は、CDのみ。';
+UPDATE tb_instrument SET 
+detail='絶縁物試料も金属コーティングせずに、そのまま観察できる。また、付属したエネルギー分散型X線分析装置（Bruker Quantax70）により、試料の軽元素分析ができる。試料は、最大寸法70mm,厚さ50mmまで観察可能。倍率は、15倍〜30,000倍。画像の記録媒体は、CDのみ。';

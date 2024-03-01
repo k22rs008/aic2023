@@ -2,6 +2,7 @@
 namespace aic;
 
 use aic\models\Instrument;
+use aic\models\Room;
 use aic\models\KsuCode;
 
 $selected = 0;
@@ -25,6 +26,7 @@ foreach($rows as $row){
   if (!@GetImageSize($url)){// use dummy image for instrument w/o image
     $url = 'img/dummy-image-square1.webp' ; 
   }   
+  $room = (new Room)->getDetail($row['room_id']);
   echo '<div class="row border border-bottom-0 m-1">';
   echo '<div class="col-md-4 pl-0">';
   echo '<img src="' . $url . '" height="200px" width="280px" class="rounded">'. PHP_EOL;
@@ -33,6 +35,7 @@ foreach($rows as $row){
   echo '<h4 class="mt-0">'. $row['fullname'].'</h4>',
    '<div><span class="badge badge-hill badge-secondary">主な用途</span> ', $row['purpose'] , '</div>',
    '<div><span class="badge badge-hill badge-secondary">メーカー・型式</span> ',$row['maker'], ' ' ,$row['model'], '</div>',
+   '<div><span class="badge badge-hill badge-secondary">設置場所</span> ', $room['room_name'], $room['room_no'] , '</div>',
    '<div class="small">',$row['detail'], '</div>',
    '<div class="align-self-end">',
    '<a class="btn btn-sm btn-outline-danger m-1" href="?do=inst_detail&id='.$row['id'].'">詳細</a>',
