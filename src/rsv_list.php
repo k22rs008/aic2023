@@ -11,7 +11,9 @@ use aic\views\Html;
 $page = isset($_GET['page']) ? $_GET['page'] : 1; 
 
 $inst_id = $status = 0;
-$selected_y = $selected_m = $selected_d = 0;
+$selected_y = date('Y');
+$selected_m = date('m');
+$selected_d = 0;
 if (isset($_POST['id'], $_POST['status'], $_POST['y'], $_POST['m'])){
   $inst_id = $_POST['id'];
   $status = $_POST['status'];
@@ -30,11 +32,10 @@ if (isset($_POST['id'], $_POST['status'], $_POST['y'], $_POST['m'])){
   $selected_m = $_SESSION['selected_month'];
   $selected_d = $_SESSION['selected_day'];
 }
-
 $date1 = $date2 = null;
-if ($selected_y>0 and $selected_m>0){
+if ($selected_y > 0 and $selected_m > 0){
+  $time = mktime(0, 0, 0, $selected_m, 1, $selected_y);
   $day1 = $selected_d > 0 ? $selected_d : 1; //// one day or one month from day 1
-  $time = mktime(0, 0, 0, $selected_m, $day1, $selected_y);
   $day2 = $selected_d > 0 ? $selected_d : date('t', $time); // one day or one month until last day
   $date1 = sprintf('%d-%d-%d 00:00', $selected_y, $selected_m, $day1); 
   $date2 = sprintf('%d-%d-%d 23:59', $selected_y, $selected_m, $day2);
