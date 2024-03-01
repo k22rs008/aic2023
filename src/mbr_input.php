@@ -2,6 +2,7 @@
 namespace aic;
 
 use aic\models\Member;
+use aic\models\KsuCode;
 use aic\views\Html;
 
 $mbr_id = 0;

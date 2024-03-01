@@ -8,14 +8,14 @@ use aic\models\KsuCode;
 $selected = 0;
 $where = 'state=1';
 $orderby = 'code';
-if (isset($_GET['category'])){
-  $where = 'category=' . $_GET['category'];
-  $selected = $_GET['category'];
+if (isset($_GET['c'])){
+  $where = 'category=' . $_GET['c'];
+  $selected = $_GET['c'];
 }
 echo '<div class="text-left">'. PHP_EOL;
 foreach (KsuCode::INST_CATEGORY as $c=>$label){
   $disabled = ($c==$selected) ? 'disabled' : '';
-  $link = '<a href="?do=inst_list&category=%d" class="btn btn-outline-primary %s m-1">%s</a>' . PHP_EOL;
+  $link = '<a href="?do=inst_list&c=%d" class="btn btn-outline-primary %s m-1">%s</a>' . PHP_EOL;
   printf($link,  $c, $disabled, $label);
 } 
 echo '</div>' . PHP_EOL;

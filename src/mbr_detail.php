@@ -8,6 +8,7 @@ $mbr_id = 0;
 if (isset($_GET['id'])){
   $mbr_id = $_GET['id'];
 }
+
 $row= (new Member)->getDetail($mbr_id);
 if ($row) {  
     echo '<h3 class="text-primary">「'. $row['ja_name'].'」会員情報</h3>' . PHP_EOL;
@@ -32,10 +33,11 @@ if ($row) {
     echo '<tr><th>所属</th><td>' . $row['dept_name'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>所属番号</th><td>' . $row['dept_code'] . '</td></tr>' . PHP_EOL;
     $i  = $row['authority'];  
-    echo '<tr><th>予約権有無</th><td>' . KsuCode::MBR_AUTHORITY[$i] . '</td></tr>' . PHP_EOL;
+    $class = [ 1=>'text-success', 0=>'text-danger'];
+    echo '<tr><th>予約権有無</th><td class="'.$class[$i].'">' . KsuCode::MBR_AUTHORITY[$i] . '</td></tr>' . PHP_EOL;
     echo '</table>' . PHP_EOL;
     echo '<div class="pb-5 mb-5">' . PHP_EOL;
-    $label = ($row['authority']) ?'予約権撤回' : '予約権付与';  
+    $label = ($row['authority']) ?'予約権撤回' : '予約権付与';
     echo '<a class="btn btn-outline-success m-1" href="?do=mbr_grant&id='.$mbr_id.'">'.$label.'</a>' . PHP_EOL .
       '<a class="btn btn-outline-primary m-1" href="?do=mbr_input&id='.$mbr_id.'">編集</a>' . PHP_EOL .
       '<a href="#myModal" class="btn btn-outline-danger m-1" data-id='.$mbr_id.' data-toggle="modal">削除</a>' . PHP_EOL .
