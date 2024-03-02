@@ -1,7 +1,7 @@
 <?php
 namespace aic\models;
 
-class Util{
+class Util {
     public static function jpdate($date, $withtime=false, $withyear=true){
         $wdays = ['日','月','火','水','木','金','土'];
         $_date = new \DateTimeImmutable($date);
@@ -52,7 +52,7 @@ class Util{
         
         // Generate combined keys of size $n, e.g.,
         // ['J','Q', 'K', 'A'] => [['J','Q'],['Q','K'],['K','A']]
-        $comb_keys = combination($keys, $n);    // print_r($comb_keys);
+        $comb_keys = self::combination($keys, $n);    // print_r($comb_keys);
         $comb_values = [];
         foreach ($comb_keys as $i=>$key){
             $comb_prob = array_map(fn($a):float=>$new_items[$a], $key);

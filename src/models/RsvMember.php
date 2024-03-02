@@ -1,7 +1,7 @@
 <?php
 namespace aic\models;
 
-class RsvMember extends Model{
+class RsvMember extends Model {
     protected $table = "rsv_member";
     protected $member_table = "tb_member";
 

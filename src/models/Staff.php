@@ -1,7 +1,7 @@
 <?php
 namespace aic\models;
 
-class Staff extends Model{
+class Staff extends Model {
    protected $table = 'tb_staff';
    protected $member_table = "tb_member";
 

@@ -6,7 +6,7 @@ use aic\models\RsvSample;
 use aic\models\RsvMember;
 use aic\models\Util;
 
-class Reserve extends Model{
+class Reserve extends Model {
     protected $table = "tb_reserve";
     protected $inst_table = 'tb_instrument';
     protected $member_table = 'tb_member';

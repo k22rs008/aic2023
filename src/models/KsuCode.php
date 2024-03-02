@@ -1,7 +1,7 @@
 <?php
 namespace aic\models;
 
-class KsuCode{
+class KsuCode {
 
     const PAGE_ROWS = 10;
     

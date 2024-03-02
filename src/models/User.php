@@ -5,7 +5,7 @@ use aic\models\Member;
 use aic\models\Staff;
 use aic\models\KsuCode;
 
-class User extends Model{
+class User extends Model {
     protected $table = "tb_user";    
     const ldap_host = "ldap1.ip.kyusan-u.ac.jp";
     const ldap_base = "ou=userall,dc=kyusan-u,dc=ac,dc=jp";

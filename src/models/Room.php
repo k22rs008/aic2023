@@ -3,7 +3,7 @@ namespace aic\models;
 
 // use aic\models\Model;
 
-class Room extends Model{
+class Room extends Model {
     protected $table = "tb_room";
 
     public function getListItems()
