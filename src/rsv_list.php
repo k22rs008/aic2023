@@ -58,7 +58,8 @@ $rsv_status = KsuCode::RSV_STATUS;
 $rsv_status[0] = 'すべて';
 echo Html::select($rsv_status, 'status', [$status], 'radio');
 echo '<button type="submit" class="btn btn-outline-primary mt-1 mb-1 mr-1">絞込</button>' . PHP_EOL; 
-echo '<span class="float-right "><a class="btn btn-outline-success" href="?do=rsv_report">印刷</a></span>' . PHP_EOL;
+echo '<span class="float-right ">
+  <a class="btn btn-outline-success" href="?do=rsv_report">出力</a></span>' . PHP_EOL;
 echo '</div>'. PHP_EOL;
 echo '</form>'. PHP_EOL;
 echo '</div>' . PHP_EOL;
@@ -70,33 +71,33 @@ echo Html::pagination($num_rows, KsuCode::PAGE_ROWS, $page);
 
 echo '<table class="table table-hover">'. PHP_EOL;
 echo '<tr><th>部屋No.</th><th>利用機器名</th><th>利用目的</th><th>利用予定日</th>
-    <th>利用時間帯</th><th>利用責任者</th><th>承認状態</th><th>操　作</th></tr>'. PHP_EOL;
+  <th>利用時間帯</th><th>利用責任者</th><th>承認状態</th><th>操　作</th></tr>'. PHP_EOL;
 
 $rows= (new Reserve)->getListByInst($inst_id, $date1, $date2, $status, $page);
 foreach ($rows as $row){ //予約テーブルにある予約の数だけ繰り返す
-    echo '<tr>'. 
-      '<td>' . $row['room_no'] . '</td>' . PHP_EOL . 
-      //'<td>' . Util::jpdate($row['reserved']) . '</td>' . PHP_EOL .  //申請日時を表示
-      //'<td>' . $row['apply_name'] . '</td>' . PHP_EOL . //申請者氏名を表示
-      //'<td>' . $row['fullname'] . '</td>' . PHP_EOL . //利用機器名を表示
-      '<td>' . $row['shortname'] . '</td>' . PHP_EOL . //利用機器名(省略)を表示
-      '<td>' . $row['purpose'] . '</td>' . PHP_EOL;
-    $date1 = Util::jpdate($row['stime']) ;
-    $date2 = Util::jpdate($row['etime']) ;
-    echo '<td>' . $date1 . '</td>' . PHP_EOL; //利用日を表示
-    $time2 = ($date1==$date2) ? substr($row['etime'], 10,6) : '';//日をまかがった予約は終了時刻表示なし
-    echo '<td>' . substr($row['stime'], 10,6) . '～' . $time2 . '</td>'; //利用時間帯を表示
-    echo '<td>' . $row['master_name'] . '</td>';//利用責任者者氏名を表示
-    $i = $row['status'];
-    echo '<td>' . $rsv_status[$i] . '</td>';//申請状態を表示
-    $rsv_id = $row['id'];
-    $status = $row['status'];
-    $label = ($status==1 or $status==3) ? '承認' : '却下';
-    echo '<td>' .
-      '<a class="btn btn-sm btn-outline-info" href="?do=rsv_grant&id='.$rsv_id.'">'.$label.'</a>' . PHP_EOL .
-      '<a class="btn btn-sm btn-outline-success" href="?do=rsv_detail&id='.$row['id'].'">詳細</a>' .
-      '</td>';
-    echo '</tr>' . PHP_EOL;
+  echo '<tr>'. 
+    '<td>' . $row['room_no'] . '</td>' . PHP_EOL . 
+    //'<td>' . Util::jpdate($row['reserved']) . '</td>' . PHP_EOL .  //申請日時を表示
+    //'<td>' . $row['apply_name'] . '</td>' . PHP_EOL . //申請者氏名を表示
+    //'<td>' . $row['fullname'] . '</td>' . PHP_EOL . //利用機器名を表示
+    '<td>' . $row['shortname'] . '</td>' . PHP_EOL . //利用機器名(省略)を表示
+    '<td>' . $row['purpose'] . '</td>' . PHP_EOL;
+  $date1 = Util::jpdate($row['stime']) ;
+  $date2 = Util::jpdate($row['etime']) ;
+  echo '<td>' . $date1 . '</td>' . PHP_EOL; //利用日を表示
+  $time2 = ($date1==$date2) ? substr($row['etime'], 10,6) : '';//日をまかがった予約は終了時刻表示なし
+  echo '<td>' . substr($row['stime'], 10,6) . '～' . $time2 . '</td>'; //利用時間帯を表示
+  echo '<td>' . $row['master_name'] . '</td>';//利用責任者者氏名を表示
+  $i = $row['status'];
+  echo '<td>' . $rsv_status[$i] . '</td>';//申請状態を表示
+  $rsv_id = $row['id'];
+  $status = $row['status'];
+  $label = ($status==1 or $status==3) ? '承認' : '却下';
+  echo '<td>' .
+    '<a class="btn btn-sm btn-outline-info" href="?do=rsv_grant&id='.$rsv_id.'">'.$label.'</a>' . PHP_EOL .
+    '<a class="btn btn-sm btn-outline-success" href="?do=rsv_detail&id='.$row['id'].'">詳細</a>' .
+    '</td>';
+  echo '</tr>' . PHP_EOL;
 }
 echo '</table>';
 

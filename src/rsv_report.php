@@ -64,12 +64,15 @@ foreach ($rows as $row){ //予約テーブルにある予約の数だけ繰り�
 }
 // echo '<pre>'; print_r($data); echo '</pre>';
 
-$filename = sprintf("Report%02d_%s.xlsx", $rsv_id, $date1);
+$filename = sprintf("Report%s.xlsx", $date1);
 $spreadsheet = new Spreadsheet();
 $worksheet = $spreadsheet->getActiveSheet();
-$worksheet->getColumnDimension('F')->setWidth(20);
+foreach(range('A','H') as $col){ 
+  $worksheet->getColumnDimension($col)->setWidth(12);
+}
+$worksheet->getColumnDimension('F')->setWidth(24);
 $worksheet->getStyle('F2:F'.($reserve_n+1))->getAlignment()->setWrapText(true);
-$worksheet->getStyle('F2:F'.($reserve_n+1))->getAlignment()->setVertical(Align::VERTICAL_TOP); 
+$worksheet->getStyle('A2:H'.($reserve_n+1))->getAlignment()->setVertical(Align::VERTICAL_CENTER); 
 foreach ($data as $rowNum => $rowData) {
   $worksheet->fromArray($rowData, null, 'A' . ($rowNum + 1));
 }
@@ -79,4 +82,3 @@ header("Content-Disposition: attachment; filename=\"{$filename}\"");
 header('Cache-Control: max-age=0');
 ob_end_clean();//IMPORTANT for prevending file crash
 $writer->save('php://output');
-
