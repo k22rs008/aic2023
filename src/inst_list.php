@@ -6,8 +6,8 @@ use aic\models\Room;
 use aic\models\KsuCode;
 
 $selected = 0;
-$where = 'state=1';
-$orderby = 'code';
+$where = '1';
+$orderby = 'room_id';
 if (isset($_GET['c'])){
   $where = 'category=' . $_GET['c'];
   $selected = $_GET['c'];
@@ -35,7 +35,7 @@ foreach($rows as $row){
   echo '<h4 class="mt-0">'. $row['fullname'].'</h4>',
    '<div><span class="badge badge-hill badge-secondary">主な用途</span> ', $row['purpose'] , '</div>',
    '<div><span class="badge badge-hill badge-secondary">メーカー・型式</span> ',$row['maker'], ' ' ,$row['model'], '</div>',
-   '<div><span class="badge badge-hill badge-secondary">設置場所</span> ', $room['room_name'], $room['room_no'] , '</div>',
+   '<div><span class="badge badge-hill badge-secondary">設置場所</span> 〔',$room['room_no'] , '〕', $room['room_name'],'</div>',
    '<div class="small">',$row['detail'], '</div>',
    '<div class="align-self-end">',
    '<a class="btn btn-sm btn-outline-danger m-1" href="?do=inst_detail&id='.$row['id'].'">詳細</a>',
