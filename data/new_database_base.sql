@@ -138,7 +138,7 @@ INSERT INTO tb_user
 ('admin3', 9, 'AIC管理者C', md5('092C673C5711'));
 
 INSERT INTO tb_member 
-(uid,sid,ja_name,dept_code,dept_name,category,authority) VALUES
+(uid,sid,tel_no,ja_name,dept_code,dept_name,category,authority) VALUES
 ('admin1','673571',' 092-673-5711','管理者A','AIC','総合機器センター',9,1),
 ('admin2','673572',' 092-673-5711','管理者B','AIC','総合機器センター',9,1),
 ('admin3','673573',' 092-673-5711','管理者C','AIC','総合機器センター',9,1);

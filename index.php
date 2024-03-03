@@ -6,7 +6,7 @@ require "vendor/autoload.php";
 include('src/views/bs4_header.php');
 
 define ('ENV', 'development'); // 開発テスト時の設定
-//define ('ENV', 'deployment'); // 本番運用時の設定
+// define ('ENV', 'deployment'); // 本番運用時の設定
 require 'conf/' . ENV . '_env.php';
 
 $action = 'aic_home'; //ホームページ (aic_home)をデフォルト機能とする
