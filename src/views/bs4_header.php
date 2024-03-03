@@ -65,8 +65,9 @@ if (isset($_SESSION['urole'])){
   }
   if($_SESSION['urole']==9) { //管理者
     $menu = array(   //管理者メニュー
-      //'利用者一覧'  => '',
+      '会員一覧'  => 'mbr_list',
       '機器設備一覧'  => 'inst_list',
+      '空き状況一覧'  => 'aic_list',
       //'年間スケジュール'  => '',
       //'お知らせ一覧' => '',
       '利用申請一覧' => 'rsv_list',

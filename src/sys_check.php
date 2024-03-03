@@ -18,7 +18,7 @@ if (isset($_POST['uid'], $_POST['pass'])){
         $_SESSION['uid'] = $uid;
         $_SESSION['urole'] = $row['urole'];
         $_SESSION['uname'] = $row['uname'];
-        $login_member= (new Member)->getList("uid='$uid'");
+        $member= (new Member)->getList("uid='$uid'");
         if ($member){
             $login_member = $member[0];        
         }

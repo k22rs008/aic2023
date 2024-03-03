@@ -17,9 +17,9 @@ $status_class = [1=>'text-info', 2=>'text-success', 3=>'text-danger'];
 ?>
 <h3>機器設備利用申請内容詳細</h3>
 <table class="table table-bordered table-hover">
-<tr><td width="20%" class="text-info">利用申請者</td>
+<tr><td width="20%" class="text-info">利用申請者氏名</td>
     <td><?=$rsv['apply_member']['ja_name']?></td>
-    <td class="text-info">学籍番号</td>
+    <td class="text-info">会員番号</td>
     <td colspan="2"><?=$rsv['apply_member']['sid']?></td>
 </tr>
 <tr><td class="text-info">利用責任者氏名</td>

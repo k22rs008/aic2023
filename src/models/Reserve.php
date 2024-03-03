@@ -2,6 +2,7 @@
 namespace aic\models;
 
 use aic\models\Member;
+use aic\models\User;
 use aic\models\RsvSample;
 use aic\models\RsvMember;
 use aic\models\Util;
@@ -21,10 +22,11 @@ class Reserve extends Model {
                 $key = $f['Field'];
                 $rsv[$key] = '';
             }
-            $rsv['id'] = 0;
-            $rsv['apply_mid'] = 1; //$_SESSION['member_id'];
+            $rsv['id'] = 0;      
             $rsv['xray_chk'] = 0;
-            $rsv['apply_member'] = (new Member)->getDetail($rsv['apply_mid']);
+            $userid = (new User)->getLoginUid();
+            $member = (new Member)->getList("uid='$userid'");
+            $rsv['apply_member'] = $member[0];
             $rsv['rsv_member'] = $rsv['sample_nature'] = [];  
             $rsv['sample_other']='';    
             $rsv['sample_state']=1;

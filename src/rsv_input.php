@@ -13,6 +13,7 @@ if (isset($_GET['id'])){
     $rsv_id = $_GET['id'];
 }
 $rsv = (new Reserve)->getDetail($rsv_id);
+// print_r($rsv);
 if (isset($_GET['inst'])){
     $rsv['instrument_id'] = $_GET['inst'];
     $instrument = (new Instrument)->getDetail($rsv['instrument_id']);
@@ -44,7 +45,7 @@ $staffs = (new Staff)->getOptions('responsible');
 <input type="hidden" name="apply_mid" value="<?=$rsv['apply_member']['id']?>">
 <tr><td width="20%" class="text-info">利用申請者</td>
     <td><?=$rsv['apply_member']['ja_name']?></td>
-    <td class="text-info">学籍番号</td>
+    <td class="text-info">会員番号</td>
     <td colspan="2"><?=$rsv['apply_member']['sid']?></td>
 </tr>
 <tr><td class="text-info form-group">利用目的※</td>
