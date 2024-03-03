@@ -15,6 +15,18 @@ class Util {
         return $_date->format('n月d日(') . $wdays[$w]. ')' . $time;
     }
 
+        /** transform a row list to a KVP list: Key-Value Pair */
+        public static function toKVP($data, $key_field, $value_field)
+        {
+            $options = [];
+            foreach($data as $row){
+                $key = $row[$key_field];
+                $value = $row[$value_field];
+                $options[$key] = $value;
+            }
+            return $options;
+        }
+        
     public static function unifom_rand($items, $n=1)
     {
         $indexes = array_rand($items, $n);
@@ -36,8 +48,7 @@ class Util {
     /** prob_rand() : returns n elements from an array selected randpmly at unform
      * Example: prob_rand(['J'=>10, 'Q'=>25, 'K'=>15, 'A'=>50], 2) => ['Q','K']
      */
-    public static 
-    function prob_rand($prob_items, $n=1) 
+    public static function prob_rand($prob_items, $n=1) 
     {        
         $keys = array_keys($prob_items);
         $n_item = count($keys); 

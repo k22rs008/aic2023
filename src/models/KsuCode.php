@@ -5,7 +5,15 @@ class KsuCode {
 
     const PAGE_ROWS = 10;
     
-    const USER_ROLE = [1=>'学生', 5=>'教員', 9=>'管理者'];
+    const USER_ROLE = [1=>'学生', 2=>'教育職員', 3=>'事務職員',4=>'その他職員',9=>'管理者'];
+    
+    const MBR_CATEGORY = [1=>'一般学生',2=>'教育職員',3=>'事務職員',4=>'その他職員'];  
+    const MBR_AUTHORITY = [0=>'予約権無',1=>'予約権有'];   
+    const MBR_SEX = [0=>'未登録',1=>'男性',2=>'女性'];
+
+    const STAFF_RESPONSIBLE  = [0=>'責任者否',1=>'責任者可'];
+    const STAFF_RANK  = [1=>'教授',2=>'准教授',3=>'講師',4=>'助教',5=>'職員'];
+    const STAFF_TITLE = [1=>'大学教育職員',2=>'事務職員',9=>'その他職員'];
     
     const INST_STATE = [1=>'使用可',2=>'貸出中',3=>'使用不可',9=>'その他'];
     const INST_CATEGORY = [1=>'観察', 2=>'分析',3=>'計測',4=>'調製',9=>'その他'];
@@ -13,14 +21,6 @@ class KsuCode {
     const RSV_STATUS = [1=>'申請中', 2=>'承認済', 3=>'却下済'];
     const RSV_STYLE = [1=>'red', 2=>'green', 3=>'blue', 9=>'black']; 
     
-    const MBR_SEX = [0=>'未登録',1=>'男性',2=>'女性'];
-    const MBR_CATEGORY = [1=>'一般学生',2=>'教育職員',3=>'事務職員',9=>'その他職員'];  
-    const MBR_AUTHORITY = [0=>'予約権無',1=>'予約権有'];   
-    
-    const STAFF_RESPONSIBLE  = [0=>'責任者不可',1=>'責任者可'];
-    const STAFF_RANK  = [1=>'教授',2=>'准教授',3=>'講師',4=>'助教',5=>'職員'];
-    const STAFF_TITLE = [1=>'大学教育職員',2=>'事務職員',9=>'その他職員'];
-
     const YESNO = [0=>'無', 1=>'有'];
 
     const SAMPLE_STATE = [1=>'固体',2=>'液体',3=>'気体'];
@@ -89,8 +89,7 @@ class KsuCode {
     }
     
     /**
-     * Parse $str to student ids
-     * e.g., parseSid("21rs017,2")
+     * Parse $str to student ids. e.g., parseSid("21rs017")
      */
     public static function parseSid($str)
     {

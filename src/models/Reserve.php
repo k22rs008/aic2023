@@ -8,6 +8,7 @@ use aic\models\Util;
 
 class Reserve extends Model {
     protected $table = "tb_reserve";
+    protected $rsv_view = "vw_reserve";
     protected $inst_table = 'tb_instrument';
     protected $member_table = 'tb_member';
     
@@ -96,11 +97,9 @@ class Reserve extends Model {
     function getListByInst($inst_id=0, $date1=null, $date2=null, $status=0, $page=0)
     {
         $conn = $this->db; 
-        $sql = "SELECT r.*, f.room_id, f.fullname, f.shortname,m1.ja_name AS apply_name, m2.ja_name AS master_name
-          FROM %s r, %s f, %s m1, %s m2 WHERE r.apply_mid=m1.id AND r.master_mid=m2.id AND f.id=r.instrument_id ";
-        $sql = sprintf($sql, $this->table, $this->inst_table, $this->member_table, $this->member_table);
+        $sql = sprintf("SELECT * FROM %s WHERE 1 ", $this->rsv_view);
         if ($inst_id){ 
-            $sql .= " AND r.instrument_id=$inst_id"; 
+            $sql .= " AND instrument_id=$inst_id"; 
         }
         if ($date1 and $date2){
             $sql .= " AND GREATEST(stime, '{$date1} 00:00') <= LEAST(etime, '{$date2} 23:59')"; 
@@ -108,7 +107,7 @@ class Reserve extends Model {
             $sql .= " AND etime>'{$date1}'";
         }
         if ($status > 0){ 
-            $sql .= " AND r.status=$status"; 
+            $sql .= " AND status=$status"; 
         }
         $sql .= ' ORDER BY instrument_id, stime, etime';
         if ($page>0){

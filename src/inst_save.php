@@ -2,10 +2,13 @@
 namespace aic;
 
 use aic\models\Instrument;
+use aic\models\User;
 
-// foreach ($_POST as $name=>$value){
-//     echo '<b>' . $name, ':</b> ', $value, '<br>' . PHP_EOL;
-// }
+$is_admin = (new User)->isAdmin();
+if (ENV=='deployment' and $is_admin){
+    die('<p class="text-danger">この機能は管理者以外利用できません。</p>');
+}
+
 $id = (new Instrument)->write($_POST);
 
 $inst_id = $_POST['id'] > 0 ? $_POST['id'] : $id;

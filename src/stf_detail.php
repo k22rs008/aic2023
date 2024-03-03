@@ -34,12 +34,14 @@ if ($staff and $row ) {
     $i  = $row['authority'];  
     echo '<tr><th>予約権有無</th><td>' . KsuCode::MBR_AUTHORITY[$i] . '</td></tr>' . PHP_EOL;
     $r  = $staff['responsible'];  
-    echo '<tr><th>責任者可否</th><td>' . KsuCode::STAFF_RESPONSIBLE[$r] . '</td></tr>' . PHP_EOL;
+    $class = [ 1=>'text-success', 0=>'text-danger'];
+    echo '<tr><th>責任者可否</th><td class="'.$class[$r].'">' . KsuCode::STAFF_RESPONSIBLE[$r] . '</td></tr>' . PHP_EOL;
     echo '</table>' . PHP_EOL;
     echo '<div class="pb-5 mb-5">' . PHP_EOL;    
-    $label = ($r==0) ?'責任者指定' : '責任者撤回';  
-    echo '<a class="btn btn-outline-success m-1" href="?do=stf_grant&id='.$stf_id.'">'.$label.'</a>'. PHP_EOL;
-    echo '<a class="btn btn-outline-primary m-1" href="?do=stf_input&id='.$stf_id.'">編集</a>' . PHP_EOL;
+    $i  = $row['authority'];    
+    $label = ($r==0) ?'責任者指定' : '責任者指定撤回';  
+    echo '<a class="btn btn-outline-primary m-1" href="?do=stf_grant&id='.$stf_id.'">'.$label.'</a>'. PHP_EOL;
+    //echo '<a class="btn btn-outline-primary m-1" href="?do=stf_input&id='.$stf_id.'">編集</a>' . PHP_EOL;
     echo '<a href="?do=mbr_detail&id='.$mbr_id.'" class="btn btn-outline-info m-1">戻る</a>' . PHP_EOL .  
       '</div>';
 }else{

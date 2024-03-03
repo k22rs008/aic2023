@@ -3,6 +3,7 @@ namespace aic;
 
 use aic\models\User;
 use aic\models\Member;
+use aic\models\Staff;
 
 use aic\views\Html;
 
@@ -44,8 +45,9 @@ if (isset($_POST['uid'], $_POST['pass'])){
     if ($login_member){
         $_SESSION['member_id'] = $login_member['id'];
         $_SESSION['member_name'] = $login_member['ja_name'];
-        if (!$new_user)
-            header('Location:?do=aic_home');
+        $_SESSION['member_category'] = $login_member['category'];
+        $_SESSION['member_authority'] = $login_member['authority'];
+        if (!$new_user) header('Location:?do=aic_home');
     }
     // TODO: 会員情報が存在しない場合の対応
 }else{

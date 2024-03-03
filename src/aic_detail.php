@@ -3,6 +3,7 @@ namespace aic;
 
 use aic\models\Instrument;
 use aic\models\Reserve;
+use aic\models\User;
 use aic\models\KsuCode;
 use aic\models\Util;
 
@@ -35,7 +36,7 @@ $rows =  (new Reserve)->getListByInst($inst_id, $date_start, $date_start);
 if (count($rows) > 0){
   echo '<table class="table table-boxed">' . PHP_EOL;
   echo  '<tr><th width="20%">開始日時</th><th width="20%">終了日時</th>' . PHP_EOL;
-  echo  '<th>責任者</th><th>目的</th><th>承認</th></tr>' . PHP_EOL;
+  echo  '<th>責任者</th><th>目的</th><th>申請状態</th></tr>' . PHP_EOL;
   foreach ($rows as $row) {
     echo  '<tr>' . PHP_EOL;
     $e = $row['status'];
@@ -58,8 +59,11 @@ foreach ($navbar as $delta => $label){
   $link='<a href="?do=aic_detail&id=%d&d=%s" class="btn btn-outline-primary m-1">%s</a>' . PHP_EOL;
   printf($link, $inst_id, $ymd, $label);
 } 
-$link = '<a href="?do=rsv_input&inst=%d&d=%s" class="btn btn-outline-info float-right m-1">予約する</a>' . PHP_EOL;
-printf($link, $inst_id, $ymd);
+$can_reserve = (new User)->canReserve();
+if (ENV=='development' or $can_reserve){
+  $link = '<a href="?do=rsv_input&inst=%d&d=%s" class="btn btn-outline-info float-right m-1">予約する</a>' . PHP_EOL;
+  printf($link, $inst_id, $ymd);
+}
 echo '</div>' . PHP_EOL;
 ?>
 <div id="visualization"></div>

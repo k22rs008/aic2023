@@ -33,11 +33,8 @@ class Model
         
     }
   
-    public static function setConnInfo($conf=null)
+    public static function setConnInfo($conf)
     {
-      if (!$conf){
-        $conf = ['host'=>"localhost", 'usename'=>"root", 'password'=>"", 'dbname'=>"aic_rsv"];
-      }
       self::$conf = $conf;
     }
 
@@ -110,15 +107,4 @@ class Model
         return $rs->fetch_all(MYSQLI_ASSOC);// Field, Type, Null...
     }
 
-    /** transform a row list to a KVP list: Key-Value Pair */
-    public static function toKVP($data, $key_field, $value_field)
-    {
-        $options = [];
-        foreach($data as $row){
-            $key = $row[$key_field];
-            $value = $row[$value_field];
-            $options[$key] = $value;
-        }
-        return $options;
-    }
 }

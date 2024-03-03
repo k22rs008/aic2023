@@ -57,6 +57,38 @@ class User extends Model {
         return parent::getList($where, $orderby);
     }
 
+    public function getLoginUid()
+    {
+        if (isset($_SESSION['uid'])){
+            return $_SESSION['uid'];
+        }
+        return null;
+    }
+
+    public function getLoginRole()
+    {
+        if (isset($_SESSION['urole'])){
+            return $_SESSION['urole'];
+        }
+        return null;
+    }
+
+    public function canReserve()
+    {
+        if ($this->getLoginRole() and $_SESSION['member_authority']){
+            return true;
+        }
+        return false;
+    }
+
+    public function isAdmin()
+    {
+        if ($this->getLoginRole()){
+            return $this->getLoginRole() === 9;
+        }
+        return false;
+    }
+
     public function check($userid, $passwd)
     {
         $conn = $this->db; 
@@ -111,15 +143,13 @@ class User extends Model {
         }
         $uid = $info['uid'];
         $sid = $info['sid'];
-        // $_SESSION['uid'] = $uid;
-        // $_SESSION['urole'] = $urole;
     
         $student = KsuCode::parseSid($sid);
         if ($student){
             $dept_code = $student['dept_code'];
             $dept_name = $student['dept_name'];
         }else{
-            $dept_code = 'NA';
+            $dept_code = 'N/A';
             $dept_name = $info['dept'];
         }
       
@@ -138,7 +168,7 @@ class User extends Model {
             'category'=>$category,
         ];
         $member_id = (new Member)->write($member);
-        if ($urole > 1){ //教職員
+        if ($category > 1){ //教職員
             $staff = [
                 'id'=>0,
                 'member_id'=>$member_id, 'title'=>$info['title'],'rank'=>$info['rank'],

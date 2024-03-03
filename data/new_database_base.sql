@@ -64,11 +64,11 @@ CREATE TABLE tb_staff(
 
 -- tb_department: 部所テーブル
 
-CREATE TABLE tb_department(
-	id SERIAL PRIMARY KEY COMMENT '通し番号（自動採番, 内部参照用）',
-	dept_code VARCHAR(16) UNIQUE COMMENT '部所コード,例: RS, AIC',
-	dept_name VARCHAR(32) COMMENT '部所,例: 理工学部 情報科学科, 総合機器センター'
-);
+-- CREATE TABLE tb_department(
+-- 	id SERIAL PRIMARY KEY COMMENT '通し番号（自動採番, 内部参照用）',
+-- 	dept_code VARCHAR(16) UNIQUE COMMENT '部所コード,例: RS, AIC',
+-- 	dept_name VARCHAR(32) COMMENT '部所,例: 理工学部 情報科学科, 総合機器センター'
+-- );
 
 -- tb_reserve: 予約テーブル
 
@@ -267,3 +267,19 @@ INSERT INTO tb_instrument
 (44,'超純水製造システム','超純水',1,4,8, null),
 (45,'ウルトラミクロ天秤','マイクロ天秤',1,3,7, null),
 (46,'粘度粘弾性測定装置','レオメータ',1,3,10, null);
+
+-- vw_instrument: view of instruments with room info
+CREATE VIEW vw_instrument AS 
+SELECT i.*, r.room_no, r.room_name 
+FROM tb_instrument i LEFT JOIN tb_room r ON i.room_id=r.id;
+
+
+-- vw_reserve: wiew of reservations with room, member info
+
+CREATE VIEW vw_reserve AS
+SELECT r.*, i.fullname, i.shortname,i.room_no, i.room_name, 
+	m1.ja_name AS apply_name, m2.ja_name AS master_name
+FROM tb_reserve r, vw_instrument i, tb_member m1, tb_member m2 
+WHERE r.apply_mid=m1.id AND r.master_mid=m2.id AND r.instrument_id=i.id
+
+
