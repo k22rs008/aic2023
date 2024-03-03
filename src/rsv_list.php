@@ -58,22 +58,15 @@ $rsv_status = KsuCode::RSV_STATUS;
 $rsv_status[0] = 'すべて';
 echo Html::select($rsv_status, 'status', [$status], 'radio');
 echo '<button type="submit" class="btn btn-outline-primary mt-1 mb-1 mr-1">絞込</button>' . PHP_EOL; 
+echo '<span class="float-right "><a class="btn btn-outline-success" href="?do=rsv_report">印刷</a></span>' . PHP_EOL;
 echo '</div>'. PHP_EOL;
 echo '</form>'. PHP_EOL;
 echo '</div>' . PHP_EOL;
 
 // pagination
-
 $num_rows = (new Reserve)->getNumRows($inst_id, $date1, $date2, $status);
-echo '<div clas="row">'. PHP_EOL;
-echo '<div clas="col-8">'. PHP_EOL;
 echo Html::pagination($num_rows, KsuCode::PAGE_ROWS, $page);
 // end of pagination
-echo '</div>'. PHP_EOL;
-echo '<div clas="col-4">'. PHP_EOL;
-echo '<a class="btn btn-sm float-right btn-outline-success" href="?do=rsv_report">印刷</a>' . PHP_EOL;
-echo '</div>'. PHP_EOL;
-echo '</div>'. PHP_EOL;
 
 echo '<table class="table table-hover">'. PHP_EOL;
 echo '<tr><th>部屋No.</th><th>利用機器名</th><th>利用目的</th><th>利用予定日</th>
