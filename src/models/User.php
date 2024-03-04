@@ -98,10 +98,8 @@ class User extends Model {
 
     public function isAdmin()
     {
-        if ($this->getLoginRole()){
-            return $this->getLoginRole() === 9;
-        }
-        return false;
+        $urole = $this->getLoginRole();        
+        return ($urole==9);
     }
     public function isStaff()
     {

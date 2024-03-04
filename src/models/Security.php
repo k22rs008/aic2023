@@ -8,10 +8,10 @@ class Security extends Model
 {
     const ERROR_MSG = [
         'require_login' => 'この機能は、ログインしないと利用できません。',
-        'require_admin' => 'この機能は、管理者以外では利用できません。',
-        'require_staff' => 'この機能は、教職員以外では利用できません。',
+        'require_admin' => 'この機能は、管理者でないと利用できません。',
+        'require_staff' => 'この機能は、教職員でないと利用できません。',
         'require_owner' => 'この機能は、本人でないと利用できません。',
-        'require_reserve' => 'この機能は、予約権限のある会員以外では利用できません。',
+        'require_reserve' => 'この機能は、予約権限のある会員でないと利用できません。',
     ];
 
     public function require($privilege='login', $mbr_id=0)

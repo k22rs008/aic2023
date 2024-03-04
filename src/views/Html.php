@@ -53,7 +53,7 @@ class Html
     }
 
     /** Return a range as options */
-    public static function rangeOptions($start, $end, $label='', $special=[],$step=1)
+    public static function rangeOptions($start, $end, $label='', $special=[], $step=1)
     {
         $range = range($start, $end, $step);
         $labels = array_map(fn($v):string=>$v. $label, $range);
