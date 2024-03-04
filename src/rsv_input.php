@@ -4,31 +4,34 @@
 use aic\models\Reserve;
 use aic\models\Instrument;
 use aic\models\Staff;
+use aic\models\Security;
 use aic\models\KsuCode;
 
 use aic\views\Html;
 
-$rsv_id = 0;
-if (isset($_GET['id'])){
-    $rsv_id = $_GET['id'];
-}
+(new Security)->require('login');
+(new Security)->require('reserve');
+
+$rsv_id = isset($_GET['id']) ? $_GET['id'] :0;
 $rsv = (new Reserve)->getDetail($rsv_id);
-// print_r($rsv);
+
 if (isset($_GET['inst'])){
     $rsv['instrument_id'] = $_GET['inst'];
     $instrument = (new Instrument)->getDetail($rsv['instrument_id']);
     $rsv['instrument_name'] = $instrument['fullname']; 
 }
+
 $stime = date('Y-m-d H:i');
 if (isset($_GET['d'])){
     $ymd = DateTime::createFromFormat('ymd', $_GET['d']);
     $stime = $ymd->format('Y-m-d H:i');
 }
+
 if ($rsv_id == 0){
     $rsv['stime'] = $stime;
     $rsv['etime'] = $stime;
 }
-// echo '<pre>';print_r($rsv);echo '</pre>';
+
 foreach($rsv as $key=>$value){
     $$key = $value;
 }

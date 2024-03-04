@@ -23,6 +23,16 @@ class Html
         return null;
     } 
 
+    public static function debug_msg($data)
+    {
+        if (is_array($data)){
+            echo '<pre>';print_r($data);echo '</pre>';
+        }else{
+            echo '<p class="text-info">' . $data . '</p>' . PHP_EOL;
+        }
+    }
+
+
     public static function textarea($name, $value=null, $attrs=null)
     {
         return sprintf('<textarea name="%s" %s>%s</textarea>', $name, $attrs, $value);

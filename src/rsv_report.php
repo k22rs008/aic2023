@@ -4,17 +4,15 @@ namespace aic;
 use aic\models\KsuCode;
 use aic\models\Reserve;
 use aic\models\RsvMember;
-use aic\models\User;
+use aic\models\Security;
 use aic\models\Util;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment as Align;
 
-$is_admin = (new User)->isAdmin();
-if (ENV=='deployment' and !$is_admin){
-    die('<p class="text-danger">この機能は管理者以外利用できません。</p>');
-}
+(new Security)->require('admin');
+
 foreach (['inst','status','year','month','day'] as $item){
   $key = 'selected_' . $item; // 'selected_??'
   $$item = isset($_SESSION[$key]) ? $_SESSION[$key] : 0;

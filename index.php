@@ -3,6 +3,7 @@ session_start();
 date_default_timezone_set("Asia/Tokyo");
 
 require "vendor/autoload.php";
+
 define ('ENV', 'development'); // 開発テスト時の設定
 // define ('ENV', 'deployment'); // 本番運用時の設定
 require 'conf/' . ENV . '_env.php';

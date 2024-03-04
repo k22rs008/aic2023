@@ -5,8 +5,8 @@ use aic\models\Reserve;
 use aic\models\Member;
 use aic\models\RsvMember;
 use aic\models\RsvSample;
+use aic\models\Util;
 
-// echo '<pre>'; print_r($_POST); echo '</pre>';
 $data = $_POST;
 $rsv_id = $data['id'];
 $rsv = [
@@ -23,14 +23,10 @@ foreach($rsv as $key=>$val){
 $errors = [];
 $existed_rsv = (new Reserve)->getListByInst($rsv['instrument_id'], $rsv['stime'], $rsv['etime']);
 if (count($existed_rsv) > 0 ){
-    $errors[] = sprintf("ほかの予約時間帯と被っています：%s～%s：", jpdate($rsv['stime'],true), jpdate($rsv['etime'],true));
+    $errors[] = sprintf("ほかの予約時間帯と被っています：%s～%s：", Util::jpdate($rsv['stime'],true), Util::jpdate($rsv['etime'],true));
 }
 $member = (new Member)->getDetailBySid($data['master_sid']);
-// if ($member){
-//     $rsv['master_mid'] = $member['id']; 
-// }else{
-//     $errors[] = sprintf("'%s'：無効な教職員IDです", $data['master_sid']);
-// }
+
 $rsv_members = [];
 foreach ($data['rsv_member'] as $sid){
     if (empty($sid)) continue;
@@ -45,10 +41,12 @@ if (count($rsv_members) == 0){
     $errors[] = "有効な利用代表者が指定されていません";
 }
 if (count($errors) > 0){
-    echo '<h3 class="text-danger">以下の理由により登録できません</h3>';
+    echo '<h3 class="text-danger">以下の理由により登録できません</h3>' . PHP_EOL;
+    echo '<ul class="list-group">';
     foreach ($errors as $error){
-        echo '<p class="text-info">エラー：' . $error . '！</p>' . PHP_EOL;
+        echo '<li class="list-group-item list-group-item-info">エラー：' . $error . '！</li>' . PHP_EOL;
     }
+    echo '</ul>';
     echo '<button class="btn btn-primary m-2" onclick="history.back();">戻る</button>';
 }else{
     $rs = (new Reserve)->write($rsv);

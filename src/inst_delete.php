@@ -2,6 +2,9 @@
 namespace aic;
 
 use aic\models\Instrument;
+use aic\models\Security;
+
+(new Security)->require('admin');
 
 if (isset($_GET['id'])){
     $inst_id = $_GET['id'];

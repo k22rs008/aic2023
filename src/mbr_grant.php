@@ -2,6 +2,9 @@
 namespace aic;
 
 use aic\models\Member;
+use aic\models\Security;
+
+(new Security)->require('admin');
 
 $id = $_GET['id'];
 $member = (new Member)->getDetail($id);

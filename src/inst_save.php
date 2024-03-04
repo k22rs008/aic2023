@@ -2,12 +2,9 @@
 namespace aic;
 
 use aic\models\Instrument;
-use aic\models\User;
+use aic\models\Security;
 
-$is_admin = (new User)->isAdmin();
-if (ENV=='deployment' and $is_admin){
-    die('<p class="text-danger">この機能は管理者以外利用できません。</p>');
-}
+(new Security)->require('admin');
 
 $id = (new Instrument)->write($_POST);
 
@@ -17,7 +14,7 @@ $upload_dir = 'img/instrument/';
 if ($_FILES['imgfile']['size'] > 0){
     $img_file = $_FILES['imgfile']['tmp_name'];
     $webp_file = $upload_dir . $webp_name;
-    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $finfo = new \finfo(FILEINFO_MIME_TYPE);
     $mime_type = $finfo->file($img_file);
     switch($mime_type){
         case 'image/jpeg':

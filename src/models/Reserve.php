@@ -26,7 +26,7 @@ class Reserve extends Model {
             $rsv['xray_chk'] = 0;
             $userid = (new User)->getLoginUid();
             $member = (new Member)->getList("uid='$userid'");
-            $rsv['apply_member'] = $member[0];
+            $rsv['apply_member'] = (count($member)>0) ? $member[0] : null;
             $rsv['rsv_member'] = $rsv['sample_nature'] = [];  
             $rsv['sample_other']='';    
             $rsv['sample_state']=1;

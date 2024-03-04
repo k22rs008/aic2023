@@ -73,6 +73,14 @@ class User extends Model {
         return null;
     }
 
+    public function getLoginMemberId()
+    {
+        if (isset($_SESSION['member_id'])){
+            return $_SESSION['member_id'];
+        }
+        return null;
+    }
+
     public function canReserve()
     {
         if ($this->getLoginRole() and $_SESSION['member_authority']){
@@ -85,6 +93,19 @@ class User extends Model {
     {
         if ($this->getLoginRole()){
             return $this->getLoginRole() === 9;
+        }
+        return false;
+    }
+    public function isStaff()
+    {
+        $urole = $this->getLoginRole();        
+        return ($urole > 1 and $urole<9);
+    }
+    
+    public function isOwner($mbr_id)
+    {
+        if ($this->getLoginMemberId()){
+            return ($this->getLoginMemberId() === $mbr_id);
         }
         return false;
     }

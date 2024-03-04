@@ -16,6 +16,19 @@
 	. rsv_member: 利用代表者名簿
 *********************************************/ 
 
+-- seq_reserve: 申請番号自動採番用テーブル
+-- 1. 採番テーブル作成・初期化
+CREATE TABLE seq_reserve (
+	id INT NOT NULL, 
+	y INT
+);
+INSERT INTO seq_reserve VALUES (0,YEAR(CURRENT_DATE));
+
+-- 2. 採番実行/年越しリセット
+UPDATE seq_reserve SET id=0,y=YEAR(CURRENT_DATE) WHERE NOT y=YEAR(CURRENT_DATE);
+UPDATE seq_reserve SET id=LAST_INSERT_ID(id + 1);
+SELECT LAST_INSERT_ID() as id;
+
 -- tb_user: ユーザアカウントテーブル
 -- 管理者アカウント以外は、LDAPによる認証を行いアカウント情報を自動登録
 
@@ -130,7 +143,7 @@ CREATE TABLE tb_instrument(
 	memo TEXT  COMMENT '備考'
 );
 
---　ユーザアカウント情報
+-- ユーザアカウント情報
 INSERT INTO tb_user
 (uid, urole, uname, upass) VALUES
 ('admin1', 9, 'AIC管理者A', md5('092A673A5711')),

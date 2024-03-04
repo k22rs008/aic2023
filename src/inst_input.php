@@ -3,15 +3,13 @@ namespace aic;
 
 use aic\models\Instrument;
 use aic\models\Room;
-use aic\models\User;
+use aic\models\Security;
 use aic\models\KsuCode;
 
 use aic\views\Html;
 
-$is_admin = (new User)->isAdmin();
-if (ENV=='deployment' and !$is_admin){
-    die('<p class="text-danger">この機能は管理者以外利用できません。</p>');
-}
+
+(new Security)->require('admin');
 
 $inst_id = isset($_GET['id']) ? $_GET['id'] : 0;;
 $status = $category = $room_id = 1;
