@@ -10,6 +10,7 @@ use aic\models\Util;
 class Reserve extends Model {
     protected $table = "tb_reserve";
     protected $rsv_view = "vw_reserve";
+    protected $rsv_seq = "seq_reserve";
     protected $inst_table = 'tb_instrument';
     protected $member_table = 'tb_member';
     
@@ -71,8 +72,23 @@ class Reserve extends Model {
         return $rsv;
     }
 
-     // $inst_id= 0 for all, or 1~ for one specific instrument 
-    // $status=9 for all, or 1~ for one specific status
+    public function nextCode()
+    {
+        $date = new \DateTime();
+        $sql = sprintf("UPDATE %s SET id=0, y=YEAR(CURRENT_DATE) WHERE NOT y=YEAR(CURRENT_DATE)", $this->rsv_seq); 
+        $this->db->query($sql);
+        $sql = sprintf("UPDATE %s SET id=LAST_INSERT_ID(id + 1)", $this->rsv_seq);
+        $this->db->query($sql);
+        $sql = sprintf("SELECT LAST_INSERT_ID() as id, y FROM %s", $this->rsv_seq);
+        $rs = $this->db->query($sql);
+        if (!$rs) die('エラー: ' . $this->db->error);
+        $row = $rs->fetch_assoc();
+        if (!$row) die('エラー: 自動採番が失敗しました。');         
+        return sprintf("%s%04d", $row['y'], $row['id']);
+    }
+
+    // $inst_id= 0 for all, or 1~ for one specific instrument 
+    // $status=0 for all, or 1~ for one specific status
     function getNumRows($inst_id=0, $date1=null, $date2=null, $status=0)
     {
         $conn = $this->db; 
@@ -94,7 +110,6 @@ class Reserve extends Model {
         if (!$rs) die('エラー: ' . $conn->error);
         return $rs->num_rows;
     }
-
    
     function getListByInst($inst_id=0, $date1=null, $date2=null, $status=0, $page=0)
     {
@@ -151,7 +166,6 @@ class Reserve extends Model {
             $d = $_stime->format('Y/m/d');
             //TODO: combine all data
         }
-
     }
       
     function getItems($inst_id, $date1=null, $date2=null)

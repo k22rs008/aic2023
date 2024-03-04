@@ -37,10 +37,13 @@ foreach($rsv['rsv_member'] as $row){
 ?>
 </table>
 </td></tr>
-<tr><td class="text-info">その他利用者</td><td colspan="4"><?=$rsv['other_user'] ?></td>
-</tr>
 <tr><td class="text-info">教職員人数</td><td><?= $rsv['staff_n'] ?>人</td>
     <td class="text-info">学生人数</td><td colspan="2"><?= $rsv['student_n'] ?>人</td>
+</tr>
+<tr><td class="text-info">その他利用者数</td>
+    <td><?=$rsv['other_num'] ?></td>
+    <td class="text-info">利用者説明</td>
+    <td colspan="2"><?= $rsv['other_user'] ?></td>
 </tr>
 <tr><td class="text-info">希望利用機器</td>
 <td colspan="4"><?=$rsv['instrument_fullname']?>（<?=$rsv['instrument_shortname']?>）</td>

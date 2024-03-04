@@ -3,6 +3,7 @@
 
 use aic\models\Reserve;
 use aic\models\Member;
+use aic\models\User;
 use aic\models\RsvMember;
 use aic\models\RsvSample;
 use aic\models\Util;
@@ -10,8 +11,8 @@ use aic\models\Util;
 $data = $_POST;
 $rsv_id = $data['id'];
 $rsv = [
-    'id'=>0,'instrument_id'=>0,'apply_mid'=>0,'master_mid'=>0,
-    'purpose'=>'','other_user'=>'','stime'=>'','etime'=>'','sample_name'=>'','sample_state'=>1,
+    'id'=>0, 'code'=>'', 'instrument_id'=>0, 'apply_mid'=>0, 'master_mid'=>0,
+    'purpose'=>'','other_num'=>0, 'other_user'=>'', 'stime'=>'','etime'=>'','sample_name'=>'','sample_state'=>1,
     'xray_chk'=>0, 'xray_num'=>'', 'memo'=>'',
 ];
 foreach($rsv as $key=>$val){
@@ -25,7 +26,12 @@ $existed_rsv = (new Reserve)->getListByInst($rsv['instrument_id'], $rsv['stime']
 if (count($existed_rsv) > 0 ){
     $errors[] = sprintf("ほかの予約時間帯と被っています：%s～%s：", Util::jpdate($rsv['stime'],true), Util::jpdate($rsv['etime'],true));
 }
+
+$rsv['master_mid'] = (new User)->getLoginMid();
 $member = (new Member)->getDetailBySid($data['master_sid']);
+if ($member){
+    $rsv['master_mid'] = $member['id'];
+}
 
 $rsv_members = [];
 foreach ($data['rsv_member'] as $sid){
@@ -49,10 +55,13 @@ if (count($errors) > 0){
     echo '</ul>';
     echo '<button class="btn btn-primary m-2" onclick="history.back();">戻る</button>';
 }else{
-    $rs = (new Reserve)->write($rsv);
+    if ($rsv_id == 0){
+        $rsv['code'] = (new Reserve)->nextCode();
+    }
+    $id = (new Reserve)->write($rsv);
 
     if ($rsv_id == 0){
-        $rsv_id = $rs;
+        $rsv_id = $id;
     }
 
     (new RsvMember)->reset($rsv_id);
@@ -73,8 +82,6 @@ if (count($errors) > 0){
         // echo '<pre>'; print_r($record); echo '</pre>';
         $rs = (new RsvSample)->write($record);
     }
-    foreach ($rsv_members as $member){
-        $record = ['id'=>0, 'reserve_id'=>$rsv_id, 'member_id'=>$member['id']];
-        $rs = (new RsvMember)->write($record);
-    }
+
+    header('Location:?do=rsv_detail&id='.$rsv_id);
 }

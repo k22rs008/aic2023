@@ -64,6 +64,13 @@ class User extends Model {
         }
         return null;
     }
+    public function getLoginMid()
+    {
+        if (isset($_SESSION['member_id'])){
+            return $_SESSION['member_id'];
+        }
+        return null;
+    }
 
     public function getLoginRole()
     {

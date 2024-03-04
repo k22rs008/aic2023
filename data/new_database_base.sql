@@ -16,19 +16,6 @@
 	. rsv_member: 利用代表者名簿
 *********************************************/ 
 
--- seq_reserve: 申請番号自動採番用テーブル
--- 1. 採番テーブル作成・初期化
-CREATE TABLE seq_reserve (
-	id INT NOT NULL, 
-	y INT
-);
-INSERT INTO seq_reserve VALUES (0,YEAR(CURRENT_DATE));
-
--- 2. 採番実行/年越しリセット
-UPDATE seq_reserve SET id=0,y=YEAR(CURRENT_DATE) WHERE NOT y=YEAR(CURRENT_DATE);
-UPDATE seq_reserve SET id=LAST_INSERT_ID(id + 1);
-SELECT LAST_INSERT_ID() as id;
-
 -- tb_user: ユーザアカウントテーブル
 -- 管理者アカウント以外は、LDAPによる認証を行いアカウント情報を自動登録
 
@@ -79,11 +66,13 @@ CREATE TABLE tb_staff(
 
 CREATE TABLE tb_reserve(
 	id SERIAL PRIMARY KEY COMMENT '通し番号（自動採番, 内部参照用）',
+	rsv_code VARCHAR(32) NOT NULL COMMENT '予約番号(問合せ用)yyyymmxxxx'
     instrument_id INT NOT NULL COMMENT '利用希望機器ID',
     apply_mid VARCHAR(16) NOT NULL COMMENT '申請者会員ID',
     master_mid VARCHAR(16) NOT NULL COMMENT '責任者会員ID',
     purpose VARCHAR(16) COMMENT '利用目的',
-	other_user VARCHAR(64) COMMENT 'その他利用者',
+	other_num INT COMMENT 'その他利用者数'
+	other_user VARCHAR(64) COMMENT 'その他利用者説明',
 	stime DATETIME NOT NULL COMMENT '利用開始日時',
     etime DATETIME NOT NULL COMMENT '利用終了日時',
 	sample_name VARCHAR(64) NOT NULL COMMENT '試料名称',
@@ -96,6 +85,23 @@ CREATE TABLE tb_reserve(
 	approved DATETIME COMMENT '承認日',
 	lastmodified TIMESTAMP COMMENT '最終変更日'
 );
+
+-- seq_reserve: 申請番号自動採番用テーブル
+-- 1. 採番テーブル作成・初期化
+CREATE TABLE seq_reserve (
+	id INT NOT NULL, 
+	y INT
+);
+INSERT INTO seq_reserve VALUES (0,YEAR(CURRENT_DATE));
+
+-- 2. 採番実行/年越しリセット
+UPDATE seq_reserve SET id=0,y=YEAR(CURRENT_DATE) WHERE NOT y=YEAR(CURRENT_DATE);
+UPDATE seq_reserve SET id=LAST_INSERT_ID(id + 1);
+SELECT LAST_INSERT_ID() as id;
+
+-- 3. 全て初期化 
+UPDATE seq_reserve set id=0, y=YEAR(CURRENT_DATE);
+
 
 -- rsv_member: 利用者名簿テーブル
 

@@ -10,8 +10,8 @@ use aic\models\Util;
 $inst_id = $_GET['id'];
 // $date_curr = '240327';  //本番なら date("ymd");
 $date_curr = date("ymd");
-$ymd = isset($_GET['d']) ? $_GET['d'] : $date_curr;
-$_start = \DateTime::createFromFormat('ymd', $ymd);
+$selected_ymd = isset($_GET['d']) ? $_GET['d'] : $date_curr;
+$_start = \DateTime::createFromFormat('ymd', $selected_ymd);
 $date_start = $_start->format('Y-m-d');
 $date_end = date("Y-m-d", strtotime("+1 days", strtotime($date_start)));
 $jpdate = Util::jpdate($date_start);
@@ -62,7 +62,7 @@ foreach ($navbar as $delta => $label){
 $can_reserve = (new User)->canReserve();
 if (ENV=='development' or $can_reserve){
   $link = '<a href="?do=rsv_input&inst=%d&d=%s" class="btn btn-outline-info float-right m-1">予約する</a>' . PHP_EOL;
-  printf($link, $inst_id, $ymd);
+  printf($link, $inst_id, $selected_ymd);
 }
 echo '</div>' . PHP_EOL;
 ?>
