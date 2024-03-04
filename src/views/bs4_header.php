@@ -74,8 +74,8 @@ if (isset($_SESSION['urole'])){
       //'利用状況集計' => ''
     );
   }
-  foreach($menu as $label=>$action){ 
-    echo  '<li class="nav-item"><a class="nav-link" href="?do=' . $action . '">' . $label . '</a></li>' ;
+  foreach($menu as $_label=>$_action){ 
+    echo  '<li class="nav-item"><a class="nav-link" href="?do=' . $_action . '">' . $_label . '</a></li>' ;
   }
   echo  '<li class="nav-item"><a class="nav-link" href="?do=sys_logout">ログアウト</a></li>' ;
 }else{

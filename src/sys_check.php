@@ -31,7 +31,18 @@ if (isset($_POST['uid'], $_POST['pass'])){
         }else{
             $login_member= (new Member)->getList("uid='$uid'");
             $_SESSION['uid'] = $ldap_info['uid'];
-            $_SESSION['urole'] = $ldap_info['sid'];
+            $urole = 4;
+            if ($ldap_info['category']=='一般学生') {
+                $urole = 1;
+            }
+            if ($ldap_info['category']=='教育職員') {
+                $urole = 2;
+            }
+            if ($ldap_info['category']=='事務職員') {
+                $urole = 3;
+            }
+            $_SESSION['urole'] = $urole;
+            $_SESSION['uname'] = $ldap_info['ja_name'];
             if (!$login_member){
                 $new_user = true;
                 $login_member = (new User)->addLdapUser($ldap_info);
@@ -43,6 +54,7 @@ if (isset($_POST['uid'], $_POST['pass'])){
         }
     }
     if ($login_member){
+        $_SESSION['sid'] = $login_member['sid'];
         $_SESSION['member_id'] = $login_member['id'];
         $_SESSION['member_name'] = $login_member['ja_name'];
         $_SESSION['member_category'] = $login_member['category'];
