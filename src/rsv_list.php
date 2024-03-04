@@ -57,7 +57,7 @@ echo Html::select($options, 'd', [$selected_d]);
 $rsv_status = KsuCode::RSV_STATUS;
 $rsv_status[0] = 'すべて';
 echo Html::select($rsv_status, 'status', [$status], 'radio');
-echo '<button type="submit" class="btn btn-outline-primary mt-1 mb-1 mr-1">絞込</button>' . PHP_EOL; 
+echo '<button type="submit" class="btn btn-outline-primary mt-1 mb-1 mr-2">絞込</button>' . PHP_EOL; 
 echo '<span class="float-right ">
   <a class="btn btn-outline-success" href="?do=rsv_report">出力</a></span>' . PHP_EOL;
 echo '</div>'. PHP_EOL;
