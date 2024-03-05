@@ -195,7 +195,7 @@ class User extends Model {
             'dept_code'=>$dept_code,'dept_name'=>$dept_name,
             'ja_name'=>$info['ja_name'],'ja_yomi'=>$info['ja_yomi'],
             'en_name'=>$info['en_name'],'en_yomi'=>$info['en_yomi'], 
-            'category'=>$category,
+            'category'=>$category, 'authority'=>1,
         ];
         $member_id = (new Member)->write($member);
         if ($category > 1){ //教職員
