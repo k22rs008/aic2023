@@ -6,10 +6,12 @@ use aic\models\User;
 use aic\models\RsvSample;
 use aic\models\RsvMember;
 use aic\models\Util;
+use aic\views\Html;
 
 class Reserve extends Model {
     protected $table = "tb_reserve";
     protected $rsv_view = "vw_reserve";
+    protected $rsv_report = "vw_report";
     protected $rsv_seq = "seq_reserve";
     protected $inst_table = 'tb_instrument';
     protected $member_table = 'tb_member';
@@ -126,7 +128,7 @@ class Reserve extends Model {
         if ($status > 0){ 
             $sql .= " AND status=$status"; 
         }
-        $sql .= ' ORDER BY instrument_id, stime, etime';
+        $sql .= ' ORDER BY room_id, stime, etime';
         if ($page>0){
             $n = KsuCode::PAGE_ROWS;
             $sql .= sprintf(' LIMIT %d OFFSET %d', $n, ($page-1) * $n);
@@ -137,35 +139,54 @@ class Reserve extends Model {
         return $rs->fetch_all(MYSQLI_ASSOC);
     }
 
-    function getReport($inst_id=0, $date1=null, $date2=null)
+    function getReport($inst_id=0, $date1=null, $date2=null, $status=0)
     {
         $report=[];
-        $rows = (new Instrument)->getList(1, 'code');
+        $others=[];
+        $total = ['student_n'=>0, 'staff_n'=>0, 'other_n'=>0];
+        $conn = $this->db; 
+        $sql = sprintf("SELECT * FROM %s WHERE 1 ", $this->rsv_report);
+        if ($inst_id){ 
+            $sql .= " AND instrument_id=$inst_id"; 
+        }
+        if ($date1 and $date2){
+            $sql .= " AND GREATEST(stime, '{$date1} 00:00') <= LEAST(etime, '{$date2} 23:59')"; 
+        }elseif($date1 and !$date2){
+            $sql .= " AND etime>'{$date1}'";
+        }
+        if ($status > 0){ 
+            $sql .= " AND status=$status"; 
+        }
+        $sql .= ' ORDER BY stime, etime';
+        
+        // echo $sql;
+        $rs = $conn->query($sql);
+        if (!$rs) die('エラー: ' . $conn->error);
+        $rows = $rs->fetch_all(MYSQLI_ASSOC);
         foreach ($rows as $row){
-            $id = $row['id'];
-            $room_id = $row['room_id'];
-            $room = (new Room)->getDetail($room_id);
-            $report[$id] = ['rsv'=>[], 'room_no'=>$room['room_no'], 'shortname'=>$row['shortname']];
+            $date = Util::jpdate($row['stime'], false, false);//without year and time
+            if (!isset($report[$date])){
+                $report[$date] = $total;
+            }
+            if (!isset($others[$date])){
+                $others[$date] = [];
+            }
+                   
+            $student_n = $row['student_n'];
+            $staff_n = $row['staff_n']; 
+            $other_n = $row['other_num'];
+            $other_user = $row['other_user'];
+            if (strlen($other_user)>1){
+                $others[$date] = array_merge($others[$date], [$other_user]);
+            }
+            foreach (array_keys($total) as $key){
+                $report[$date][$key] += $$key;   
+            }
+            // printf('%s, %d, %d, %d, %s<br>',$date, $student_n, $staff_n, $other_n, $other_user);
         }
-        $_date1 = new \DateTimeImmutable($date1);
-        $_date2 = new \DateTimeImmutable($date2);
-        $interval = \DateInterval::createFromDateString('1 day');
-        $daterange = new \DatePeriod($_date1, $interval ,$_date2);
-        $data = [];
-        foreach($daterange as $date){
-            $d = $date->format('Y/m/d');
-            $w = $date->format('w');
-            $data[$d]=['weekday'=>KsuCode::WEEKDAY[$w]];
-        }
+        ksort($report);
+        return ['report'=>$report, 'other'=>$others];
 
-        $rows = $this->getListByInst($inst_id, $date1, $date2);
-        foreach ($rows as $row){
-            $id = $row['instrument_id'];
-            $_stime = new \DateTimeImmutable($row['stime']);
-            $_etime = new \DateTimeImmutable($row['etime']);
-            $d = $_stime->format('Y/m/d');
-            //TODO: combine all data
-        }
     }
       
     function getItems($inst_id, $date1=null, $date2=null)

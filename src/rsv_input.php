@@ -72,7 +72,7 @@ foreach(range(0,2) as $i){
 </tr>
 <tr><td class="text-info">その他利用者数</td>
     <td><?= Html::input('number', 'other_num', $rsv['other_num'])?></td>
-    <td class="text-info">利用者説明</td>
+    <td class="text-info">内訳等の説明</td>
     <td colspan="2"><?= Html::input('text', 'other_user', $rsv['other_user'],'placeholder="例：○○株式会社４名、○○学校2名"')?></td>
 </tr>
 <tr><td class="text-info">希望利用機器</td>

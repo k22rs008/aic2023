@@ -13,10 +13,10 @@ if (isset($_GET['do'])) {//index.php?do=に続くパラメータで実行する�
   $requested_action = $_GET['do'];
 }
 
-if (!in_array($requested_action, ['rsv_report']))
+if (!in_array($requested_action, ['rsv_excel']))
   include('src/views/bs4_header.php');
 
 include('src/' . $requested_action . '.php'); //指定されたファイルを読み込む
 
-if (! in_array($requested_action, ['rsv_report']))
+if (! in_array($requested_action, ['rsv_excel']))
   include('src/views/bs4_footer.php');;  
