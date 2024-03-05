@@ -79,7 +79,7 @@ CREATE TABLE tb_reserve(
 	sample_state INT COMMENT '試料状態(1-個体,2-液体,3-気体)',
     xray_chk BOOLEAN COMMENT 'X線取扱者登録有無',
     xray_num VARCHAR(32) COMMENT 'X線取扱者登録者番号',
-    status INT NOT NULL DEFAULT 1 COMMENT '申請状態(1:申請中,3:承認,4:却下,5:キャンセル)',
+    `status` INT NOT NULL DEFAULT 1 COMMENT '申請状態(1:申請中,3:承認,4:却下,5:キャンセル)',
     memo TEXT COMMENT '備考',
     reserved DATETIME COMMENT '予約日',
 	approved DATETIME COMMENT '承認日',
@@ -136,7 +136,7 @@ CREATE TABLE tb_instrument(
 	code VARCHAR(16) COMMENT '人間識別用番号',
 	fullname VARCHAR(64) NOT NULL COMMENT '名称',
 	shortname VARCHAR(64) NOT NULL COMMENT '略称', 
-	state INT NOT NULL COMMENT '機器状態(1:使用可,2:貸出中,3:使用不可,9:その他)',
+	`state` INT NOT NULL COMMENT '機器状態(1:使用可,2:貸出中,3:使用不可,9:その他)',
 	category INT COMMENT 'カテゴリ（1:観察, 2:分析,3:計測,4:調製,9:その他）', 
 	purpose VARCHAR(64) COMMENT '主な用途',
 	detail TEXT COMMENT '施設紹介' ,
@@ -189,7 +189,7 @@ INSERT INTO tb_room
 -- 状　　態(state) 1:使用可,2:貸出中,3:使用不可
 -- カテゴリ(category) 1:観察, 2:分析,3:計測,4:調製,9:その他
 INSERT INTO tb_instrument
-(code,fullname,shortname,state,category,room_id,memo) VALUES
+(code,fullname,shortname,`state`,category,room_id,memo) VALUES
 (1,'３Ｄデジタルファインスコープ','３ＤＳ',1,1,7, null),
 (2,'原子吸光分析システム','ＡＡ',1,2,8, null),
 (3,'ビジネスプロジェクター','ＢＰ',1,9,15, null),

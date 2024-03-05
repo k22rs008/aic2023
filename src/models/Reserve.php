@@ -85,7 +85,7 @@ class Reserve extends Model {
         if (!$rs) die('エラー: ' . $this->db->error);
         $row = $rs->fetch_assoc();
         if (!$row) die('エラー: 自動採番が失敗しました。');         
-        return sprintf("%s%04d", $row['y'], $row['id']);
+        return sprintf("%d%04d", $row['y'], $row['id']);
     }
 
     // $inst_id= 0 for all, or 1~ for one specific instrument 
