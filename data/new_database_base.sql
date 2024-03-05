@@ -253,13 +253,13 @@ CREATE VIEW vw_reserve AS
 SELECT r.*, i.fullname, i.shortname,i.room_id,i.room_no, i.room_name, 
 	m1.ja_name AS apply_name, m2.ja_name AS master_name
 FROM tb_reserve r, vw_instrument i, tb_member m1, tb_member m2 
-WHERE r.apply_mid=m1.id AND r.master_mid=m2.id AND r.instrument_id=i.id
+WHERE r.apply_mid=m1.id AND r.master_mid=m2.id AND r.instrument_id=i.id;
 
 -- vw_report
 CREATE VIEW vw_report AS
 SELECT r.*,
-SUM(IF(m.sid REGEXP '^\d+$', 0, 1)) AS student_n, 
-SUM(IF(m.sid REGEXP '^\d+$', 1, 0)) AS staff_n
+SUM(IF(m.sid REGEXP '^[0-9]+$', 0, 1)) AS student_n, 
+SUM(IF(m.sid REGEXP '^[0-9]+$', 1, 0)) AS staff_n
 FROM tb_reserve r, rsv_member v, tb_member m 
 WHERE r.id=v.reserve_id AND m.id=v.member_id
 GROUP BY r.id;

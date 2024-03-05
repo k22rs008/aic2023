@@ -4,6 +4,9 @@ namespace aic;
 use aic\models\Reserve;
 use aic\models\RsvMember;
 use aic\models\RsvSample;
+use aic\models\Security;
+
+(new Security)->require('admin');
 
 if (isset($_GET['id'])){
     $rsv_id = $_GET['id'];

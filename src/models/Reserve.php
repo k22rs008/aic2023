@@ -76,7 +76,6 @@ class Reserve extends Model {
 
     public function nextCode()
     {
-        $date = new \DateTime();
         $sql = sprintf("UPDATE %s SET id=0, y=YEAR(CURRENT_DATE) WHERE NOT y=YEAR(CURRENT_DATE)", $this->rsv_seq); 
         $this->db->query($sql);
         $sql = sprintf("UPDATE %s SET id=LAST_INSERT_ID(id + 1)", $this->rsv_seq);
