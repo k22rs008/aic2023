@@ -121,7 +121,7 @@ INSERT INTO tb_member (id,uid,sid,email,tel_no,ja_name,sex,dept_code,dept_name,c
 (119,'t0119',118114,'t0119@ip.kyusan-u.ac.jp',' 080-2815-3766','堀 陽愛',2,'LT','生体医工学部 生体工学科',2,1),
 (120,'t0120',113680,'t0120@ip.kyusan-u.ac.jp',' 080-2837-6772','吉岡 結人',1,'LT','生体医工学部 生体工学科',2,1);
 
-INSERT INTO tb_staff (member_id,title,rank,room_no,tel_ext) VALUES
+INSERT INTO tb_staff (member_id,title,`rank`,room_no,tel_ext) VALUES
 (101,'大学教育職員','助教','11号館8階829号室',5430),
 (102,'大学教育職員','准教授','11号館7階715号室',5734),
 (103,'事務職員','職員','10号館6階621号室',5486),

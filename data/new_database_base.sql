@@ -34,7 +34,7 @@ CREATE TABLE tb_member(
 	id SERIAL PRIMARY KEY COMMENT '通し番号（自動採番, 内部参照用）',
     uid VARCHAR(16) NOT NULL UNIQUE COMMENT 'ユーザID',
 	sid VARCHAR(16) NOT NULL UNIQUE COMMENT '学籍番号(文字列)・教職員番号(数字)',
-	email VARCHAR(32) NOT NULL COMMENT 'メールアドレス',
+	email VARCHAR(32) COMMENT 'メールアドレス',
 	tel_no VARCHAR(32) COMMENT '電話番号',
 	ja_name VARCHAR(32) NOT NULL COMMENT '日本語氏名',
 	ja_yomi VARCHAR(32) COMMENT '日本語読み',
@@ -56,7 +56,7 @@ CREATE TABLE tb_staff(
   id SERIAL PRIMARY KEY COMMENT '通し番号（自動採番, 内部参照用）',
   member_id INT NOT NULL COMMENT '',
   title VARCHAR(32)  COMMENT '役職1:大区分(大学教育職員,事務職員,職員)',
-  rank VARCHAR(32)  COMMENT '役職2:中区分(教授,准教授,講師,助教,職員)',
+  `rank` VARCHAR(32)  COMMENT '役職2:中区分(教授,准教授,講師,助教,職員)',
   room_no VARCHAR(32) COMMENT '部屋番号',
   tel_ext VARCHAR(8) COMMENT '内線番号',
   responsible BOOLEAN DEFAULT 0 COMMENT '責任者になれるか(0:否,1:可)' 
