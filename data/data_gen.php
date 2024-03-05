@@ -136,7 +136,7 @@ $xray_num = '';
 $reserve_id = 1; 
 $reserved = date('Y-m-d H:i');
 $reserve=[
-    'instrument_id'=>0, 'apply_mid'=>'', 'master_mid'=>'', 'purpose'=>'',
+    'code'=>'', 'instrument_id'=>0, 'apply_mid'=>'', 'master_mid'=>'', 'purpose'=>'',
     'stime'=>'', 'etime'=>'','sample_name'=>'', 'sample_state'=>0,
     'xray_chk'=>0, 'xray_num'=>'','status'=>1, 'reserved'=>'',
 ];
@@ -146,6 +146,7 @@ $rsv_member=[
 $rsv_sample=[
     'reserve_id'=>0, 'nature'=>0, 'other'=>'',
 ];
+$no = 0;
 foreach ($instruments as $instrument_id){
     // srand(time()); // uncomment this line if you wish the results change every time
     foreach (range(3,5) as $month){
@@ -164,9 +165,11 @@ foreach ($instruments as $instrument_id){
                 $sample_name = sample($r_samples)[0];  
                 $sample_state = rand(1,3);
                 $status = rand(1,3);                
+                $code = sprintf('%04d%04d', date('Y'), ++$no);
                 foreach(array_keys($reserve) as $key){
                     $reserve[$key] = $$key;
                 }
+                
                 $reserves[] = $reserve; 
                 
                 // rsv_members
@@ -205,7 +208,7 @@ if ($tosql){
     // echo toSQL('tb_member', $members), ';', PHP_EOL ;
     // echo toSQL('tb_staff', $staffs), ';', PHP_EOL;
     // echo toSQL('tb_user', $users), ';', PHP_EOL;
-    // echo toSQL('tb_reserve', $reserves), ';', PHP_EOL;
+    echo toSQL('tb_reserve', $reserves), ';', PHP_EOL;
     // echo toSQL('rsv_member', $rsv_members), ';', PHP_EOL;
     // echo toSQL('rsv_sample', $rsv_samples), ';', PHP_EOL;
 }
