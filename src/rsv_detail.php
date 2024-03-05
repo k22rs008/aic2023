@@ -2,6 +2,7 @@
 namespace aic;
 
 use aic\models\Reserve;
+use aic\models\User;
 use aic\models\Util;
 
 $rsv_id = 0;
@@ -10,8 +11,8 @@ if (isset($_GET['id'])){
 }
 $rsv= (new Reserve)->getDetail($rsv_id);
 // echo '<pre>'; print_r($rsv); echo '</pre>';
+$mbr_id = $rsv['apply_mid'];
 $status = $rsv['status'];
-
 $status_label = ($status==1 or $status==3) ? '承認' : '却下';
 $status_class = [1=>'text-info', 2=>'text-success', 3=>'text-danger'];
 ?>
@@ -69,10 +70,17 @@ foreach($rsv['rsv_member'] as $row){
 <tr><td class="text-info">承認状態</td><td class="<?=$status_class[$status]?>" colspan=4><?= $rsv['status_name'] ?></td>
 </tr>
 </table>
-
-<a class="btn btn-outline-success m-2" href="?do=rsv_grant&id=<?=$rsv_id?>"><?=$status_label?></a>
-<a class="btn btn-outline-primary m-2" href="?do=rsv_input&id=<?=$rsv_id?>">編集</a>
-<a href="#myModal" class="btn btn-outline-danger m-2" data-id=<?=$rsv_id?> data-toggle="modal">削除</a>
+<?php
+  $is_admin = (new User)->isAdmin();
+  $is_owner = (new User)->isOwner($mbr_id);
+  if ($is_admin){
+    echo '<a class="btn btn-outline-success m-2" href="?do=rsv_grant&id='.$rsv_id.'">'.$status_label. '</a>';
+  }
+  if ($is_admin or $is_owner){
+    echo '<a class="btn btn-outline-primary m-2" href="?do=rsv_input&id='. $rsv_id.'">編集</a>' . PHP_EOL 
+      . '<a href="#myModal" class="btn btn-outline-danger m-2" data-id='.$rsv_id .' data-toggle="modal">削除</a>' .PHP_EOL;
+  }
+?>
 <a href="?do=rsv_list" class="btn btn-outline-info m-2" onclick="history.back();">戻る</a> 
 
 <!-- Modal HTML -->

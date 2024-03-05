@@ -2,6 +2,7 @@
 namespace aic;
 
 use aic\models\Reserve;
+use aic\models\User;
 use aic\models\KsuCode;
 use aic\models\Util;
 
@@ -39,11 +40,13 @@ foreach ($rows as $row){ //予約テーブルにある予約の数だけ繰り�
   $rsv_id = $row['id'];
   $status = $row['status'];
   $label = ($status==1 or $status==3) ? '承認' : '却下';
-  echo '<td>' .
-    '<a class="btn btn-sm btn-outline-info" href="?do=rsv_grant&id='.$rsv_id.'">'.$label.'</a>' . PHP_EOL .
-    '<a class="btn btn-sm btn-outline-success" href="?do=rsv_detail&id='.$row['id'].'">詳細</a>' .
-    '</td>';
-  echo '</tr>' . PHP_EOL;
+  echo '<td>';
+  $is_admin = (new User)->isAdmin();
+  if ($is_admin){
+    echo '<a class="btn btn-sm btn-outline-info" href="?do=rsv_grant&id='.$rsv_id.'">'.$label.'</a>' . PHP_EOL;
+  }
+  echo '<a class="btn btn-sm btn-outline-success" href="?do=rsv_detail&id='.$row['id'].'">詳細</a>' .
+    '</td></tr>' . PHP_EOL;
 }
 echo '</table>';
 

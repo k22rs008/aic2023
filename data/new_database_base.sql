@@ -44,7 +44,7 @@ CREATE TABLE tb_member(
 	dept_name VARCHAR(64) COMMENT '所属名称, 例: 理工学部 情報科学科',
 	dept_code VARCHAR(16) COMMENT '所属コード,例: RS',
 	category INT COMMENT 'カテゴリ(1:一般学生,2:教育職員,3:事務職員,9:その他職員)',
-	authority INT DEFAULT 1 COMMENT '権限(0:予約権なし,1:予約付き)',
+	authority INT NOT NULL DEFAULT 1 COMMENT '権限(0:予約権なし,1:予約付き)',
 	granted TIMESTAMP COMMENT '権限付与・撤回日時',
 	memo TEXT COMMENT '備考'
 );
@@ -59,7 +59,7 @@ CREATE TABLE tb_staff(
   rank VARCHAR(32)  COMMENT '役職2:中区分(教授,准教授,講師,助教,職員)',
   room_no VARCHAR(32) COMMENT '部屋番号',
   tel_ext VARCHAR(8) COMMENT '内線番号',
-  responsible BOOLEAN DEFAULT 1 COMMENT '責任者になれるか(0:否,1:可)' 
+  responsible BOOLEAN DEFAULT 0 COMMENT '責任者になれるか(0:否,1:可)' 
 );
 
 -- tb_reserve: 予約テーブル
@@ -79,7 +79,7 @@ CREATE TABLE tb_reserve(
 	sample_state INT COMMENT '試料状態(1-個体,2-液体,3-気体)',
     xray_chk BOOLEAN COMMENT 'X線取扱者登録有無',
     xray_num VARCHAR(32) COMMENT 'X線取扱者登録者番号',
-    status INT NOT NULL DEFAULT 1 COMMENT '申請状態(1:申請中,2:審査中,3:承認,4:却下)',
+    status INT NOT NULL DEFAULT 1 COMMENT '申請状態(1:申請中,3:承認,4:却下,5:キャンセル)',
     memo TEXT COMMENT '備考',
     reserved DATETIME COMMENT '予約日',
 	approved DATETIME COMMENT '承認日',

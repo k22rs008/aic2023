@@ -30,11 +30,11 @@ echo '</div>' . PHP_EOL;
 $page = isset($_GET['page']) ? $_GET['page'] : 1; 
 // pagination
 $where = ($category==0) ? 1 : 'category='. $category;
-$num_rows = (new Member)->getNumRows($where, 'id', $page);
+$num_rows = (new Member)->getNumRows($where, 'id');
 echo Html::pagination($num_rows, KsuCode::PAGE_ROWS, $page);
 // end of pagination
 
-$rows= (new Member)->getList($where, 'id', $page);
+$rows= (new Member)->getList($where, 'authority,id', $page);
 
 echo '<table class="table table-hover">';
 echo '<tr><th>会員ID</th><th>会員名</th><th>所属</th><th>種別</th><th>電話番号</th><th>予約権</th><th>詳細</th></tr>';

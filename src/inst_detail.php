@@ -2,6 +2,7 @@
 namespace aic;
 
 use aic\models\Instrument;
+use aic\models\User;
 use aic\models\KsuCode;
 
 $inst_id = 0;
@@ -31,11 +32,18 @@ if ($row) {
     echo '<tr><th>場所番号</th><td>' . $row['room_no'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>詳細</th><td>' . nl2br($row['detail']) . '</td></tr>' . PHP_EOL;
     echo '</table>' . PHP_EOL;
-    echo '<div class="pb-5 mb-5">' . PHP_EOL . 
-      '<a class="btn btn-outline-primary m-1" href="?do=inst_input&id='.$inst_id.'">編集</a>'.
-      '<a href="#myModal" class="btn btn-outline-danger m-1" data-id='.$inst_id.' data-toggle="modal">削除</a>' .
-      '<a class="btn btn-outline-success m-1" href="?do=rsv_input&inst='.$row['id'].'">予約</a>'.
-      '<a href="?do=inst_list" class="btn btn-outline-info m-1">戻る</a>' . PHP_EOL .  
+    echo '<div class="pb-5 mb-5">' . PHP_EOL; 
+    $is_admin = (new User)->isAdmin();
+    if ($is_admin){
+      echo '<a class="btn btn-outline-primary m-1" href="?do=inst_input&id='.$inst_id.'">編集</a>'.
+        '<a href="#myModal" class="btn btn-outline-danger m-1" data-id='.$inst_id.' data-toggle="modal">削除</a>';
+    }
+    $can_reserve = (new User)->canReserve();
+    if ($can_reserve){
+      echo '<a class="btn btn-outline-success m-1" href="?do=rsv_input&inst='.$row['id'].'">予約</a>';
+    }
+    echo '<a class="btn btn-outline-success m-1" href="?do=aic_detail&id='.$row['id'].'">空き状態</a>';
+    echo '<a href="?do=inst_list" class="btn btn-outline-info m-1">戻る</a>' . PHP_EOL .  
       '</div>';
 }else{
     echo 'この機器は存在しません！';

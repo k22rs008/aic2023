@@ -58,6 +58,7 @@ if (isset($_SESSION['urole'])){
   $menu = array();
   if (($_SESSION['urole']==1 )||($_SESSION['urole']==2)){  //利用者
     $menu = array(   //申請者メニュー
+      '会員情報'  => 'mbr_detail',
       '機器設備一覧'  => 'inst_list',
       '空き状況一覧'  => 'aic_list',
       '利用申請一覧'  => 'rsv_list',

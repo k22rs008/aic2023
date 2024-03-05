@@ -102,13 +102,8 @@ foreach(range(0,2) as $i){
 </table>
 <div class="pb-5 mb-5">
 <button type="submit" class="btn btn-outline-primary m-1">保存</button>
-<?php
-if ($rsv_id > 0){
-    echo '<a href="?do=rsv_detail&id='.$rsv_id.'" class="btn btn-outline-info m-1">戻る</a>';
-}else{
-    echo '<a href="?do=rsv_list" class="btn btn-outline-info m-1">戻る</a>';
-}
-?>
+<a href="?do=rsv_list" onclick="history.back();" class="btn btn-outline-info m-1">戻る</a>
+
 </div>
 </form>
 <script>

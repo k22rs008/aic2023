@@ -2,6 +2,7 @@
 namespace aic;
 
 use aic\models\Instrument;
+use aic\models\User;
 use aic\models\Room;
 use aic\models\KsuCode;
 
@@ -38,9 +39,12 @@ foreach($rows as $row){
    '<div><span class="badge badge-hill badge-secondary">設置場所</span> 〔',$room['room_no'] , '〕', $room['room_name'],'</div>',
    '<div class="small">',$row['detail'], '</div>',
    '<div class="align-self-end">',
-   '<a class="btn btn-sm btn-outline-danger m-1" href="?do=inst_detail&id='.$row['id'].'">詳細</a>',
-   '<a class="btn btn-sm btn-outline-success m-1" href="?do=rsv_input&inst='.$row['id'].'">予約</a>',
-   '</div>';
+   '<a class="btn btn-sm btn-outline-danger m-1" href="?do=inst_detail&id='.$row['id'].'">詳細</a>';
+  echo '<a class="btn btn-sm btn-outline-danger m-1" href="?do=aic_detail&id='.$row['id'].'">空き状況</a>'; 
+  $can_reserve = (new User)->canReserve();
+  if ($can_reserve)
+  echo '<a class="btn btn-sm btn-outline-success m-1" href="?do=rsv_input&inst='.$row['id'].'">予約</a>';
+  echo '</div>';
   echo '</div>'. PHP_EOL;
   echo '<hr class="">';
   echo '</div>' . PHP_EOL;

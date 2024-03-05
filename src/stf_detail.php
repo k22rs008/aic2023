@@ -3,6 +3,7 @@
 
 use aic\models\Member;
 use aic\models\Staff;
+use aic\models\User;
 use aic\models\KsuCode;
 
 $mbr_id = 0;
@@ -25,8 +26,8 @@ if ($staff and $row ) {
     echo '<tr><th>ログインID</th><td>' . $row['uid'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>日本語名</th><td>' . $row['ja_name']. '</td></tr>' . PHP_EOL;
     echo '<tr><th>所属</th><td>' . $row['dept_name'] . '</td></tr>' . PHP_EOL;
-    echo '<tr><th>職員種別</th><td>' . $staff['title']. '</td></tr>' . PHP_EOL;
-    echo '<tr><th>役職</th><td>' . $staff['rank']. '</td></tr>' . PHP_EOL;
+    echo '<tr><th>職員種別</th><td>' . $staff['title'] . '</td></tr>' . PHP_EOL;
+    echo '<tr><th>役職</th><td>' . $staff['rank'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>メールアドレス</th><td>' . $row['email'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>電話番号</th><td>' . $row['tel_no'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>内線番号</th><td>' . $staff['tel_ext']. '</td></tr>' . PHP_EOL;
@@ -38,9 +39,12 @@ if ($staff and $row ) {
     echo '<tr><th>責任者可否</th><td class="'.$class[$r].'">' . KsuCode::STAFF_RESPONSIBLE[$r] . '</td></tr>' . PHP_EOL;
     echo '</table>' . PHP_EOL;
     echo '<div class="pb-5 mb-5">' . PHP_EOL;    
-    $i  = $row['authority'];    
-    $label = ($r==0) ?'責任者指定' : '責任者指定撤回';  
-    echo '<a class="btn btn-outline-primary m-1" href="?do=stf_grant&id='.$stf_id.'">'.$label.'</a>'. PHP_EOL;
+    $is_admin = (new User)->isAdmin();
+    if ($is_admin){
+      $i  = $row['authority'];    
+      $label = ($r==0) ?'責任者指定' : '責任者指定撤回';  
+        echo '<a class="btn btn-outline-primary m-1" href="?do=stf_grant&id='.$stf_id.'">'.$label.'</a>'. PHP_EOL;
+    }
     //echo '<a class="btn btn-outline-primary m-1" href="?do=stf_input&id='.$stf_id.'">編集</a>' . PHP_EOL;
     echo '<a href="?do=mbr_detail&id='.$mbr_id.'" class="btn btn-outline-info m-1">戻る</a>' . PHP_EOL .  
       '</div>';

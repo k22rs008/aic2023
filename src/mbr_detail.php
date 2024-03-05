@@ -2,9 +2,10 @@
 namespace aic;
 
 use aic\models\Member;
+use aic\models\User;
 use aic\models\KsuCode;
 
-$mbr_id = 0;
+$mbr_id = (new User)->getLoginMemberId();
 if (isset($_GET['id'])){
   $mbr_id = $_GET['id'];
 }
@@ -38,10 +39,18 @@ if ($row) {
     echo '</table>' . PHP_EOL;
     echo '<div class="pb-5 mb-5">' . PHP_EOL;
     $label = ($row['authority']) ?'予約権撤回' : '予約権付与';
-    echo '<a class="btn btn-outline-success m-1" href="?do=mbr_grant&id='.$mbr_id.'">'.$label.'</a>' . PHP_EOL .
-      '<a class="btn btn-outline-primary m-1" href="?do=mbr_input&id='.$mbr_id.'">編集</a>' . PHP_EOL .
-      '<a href="#myModal" class="btn btn-outline-danger m-1" data-id='.$mbr_id.' data-toggle="modal">削除</a>' . PHP_EOL .
-      '<a href="?do=mbr_list" class="btn btn-outline-info m-1">戻る</a>' . PHP_EOL .  
+    $is_admin = (new User)->isAdmin();
+    $is_owner = (new User)->isOwner($mbr_id);
+    if ($is_admin){
+      echo '<a class="btn btn-outline-success m-1" href="?do=mbr_grant&id='.$mbr_id.'">'.$label.'</a>' . PHP_EOL;
+    }
+    if ($is_admin or $is_owner){
+      echo '<a class="btn btn-outline-primary m-1" href="?do=mbr_input&id='.$mbr_id.'">編集</a>' . PHP_EOL;
+    }
+    if ($is_admin){  
+      '<a href="#myModal" class="btn btn-outline-danger m-1" data-id='.$mbr_id.' data-toggle="modal">削除</a>' . PHP_EOL;
+    }
+    echo '<a href="?do=mbr_list" class="btn btn-outline-info m-1">戻る</a>' . PHP_EOL .  
       '</div>';
 }else{
     echo '会員情報は存在しません！';

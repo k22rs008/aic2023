@@ -60,7 +60,7 @@ foreach ($navbar as $delta => $label){
   printf($link, $inst_id, $ymd, $label);
 } 
 $can_reserve = (new User)->canReserve();
-if (ENV=='development' or $can_reserve){
+if ($can_reserve){
   $link = '<a href="?do=rsv_input&inst=%d&d=%s" class="btn btn-outline-info float-right m-1">予約する</a>' . PHP_EOL;
   printf($link, $inst_id, $selected_ymd);
 }

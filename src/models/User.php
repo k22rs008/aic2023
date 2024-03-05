@@ -71,6 +71,13 @@ class User extends Model {
         }
         return null;
     }
+    public function getMemberAuthority()
+    {
+        if (isset($_SESSION['member_authority'])){
+            return $_SESSION['member_authority'];
+        }
+        return null;
+    }
 
     public function getLoginRole()
     {
@@ -90,10 +97,7 @@ class User extends Model {
 
     public function canReserve()
     {
-        if ($this->getLoginRole() and $_SESSION['member_authority']){
-            return true;
-        }
-        return false;
+        return ($this->getLoginRole() and $this->getMemberAuthority());
     }
 
     public function isAdmin()

@@ -13,15 +13,15 @@ if (isset($_POST['uid'], $_POST['pass'])){
     $login_member = null;
     $new_user = false;
 
+    $member= (new Member)->getList("uid='$uid'");
+    if ($member){
+        $login_member = $member[0];        
+    }
     $row = (new User)->check($uid, $upass);
     if ($row) {
         $_SESSION['uid'] = $uid;
         $_SESSION['urole'] = $row['urole'];
         $_SESSION['uname'] = $row['uname'];
-        $member= (new Member)->getList("uid='$uid'");
-        if ($member){
-            $login_member = $member[0];        
-        }
     }else{
         $ldap_info = [];
         $ldap_info = (new User)->ldap_check($uid, $upass);
@@ -29,7 +29,6 @@ if (isset($_POST['uid'], $_POST['pass'])){
             echo '<p class="text-danger">ログインが失敗しました！</p>';
             echo '<a class="btn btn-primary" href="?do=sys_login">戻る</a>';
         }else{
-            $login_member= (new Member)->getList("uid='$uid'");
             $_SESSION['uid'] = $ldap_info['uid'];
             $urole = 4;
             if ($ldap_info['category']=='一般学生') {
