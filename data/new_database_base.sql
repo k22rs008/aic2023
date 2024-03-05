@@ -66,12 +66,12 @@ CREATE TABLE tb_staff(
 
 CREATE TABLE tb_reserve(
 	id SERIAL PRIMARY KEY COMMENT '通し番号（自動採番, 内部参照用）',
-	rsv_code VARCHAR(32) NOT NULL COMMENT '予約番号(問合せ用)yyyymmxxxx'
+	code VARCHAR(8) NOT NULL COMMENT '予約番号(問合せ用)yyyyxxxx',
     instrument_id INT NOT NULL COMMENT '利用希望機器ID',
     apply_mid VARCHAR(16) NOT NULL COMMENT '申請者会員ID',
     master_mid VARCHAR(16) NOT NULL COMMENT '責任者会員ID',
     purpose VARCHAR(16) COMMENT '利用目的',
-	other_num INT COMMENT 'その他利用者数'
+	other_num INT COMMENT 'その他利用者数',
 	other_user VARCHAR(64) COMMENT 'その他利用者説明',
 	stime DATETIME NOT NULL COMMENT '利用開始日時',
     etime DATETIME NOT NULL COMMENT '利用終了日時',
