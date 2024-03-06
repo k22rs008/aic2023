@@ -23,8 +23,8 @@ class User extends Model {
         'jao'=>'dept',//所属学科。学生の場合。例、情報科学科
         'jaou'=>'course',
         'description'=>'category', //カテゴリ。学生の場合。 例：一般学生、
-        'labeleduri'=>'rank', // 役職1。教職員の場合。例：教授、准教授
-        'initials'=>'title', //役職2。教職員の場合。例：学部長、学科主任、大学教育職、その他職員
+        'labeleduri'=>'role_rank', // 役職1。教職員の場合。例：教授、准教授
+        'initials'=>'role_title', //役職2。教職員の場合。例：学部長、学科主任、大学教育職、その他職員
         'businesscategory'=>'category',//教職員の場合。例：教育職員、事務職員、業務特別契約職員
         'carlicense'=>'dept',//所属。教職員の場合。例：理工学部情報科学科、産学連携支援室
     ];
@@ -37,8 +37,8 @@ class User extends Model {
         'en_name'=>'英語氏名',
         'en_yomi'=>'英語読み',
         'dept'=>'所属',
-        'title'=>'種別',
-        'rank'=>'役職',
+        'role_title'=>'種別',
+        'role_rank'=>'役職',
         'category'=>'身分',
         'course'=>'専攻・コース',
         'faculty'=>'部署',
@@ -201,7 +201,7 @@ class User extends Model {
         if ($category > 1){ //教職員
             $staff = [
                 'id'=>0,
-                'member_id'=>$member_id, 'title'=>$info['title'],'rank'=>$info['rank'],
+                'member_id'=>$member_id, 'role_title'=>$info['role_title'],'role_rank'=>$info['role_rank'],
             ];
             (new Staff)->write($staff);
         }

@@ -12,7 +12,7 @@ if (isset($_GET['id'])){
 $rsv= (new Reserve)->getDetail($rsv_id);
 // echo '<pre>'; print_r($rsv); echo '</pre>';
 $mbr_id = $rsv['apply_mid'];
-$status = $rsv['status'];
+$status = $rsv['process_status'];
 $status_label = ($status==1 or $status==3) ? '承認' : '却下';
 $status_class = [1=>'text-info', 2=>'text-success', 3=>'text-danger'];
 ?>

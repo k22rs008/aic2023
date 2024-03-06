@@ -39,7 +39,7 @@ if (count($rows) > 0){
   echo  '<th>責任者</th><th>目的</th><th>申請状態</th></tr>' . PHP_EOL;
   foreach ($rows as $row) {
     echo  '<tr>' . PHP_EOL;
-    $e = $row['status'];
+    $e = $row['process_status'];
     echo  '<td>' . Util::jpdate($row['stime'], true) . '</td>';
     echo  '<td>' . Util::jpdate($row['etime'], true)  . '</td>';
     echo  '<td>' . $row['master_name'] . '</td>';

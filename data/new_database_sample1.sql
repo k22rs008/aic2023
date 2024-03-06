@@ -121,7 +121,7 @@ INSERT INTO tb_member (id,uid,sid,email,tel_no,ja_name,sex,dept_code,dept_name,c
 (119,'t0119',118114,'t0119@ip.kyusan-u.ac.jp',' 080-2815-3766','堀 陽愛',2,'LT','生体医工学部 生体工学科',2,1),
 (120,'t0120',113680,'t0120@ip.kyusan-u.ac.jp',' 080-2837-6772','吉岡 結人',1,'LT','生体医工学部 生体工学科',2,1);
 
-INSERT INTO tb_staff (member_id,title,`rank`,room_no,tel_ext) VALUES
+INSERT INTO tb_staff (member_id,role_title,role_rank,room_no,tel_ext) VALUES
 (101,'大学教育職員','助教','11号館8階829号室',5430),
 (102,'大学教育職員','准教授','11号館7階715号室',5734),
 (103,'事務職員','職員','10号館6階621号室',5486),
@@ -165,11 +165,11 @@ INSERT INTO tb_staff (member_id,title,`rank`,room_no,tel_ext) VALUES
 -- (119,1,1,'9号館8階814号室',5852),
 -- (120,1,2,'12号館4階411号室',5420);
 
-INSERT INTO tb_user
-(uid, urole, uname, upass) 
-SELECT uid, category, ja_name, md5('1234')
-FROM tb_member;
+-- INSERT INTO tb_user
+-- (uid, urole, uname, upass) 
+-- SELECT uid, category, ja_name, md5('1234')
+-- FROM tb_member;
 
 
-UPDATE tb_instrument SET 
-detail='絶縁物試料も金属コーティングせずに、そのまま観察できる。また、付属したエネルギー分散型X線分析装置（Bruker Quantax70）により、試料の軽元素分析ができる。試料は、最大寸法70mm,厚さ50mmまで観察可能。倍率は、15倍〜30,000倍。画像の記録媒体は、CDのみ。';
+-- UPDATE tb_instrument SET 
+-- detail='絶縁物試料も金属コーティングせずに、そのまま観察できる。また、付属したエネルギー分散型X線分析装置（Bruker Quantax70）により、試料の軽元素分析ができる。試料は、最大寸法70mm,厚さ50mmまで観察可能。倍率は、15倍〜30,000倍。画像の記録媒体は、CDのみ。';

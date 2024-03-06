@@ -35,10 +35,10 @@ foreach ($rows as $row){ //予約テーブルにある予約の数だけ繰り�
   $time2 = ($date1==$date2) ? substr($row['etime'], 10,6) : '';//日をまかがった予約は終了時刻表示なし
   echo '<td>' . substr($row['stime'], 10,6) . '～' . $time2 . '</td>'; //利用時間帯を表示
   echo '<td>' . $row['master_name'] . '</td>';//利用責任者者氏名を表示
-  $i = $row['status'];
+  $i = $row['process_status'];
   echo '<td>' . $rsv_status[$i] . '</td>';//申請状態を表示
   $rsv_id = $row['id'];
-  $status = $row['status'];
+  $status = $row['process_status'];
   $label = ($status==1 or $status==3) ? '承認' : '却下';
   echo '<td>';
   $is_admin = (new User)->isAdmin();

@@ -80,7 +80,7 @@ for ($i=0; $i <count($persons); $i++) {
 
 // 4. 教職員
 $staff =  [
-    'member_id'=>'','title'=>1,'rank'=>1,'room_no'=>'','tel_ext'=>'',
+    'member_id'=>'','role_title'=>1,'role_rank'=>1,'room_no'=>'','tel_ext'=>'',
 ];
 $s_title =[1=>'大学教育職員',2=>'事務職員',3=>'職員'];
 $s_rank  = [1=>'教授',2=>'准教授',3=>'講師',4=>'助教',5=>'職員'];
@@ -90,10 +90,8 @@ foreach(array_slice($members, $student_num, $staff_num) as $row){
     $member_id = $row['id'];
     $r_title = rand_prob([1=>80, 2=>15, 3=>5]);//教育職員80%
     $r_rank = $r_title==1 ? rand(1,4) : 5;
-    $title = $s_title[$r_title]; // 役職1:大区分
-    $rank = $s_rank[$r_rank];   // 役職2:中区分（主に教育職員）
-    // $title = $r_title;
-    // $rank = $r_rank;
+    $role_title = $s_title[$r_title]; // 役職1:大区分
+    $role_rank = $s_rank[$r_rank];   // 役職2:中区分（主に教育職員）
     list($b, $f, $r) = [rand(7,12), rand(4,8), rand(10,30)];
     $room_no = sprintf('%d号館%d階%d%d号室', $b, $f, $f, $r);
     $tel_ext = rand(5401, 5899); // 内線番号
@@ -138,7 +136,7 @@ $reserved = date('Y-m-d H:i');
 $reserve=[
     'code'=>'', 'instrument_id'=>0, 'apply_mid'=>'', 'master_mid'=>'', 'purpose'=>'',
     'stime'=>'', 'etime'=>'','sample_name'=>'', 'sample_state'=>0,
-    'xray_chk'=>0, 'xray_num'=>'','status'=>1, 'reserved'=>'',
+    'xray_chk'=>0, 'xray_num'=>'','process_status'=>1, 'reserved'=>'',
 ];
 $rsv_member=[
     'reserve_id'=>0, 'member_id'=>0, 
@@ -164,7 +162,7 @@ foreach ($instruments as $instrument_id){
                 $etime = $date . ' ' . $time[1];
                 $sample_name = sample($r_samples)[0];  
                 $sample_state = rand(1,3);
-                $status = rand(1,3);                
+                $process_status = rand(1,3);                
                 $code = sprintf('%04d%04d', date('Y'), ++$no);
                 foreach(array_keys($reserve) as $key){
                     $reserve[$key] = $$key;

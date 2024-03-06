@@ -1,6 +1,6 @@
 /** GENERATED FAKE DATA */
 
-INSERT INTO tb_reserve (code,instrument_id,apply_mid,master_mid,purpose,stime,etime,sample_name,sample_state,xray_chk,xray_num,status,reserved) VALUES
+INSERT INTO tb_reserve (code,instrument_id,apply_mid,master_mid,purpose,stime,etime,sample_name,sample_state,xray_chk,xray_num,process_status,reserved) VALUES
 ('20240001',1,56,101,'ゼミ','2024-3-1 9:00','2024-3-1 12:40','牛乳',1,0,'',1,'2024-03-05 22:33'),
 ('20240002',1,59,110,'ゼミ','2024-3-1 13:40','2024-3-1 15:20','ケーキ',1,0,'',1,'2024-03-05 22:33'),
 ('20240003',1,55,106,'ゼミ','2024-3-1 15:40','2024-3-1 19:20','牛乳',2,0,'',3,'2024-03-05 22:33'),

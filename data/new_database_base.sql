@@ -1,4 +1,9 @@
 /*********************************************
+UPDATED:
+Avoid using reserved words `rank`, `status` 
+ - tb_member:  rank=>role_rank, title=>role_title
+ - tb_reserve: status=>process_status
+
 テーブル定義と基礎データ
 
 <Person> Entities
@@ -40,11 +45,11 @@ CREATE TABLE tb_member(
 	ja_yomi VARCHAR(32) COMMENT '日本語読み',
 	en_name VARCHAR(32) COMMENT '英語氏名',
 	en_yomi VARCHAR(32) COMMENT '英語読み',
-	sex INT COMMENT '性別(0:未記入,1:男性,2:女性)',
+	sex INT DEFAULT 0 COMMENT '性別(0:未記入,1:男性,2:女性)',
 	dept_name VARCHAR(64) COMMENT '所属名称, 例: 理工学部 情報科学科',
 	dept_code VARCHAR(16) COMMENT '所属コード,例: RS',
 	category INT COMMENT 'カテゴリ(1:一般学生,2:教育職員,3:事務職員,9:その他職員)',
-	authority INT NOT NULL DEFAULT 1 COMMENT '権限(0:予約権なし,1:予約付き)',
+	authority INT DEFAULT 1 COMMENT '権限(0:予約権なし,1:予約付き)',
 	granted TIMESTAMP COMMENT '権限付与・撤回日時',
 	memo TEXT COMMENT '備考'
 );
@@ -55,8 +60,8 @@ CREATE TABLE tb_member(
 CREATE TABLE tb_staff(
   id SERIAL PRIMARY KEY COMMENT '通し番号（自動採番, 内部参照用）',
   member_id INT NOT NULL COMMENT '',
-  title VARCHAR(32)  COMMENT '役職1:大区分(大学教育職員,事務職員,職員)',
-  `rank` VARCHAR(32)  COMMENT '役職2:中区分(教授,准教授,講師,助教,職員)',
+  role_title VARCHAR(32)  COMMENT '役職1:大区分(大学教育職員,事務職員,職員)',
+  role_rank VARCHAR(32)  COMMENT '役職2:中区分(教授,准教授,講師,助教,職員)',
   room_no VARCHAR(32) COMMENT '部屋番号',
   tel_ext VARCHAR(8) COMMENT '内線番号',
   responsible BOOLEAN DEFAULT 0 COMMENT '責任者になれるか(0:否,1:可)' 
@@ -79,7 +84,7 @@ CREATE TABLE tb_reserve(
 	sample_state INT COMMENT '試料状態(1-個体,2-液体,3-気体)',
     xray_chk BOOLEAN COMMENT 'X線取扱者登録有無',
     xray_num VARCHAR(32) COMMENT 'X線取扱者登録者番号',
-    `status` INT NOT NULL DEFAULT 1 COMMENT '申請状態(1:申請中,3:承認,4:却下,5:キャンセル)',
+    process_status INT NOT NULL DEFAULT 1 COMMENT '申請状態(1:申請中,3:承認,4:却下,5:キャンセル)',
     memo TEXT COMMENT '備考',
     reserved DATETIME COMMENT '予約日',
 	approved DATETIME COMMENT '承認日',
@@ -136,7 +141,7 @@ CREATE TABLE tb_instrument(
 	code VARCHAR(16) COMMENT '人間識別用番号',
 	fullname VARCHAR(64) NOT NULL COMMENT '名称',
 	shortname VARCHAR(64) NOT NULL COMMENT '略称', 
-	`state` INT NOT NULL COMMENT '機器状態(1:使用可,2:貸出中,3:使用不可,9:その他)',
+	state INT NOT NULL COMMENT '機器状態(1:使用可,2:貸出中,3:使用不可,9:その他)',
 	category INT COMMENT 'カテゴリ（1:観察, 2:分析,3:計測,4:調製,9:その他）', 
 	purpose VARCHAR(64) COMMENT '主な用途',
 	detail TEXT COMMENT '施設紹介' ,

@@ -26,8 +26,8 @@ if ($staff and $row ) {
     echo '<tr><th>ログインID</th><td>' . $row['uid'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>日本語名</th><td>' . $row['ja_name']. '</td></tr>' . PHP_EOL;
     echo '<tr><th>所属</th><td>' . $row['dept_name'] . '</td></tr>' . PHP_EOL;
-    echo '<tr><th>職員種別</th><td>' . $staff['title'] . '</td></tr>' . PHP_EOL;
-    echo '<tr><th>役職</th><td>' . $staff['rank'] . '</td></tr>' . PHP_EOL;
+    echo '<tr><th>職員種別</th><td>' . $staff['role_title'] . '</td></tr>' . PHP_EOL;
+    echo '<tr><th>役職</th><td>' . $staff['role_rank'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>メールアドレス</th><td>' . $row['email'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>電話番号</th><td>' . $row['tel_no'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>内線番号</th><td>' . $staff['tel_ext']. '</td></tr>' . PHP_EOL;

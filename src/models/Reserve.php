@@ -69,7 +69,7 @@ class Reserve extends Model {
         $rsv['sample_nature'] = $selected;
         $_natures = Util::array_slice_by_index(KsuCode::SAMPLE_NATURE, $selected);
         $rsv['sample_nature_str'] = implode(', ', $_natures);
-        $status = $rsv['status'];
+        $status = $rsv['process_status'];
         $rsv['status_name'] = KsuCode::RSV_STATUS[$status];
         return $rsv;
     }
@@ -104,7 +104,7 @@ class Reserve extends Model {
             $sql .= " AND etime >= '{$date1}'";
         }
         if ($status > 0){ 
-            $sql .= " AND status=$status"; 
+            $sql .= " AND process_status=$status"; 
         }
         // echo $sql;
         $rs = $conn->query($sql);
@@ -125,7 +125,7 @@ class Reserve extends Model {
             $sql .= " AND etime>'{$date1}'";
         }
         if ($status > 0){ 
-            $sql .= " AND status=$status"; 
+            $sql .= " AND process_status=$status"; 
         }
         $sql .= ' ORDER BY room_id, stime, etime';
         if ($page>0){
@@ -154,7 +154,7 @@ class Reserve extends Model {
             $sql .= " AND etime>'{$date1}'";
         }
         if ($status > 0){ 
-            $sql .= " AND status=$status"; 
+            $sql .= " AND process_status=$status"; 
         }
         $sql .= ' ORDER BY stime, etime';
         
@@ -198,7 +198,7 @@ class Reserve extends Model {
     {
         $items = [];
         foreach ($rows as $row){
-            $e = isset($row['status']) ? $row['status'] : 1;
+            $e = isset($row['process_status']) ? $row['process_status'] : 1;
             $items[] = [
               'id' => $row['id'],
               'group'=>$row['instrument_id'],
