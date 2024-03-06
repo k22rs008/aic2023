@@ -5,17 +5,21 @@ use aic\models\Reserve;
 use aic\models\Util;
 use aic\views\Html;
 
-if (!isset($_SESSION['selected_inst'])){
-  Html::fail_msg('範囲が指定されていないため、集計できません。');
-}
-// Html::debug_msg($_SESSION);
-$inst_id = $_SESSION['selected_inst'];
-$status = $_SESSION['selected_status'];
-$y = $_SESSION['selected_year'];
-$m = $_SESSION['selected_month'];
-$d = $_SESSION['selected_day'];
-$t = $_SESSION['selected_timespan'];
+$inst_id = $status = 0;
+$y = date('Y');
+$m = date('m');
+$d = date('d');
+$t = 7;
 
+if (isset($_SESSION['selected_inst'], $_SESSION['selected_status'])){
+  // Html::debug_msg($_SESSION);
+  $inst_id = $_SESSION['selected_inst'];
+  $status = $_SESSION['selected_status'];
+  $y = $_SESSION['selected_year'];
+  $m = $_SESSION['selected_month'];
+  $d = $_SESSION['selected_day'];
+  $t = $_SESSION['selected_timespan'];
+}
 $date = new \DateTimeImmutable($y .'-'.$m.'-'.$d);
 $def = [1=>'P1D', 7=>'P1W', 30=>'P1M',];
 $period = new \DateInterval($def[$t]); 
