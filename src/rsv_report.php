@@ -5,6 +5,9 @@ use aic\models\Reserve;
 use aic\models\Util;
 use aic\views\Html;
 
+if (!isset($_SESSION['selected_inst'])){
+  Html::fail_msg('範囲が指定されていないため、集計できません。');
+}
 // Html::debug_msg($_SESSION);
 $inst_id = $_SESSION['selected_inst'];
 $status = $_SESSION['selected_status'];

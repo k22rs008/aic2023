@@ -32,6 +32,12 @@ class Html
         }
     }
 
+    public static function fail_msg($msg)
+    {
+        echo '<p class="text-danger">' . $msg .'</p>';
+        die ('<a class="btn btn-outline-primary m-1" href="' . $_SERVER['HTTP_REFERER'] . '" >戻る</a>');
+
+    }
 
     public static function textarea($name, $value=null, $attrs=null)
     {

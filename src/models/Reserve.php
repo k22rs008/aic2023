@@ -175,7 +175,7 @@ class Reserve extends Model {
             $staff_n = $row['staff_n']; 
             $other_n = $row['other_num'];
             $other_user = $row['other_user'];
-            if (strlen($other_user)>1){
+            if ($other_user){
                 $others[$date] = array_merge($others[$date], [$other_user]);
             }
             foreach (array_keys($total) as $key){

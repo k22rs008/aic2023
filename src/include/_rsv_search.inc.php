@@ -59,7 +59,7 @@ echo Html::select($options, 'd', [$selected_d]);
 $options = [1=>'１日', 7=>'週間', 30=>'月間',];
 echo Html::select($options, 't', [$selected_t]);
 $rsv_status = KsuCode::RSV_STATUS;
-$rsv_status[0] = '～状態～';
+$rsv_status[0] = '全て';
 ksort($rsv_status);
 echo Html::select($rsv_status, 'status', [$status]);
 echo '<button type="submit" class="btn btn-outline-primary m-1" data-placement="top" data-toggle="tooltip" title="条件で絞り込む">絞込</button>' . PHP_EOL; 
