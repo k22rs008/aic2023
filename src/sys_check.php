@@ -3,13 +3,12 @@ namespace aic;
 
 use aic\models\User;
 use aic\models\Member;
-use aic\models\Staff;
-
 use aic\views\Html;
 
 if (isset($_POST['uid'], $_POST['pass'])){
     $uid = htmlspecialchars($_POST['uid']);
     $upass = htmlspecialchars($_POST['pass']);
+    $login_time = null;
     $login_member = null;
     $new_user = false;
 
@@ -19,6 +18,7 @@ if (isset($_POST['uid'], $_POST['pass'])){
     }
     $row = (new User)->check($uid, $upass);
     if ($row) {
+        $login_time = date('Y-m-d H:i:s'); 
         $_SESSION['uid'] = $uid;
         $_SESSION['urole'] = $row['urole'];
         $_SESSION['uname'] = $row['uname'];
@@ -29,6 +29,7 @@ if (isset($_POST['uid'], $_POST['pass'])){
             echo '<p class="text-danger">ログインが失敗しました！</p>';
             echo '<a class="btn btn-primary" href="?do=sys_login">戻る</a>';
         }else{
+            $login_time = date('Y-m-d H:i:s'); 
             $_SESSION['uid'] = $ldap_info['uid'];
             $urole = 4;
             if ($ldap_info['category']=='一般学生') {
@@ -51,6 +52,9 @@ if (isset($_POST['uid'], $_POST['pass'])){
                 echo '<p class="text-primary">上記の項目が会員情報として登録されました。</p>';
             }
         }
+    }
+    if ($login_time){
+        (new User)->updateLoginTime($uid, $login_time);
     }
     if ($login_member){
         $_SESSION['sid'] = $login_member['sid'];

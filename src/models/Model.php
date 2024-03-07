@@ -76,10 +76,10 @@ class Model
 
     public function write($data)
     {
-        $act = (isset($data['id']) and $data['id']>0) ?'update' : 'insert';
-        $keys = $values=[];
+        $act = (isset($data['id']) and $data['id']) ?'update' : 'insert';
+        $keys = $values = [];
         foreach($data as $key=>$val){
-            if ($key == 'id') continue; // skip 'id'
+            if ($key == 'id') continue; // Not allow to manually change $id
             $keys[] = $key;
             $typed_val = gettype($val)=='string' ? "'". $val."'" : $val;
             $values[] = ($act=='update') ? $key . '=' . $typed_val : $typed_val;
@@ -90,7 +90,7 @@ class Model
             $sql = sprintf("INSERT INTO %s (%s) VALUES (%s)", $this->table, $sqlkeys, $sqlvalues);
         }else{
             $id = $data['id'];
-            $sql = sprintf("UPDATE %s SET %s WHERE id=%d", $this->table, $sqlvalues, $id);
+            $sql = sprintf("UPDATE %s SET %s WHERE id=%d", $this->table, $sqlvalues,$id);
         }
         // echo $sql;
         $rs = $this->db->query($sql);

@@ -28,7 +28,7 @@ $date2 = sprintf('%d-%d-%d 23:59', $year, $month, $day2);
 $page = 0; // no pagination
 
 $data[] = [
-  '部屋No.', '利用機器名', '開始時刻', '終了時刻', '利用責任者','利用代表者',
+  '予約番号', '部屋No.', '利用機器名', '開始時刻', '終了時刻', '利用責任者','利用代表者',
   '学生人数','教員人数', 'その他利用者数','その利用者','備考',
 ];
 
@@ -51,7 +51,7 @@ foreach ($rows as $row){ //予約テーブルにある予約の数だけ繰り�
   $staff_n = count($rsv_members) - count($students); 
 
   $data[] = [ 
-    $row['room_no'], 
+    $row['code'], $row['room_no'], 
     $row['shortname'], //利用機器名(省略)を表示
     $time1, $time2,
     $row['master_name'] , //利用代表者氏名を表示
@@ -65,13 +65,13 @@ foreach ($rows as $row){ //予約テーブルにある予約の数だけ繰り�
 $filename = sprintf("Report%s.xlsx", $date1);
 $spreadsheet = new Spreadsheet();
 $worksheet = $spreadsheet->getActiveSheet();
-foreach(range('A','K') as $col){ 
+foreach(range('A','L') as $col){ 
   $worksheet->getColumnDimension($col)->setWidth(12);
 }
-$worksheet->getColumnDimension('F')->setWidth(24);
-$worksheet->getColumnDimension('J')->setWidth(24);
-$worksheet->getStyle('F2:F'.($reserve_n+1))->getAlignment()->setWrapText(true);
-$worksheet->getStyle('A2:K'.($reserve_n+1))->getAlignment()->setVertical(Align::VERTICAL_CENTER); 
+$worksheet->getColumnDimension('G')->setWidth(24);
+$worksheet->getColumnDimension('L')->setWidth(24);
+$worksheet->getStyle('G2:G'.($reserve_n+1))->getAlignment()->setWrapText(true);
+$worksheet->getStyle('A2:L'.($reserve_n+1))->getAlignment()->setVertical(Align::VERTICAL_CENTER); 
 foreach ($data as $rowNum => $rowData) {
   $worksheet->fromArray($rowData, null, 'A' . ($rowNum + 1));
 }

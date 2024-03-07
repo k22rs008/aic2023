@@ -19,32 +19,32 @@ $status_class = [1=>'text-info', 2=>'text-success', 3=>'text-danger'];
 <h3>機器設備利用申請内容詳細</h3>
 <table class="table table-bordered table-hover">
 <tr><td width="20%" class="text-info">利用申請者氏名</td>
-    <td><?=$rsv['apply_member']['ja_name']?></td>
-    <td class="text-info">会員番号</td>
-    <td colspan="2"><?=$rsv['apply_member']['sid']?></td>
+  <td><?=$rsv['apply_member']['ja_name']?></td>
+  <td class="text-info">会員番号</td>
+  <td colspan="2"><?=$rsv['apply_member']['sid']?></td>
 </tr>
 <tr><td class="text-info">利用責任者氏名</td>
-    <td><?=$rsv['master_member']['ja_name']?></td>
-    <td class="text-info">学部学科</td>
-    <td><?=$rsv['dept_name'] ?></td>
-    <td><?=$rsv['master_member']['tel_no']?></td>
+  <td><?=$rsv['master_member']['ja_name']?></td>
+  <td class="text-info">学部学科</td>
+  <td><?=$rsv['dept_name'] ?></td>
+  <td><?=$rsv['master_member']['tel_no']?></td>
 </tr>
 <tr><td class="text-info">利用代表者氏名</td><td class="pt-0 pb-0" colspan="4">
 <table class="table table-light" width="100%">
 <?php
 foreach($rsv['rsv_member'] as $row){
-    printf('<tr><td>%s</td><td>%s</td><td>%s</td></tr>', $row['sid'], $row['ja_name'], $row['tel_no']);
+  printf('<tr><td>%s</td><td>%s</td><td>%s</td></tr>', $row['sid'], $row['ja_name'], $row['tel_no']);
 }
 ?>
 </table>
 </td></tr>
 <tr><td class="text-info">教職員人数</td><td><?= $rsv['staff_n'] ?>人</td>
-    <td class="text-info">学生人数</td><td colspan="2"><?= $rsv['student_n'] ?>人</td>
+  <td class="text-info">学生人数</td><td colspan="2"><?= $rsv['student_n'] ?>人</td>
 </tr>
 <tr><td class="text-info">その他利用者数</td>
-    <td><?=$rsv['other_num'] ?></td>
-    <td class="text-info">利用者説明</td>
-    <td colspan="2"><?= $rsv['other_user'] ?></td>
+  <td><?=$rsv['other_num'] ?></td>
+  <td class="text-info">利用者説明</td>
+  <td colspan="2"><?= $rsv['other_user'] ?></td>
 </tr>
 <tr><td class="text-info">希望利用機器</td>
 <td colspan="4"><?=$rsv['instrument_fullname']?>（<?=$rsv['instrument_shortname']?>）</td>
@@ -63,11 +63,13 @@ foreach($rsv['rsv_member'] as $row){
 <td colspan=2><?=$rsv['sample_other']?></td>
 </tr>
 <tr><td class="text-info">X線取扱者登録の有無</td><td colspan=2><?=$rsv['xray_chk_str'] ?></td>
-    <td class="text-info">登録者番号</td><td colspan=2><?=$rsv['xray_num'] ?></td>
+  <td class="text-info">登録者番号</td><td colspan=2><?=$rsv['xray_num'] ?></td>
 </tr>
 <tr><td class="text-info">備考</td><td colspan=4><?= $rsv['memo'] ?></td>
 </tr>
-<tr><td class="text-info">承認状態</td><td class="<?=$status_class[$status]?>" colspan=4><?= $rsv['status_name'] ?></td>
+<tr><td class="text-info">承認状態</td>
+  <td  colspan=2 class="<?=$status_class[$status]?>"><?= $rsv['status_name'] ?></td>
+  <td class="text-info">申請番号</td><td><?= $rsv['code'] ?></td>
 </tr>
 </table>
 <?php

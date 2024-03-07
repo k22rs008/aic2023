@@ -48,7 +48,7 @@ CREATE TABLE tb_member(
 	sex INT NOT NULL DEFAULT 0 COMMENT '性別(0:未記入,1:男性,2:女性)',
 	dept_name VARCHAR(64) COMMENT '所属名称, 例: 理工学部 情報科学科',
 	dept_code VARCHAR(16) COMMENT '所属コード,例: RS',
-	category NOT NULL INT DEFAULT 9 COMMENT 'カテゴリ(1:一般学生,2:教育職員,3:事務職員,9:その他職員)',
+	category INT NOT NULL DEFAULT 9 COMMENT 'カテゴリ(1:一般学生,2:教育職員,3:事務職員,9:その他職員)',
 	authority INT NOT NULL DEFAULT 1 COMMENT '権限(0:予約権なし,1:予約付き)',
 	granted TIMESTAMP COMMENT '権限付与・撤回日時',
 	memo TEXT COMMENT '備考'

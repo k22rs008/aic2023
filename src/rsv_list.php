@@ -17,13 +17,14 @@ $num_rows = (new Reserve)->getNumRows($inst_id, $date1, $date2, $status);
 echo Html::pagination($num_rows, KsuCode::PAGE_ROWS, $page);
 
 echo '<table class="table table-hover">'. PHP_EOL;
-echo '<tr><th>部屋No.</th><th>利用機器名</th><th>利用目的</th><th>利用予定日</th>
+echo '<tr><th>予約番号</th><th>部屋No.</th><th>利用機器名</th><th>利用目的</th><th>利用予定日</th>
   <th>利用時間帯</th><th>利用責任者</th><th>承認状態</th><th>操　作</th></tr>'. PHP_EOL;
 
 $rows= (new Reserve)->getListByInst($inst_id, $date1, $date2, $status, $page);
 foreach ($rows as $row){ //予約テーブルにある予約の数だけ繰り返す
   echo '<tr>'. 
-    '<td>' . $row['room_no'] . '</td>' . PHP_EOL . 
+  '<td>' . $row['code'] . '</td>' . PHP_EOL . 
+  '<td>' . $row['room_no'] . '</td>' . PHP_EOL . 
     //'<td>' . Util::jpdate($row['reserved']) . '</td>' . PHP_EOL .  //申請日時を表示
     //'<td>' . $row['apply_name'] . '</td>' . PHP_EOL . //申請者氏名を表示
     //'<td>' . $row['fullname'] . '</td>' . PHP_EOL . //利用機器名を表示

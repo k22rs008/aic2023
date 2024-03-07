@@ -1,3 +1,6 @@
+-- このファイルはメモ用です。
+-- new_database_base.sqlに[１.採番テーブル作成・初期化]のコードが含まれている
+
 -- seq_reserve: 申請番号自動採番用テーブル
 -- 1. 採番テーブル作成・初期化
 CREATE TABLE seq_reserve (

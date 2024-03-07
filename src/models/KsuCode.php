@@ -8,7 +8,7 @@ class KsuCode {
     const USER_ROLE = [1=>'学生', 2=>'教育職員', 3=>'事務職員',4=>'その他職員',9=>'管理者'];
     
     const MBR_CATEGORY = [1=>'一般学生',2=>'教育職員',3=>'事務職員',4=>'その他職員',9=>'管理者'];  
-    const MBR_AUTHORITY = [0=>'予約権無',1=>'予約権有'];   
+    const MBR_AUTHORITY = [0=>'無',1=>'有'];   
     const MBR_SEX = [0=>'未登録',1=>'男性',2=>'女性'];
 
     const STAFF_RESPONSIBLE  = [0=>'責任者否',1=>'責任者可'];

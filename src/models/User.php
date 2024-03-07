@@ -158,6 +158,14 @@ class User extends Model {
         return $record;                
     }
 
+    public function updateLoginTime($uid, $time)
+    {
+        $sql = sprintf("UPDATE %s SET last_login='%s' WHERE uid='%s'", $this->table, $time, $uid);
+        $rs = $this->db->query($sql);
+        if (!$rs) die('エラー: ' . $this->db->error);
+        return $this->db->affected_rows; 
+    }
+
     public function addLdapUser($info)
     {
         $category = 4; // その他職員
@@ -185,9 +193,9 @@ class User extends Model {
       
         $user = [
             'uid'=>$uid, 'uname'=>$info['ja_name'], 'urole'=>$urole,
-            'last_login'=>date('Y-m-d H:i')
+            'last_login'=>date('Y-m-d H:i:s'),
         ];
-        (new User)->write($user);
+        $this->write($user);
 
         $member = [
             'id'=>0,
