@@ -21,7 +21,13 @@ foreach (KsuCode::INST_CATEGORY as $c=>$label){
 } 
 echo '</div>' . PHP_EOL;
 
-$rows= (new Instrument)->getList($where, $orderby);
+$member_id = (new User)->getLoginMemberId();
+if ($member_id){
+  $rows= (new Instrument)->getListRFU($member_id, $where);
+}else{
+  $rows= (new Instrument)->getList($where, $orderby);
+}
+
 foreach($rows as $row){
   $url = 'img/instrument/'. $row['id'] .'.webp';
   if (!@GetImageSize($url)){// use dummy image for instrument w/o image

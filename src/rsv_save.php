@@ -57,6 +57,7 @@ if (count($errors) > 0){
 }else{
     if ($rsv_id == 0){
         $rsv['code'] = (new Reserve)->nextCode();
+        $rsv['reserved'] = date('Y-m-d H:i:s');
     }
     $id = (new Reserve)->write($rsv);
 
