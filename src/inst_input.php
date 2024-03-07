@@ -14,7 +14,7 @@ use aic\views\Html;
 $inst_id = isset($_GET['id']) ? $_GET['id'] : 0;;
 $status = $category = $room_id = 1;
 $id = $code = "";
-$fullname = $shortname = $maker = $model = $detail = $memo = "";
+$fullname = $shortname = $purpose = $maker = $model = $detail = $memo = "";
 
 $rooms = (new Room)->getListItems();
 
@@ -37,6 +37,7 @@ if (!@GetImageSize($url)){
 <?= Html::input('number', 'code', $id, 'class="form-control"  disabled')?></td></tr>
 <tr><th width="20%">機器名称</th><td><?= Html::input('text','fullname', $fullname)?></td></tr>
 <tr><th>略称</th><td><?= Html::input('text','shortname', $shortname)?></td></tr>
+<tr><th>主な用途</th><td><?= Html::input('text','purpose', $purpose)?></td></tr>
 <tr><th>機器状態</th><td><?= Html::select(KsuCode::INST_STATE,'state',[$state],'radio')?></td></tr>
 <tr><th>カテゴリ</th><td><?= Html::select(KsuCode::INST_CATEGORY,'category',[$category],'radio')?></td></tr>
 <tr><th>メーカー</th><td><?= Html::input('text','maker', $maker)?></td></tr>
