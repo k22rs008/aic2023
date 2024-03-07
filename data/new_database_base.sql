@@ -1,5 +1,5 @@
 /*********************************************
-UPDATED:
+Last UPDATED 2024/3/6:
 Avoid using reserved words `rank`, `status` 
  - tb_member:  rank=>role_rank, title=>role_title
  - tb_reserve: status=>process_status
@@ -45,11 +45,11 @@ CREATE TABLE tb_member(
 	ja_yomi VARCHAR(32) COMMENT '日本語読み',
 	en_name VARCHAR(32) COMMENT '英語氏名',
 	en_yomi VARCHAR(32) COMMENT '英語読み',
-	sex INT DEFAULT 0 COMMENT '性別(0:未記入,1:男性,2:女性)',
+	sex INT NOT NULL DEFAULT 0 COMMENT '性別(0:未記入,1:男性,2:女性)',
 	dept_name VARCHAR(64) COMMENT '所属名称, 例: 理工学部 情報科学科',
 	dept_code VARCHAR(16) COMMENT '所属コード,例: RS',
-	category INT COMMENT 'カテゴリ(1:一般学生,2:教育職員,3:事務職員,9:その他職員)',
-	authority INT DEFAULT 1 COMMENT '権限(0:予約権なし,1:予約付き)',
+	category NOT NULL INT DEFAULT 9 COMMENT 'カテゴリ(1:一般学生,2:教育職員,3:事務職員,9:その他職員)',
+	authority INT NOT NULL DEFAULT 1 COMMENT '権限(0:予約権なし,1:予約付き)',
 	granted TIMESTAMP COMMENT '権限付与・撤回日時',
 	memo TEXT COMMENT '備考'
 );
@@ -80,9 +80,9 @@ CREATE TABLE tb_reserve(
 	other_user VARCHAR(64) COMMENT 'その他利用者説明',
 	stime DATETIME NOT NULL COMMENT '利用開始日時',
     etime DATETIME NOT NULL COMMENT '利用終了日時',
-	sample_name VARCHAR(64) NOT NULL COMMENT '試料名称',
-	sample_state INT COMMENT '試料状態(1-個体,2-液体,3-気体)',
-    xray_chk BOOLEAN COMMENT 'X線取扱者登録有無',
+	sample_name VARCHAR(64) COMMENT '試料名称',
+	sample_state INT DEFAULT 1 COMMENT '試料状態(1-個体,2-液体,3-気体)',
+    xray_chk BOOLEAN DEFAULT 0 COMMENT 'X線取扱者登録有無',
     xray_num VARCHAR(32) COMMENT 'X線取扱者登録者番号',
     process_status INT NOT NULL DEFAULT 1 COMMENT '申請状態(1:申請中,3:承認,4:却下,5:キャンセル)',
     memo TEXT COMMENT '備考',
@@ -98,15 +98,6 @@ CREATE TABLE seq_reserve (
 	y INT
 );
 INSERT INTO seq_reserve VALUES (0,YEAR(CURRENT_DATE));
-
--- 2. 採番実行/年越しリセット
-UPDATE seq_reserve SET id=0,y=YEAR(CURRENT_DATE) WHERE NOT y=YEAR(CURRENT_DATE);
-UPDATE seq_reserve SET id=LAST_INSERT_ID(id + 1);
-SELECT LAST_INSERT_ID() as id;
-
--- 3. 全て初期化 
-UPDATE seq_reserve set id=0, y=YEAR(CURRENT_DATE);
-
 
 -- rsv_member: 利用者名簿テーブル
 

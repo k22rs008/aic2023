@@ -23,7 +23,7 @@ if ($row) {
     $i  = $row['category']; 
     echo '<tr><th>会員種別</th><td>' . KsuCode::MBR_CATEGORY[$i];
     if ($row['category']>1){//教育職員
-      echo '<span class="float-right"><a class="btn btn-outline-primary ml-1" href="?do=stf_detail&id='.$mbr_id.'">教育職員詳細</a></span>' . PHP_EOL;
+      echo '<span class="float-right"><a class="btn btn-outline-primary ml-1" href="?do=stf_detail&id='.$mbr_id.'">教職員詳細</a></span>' . PHP_EOL;
     }
     echo '</td></tr>' . PHP_EOL;
     

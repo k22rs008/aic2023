@@ -56,7 +56,7 @@ $options = Html::rangeOptions(1, 12, '月');
 echo Html::select($options, 'm', [$selected_m]);
 $options = Html::rangeOptions(1, 31, '日', [0=>'日選択']);
 echo Html::select($options, 'd', [$selected_d]);
-$options = [1=>'１日', 7=>'週間', 30=>'月間',];
+$options = [1=>'１日間', 7=>'１週間', 30=>'１ヶ月',];
 echo Html::select($options, 't', [$selected_t]);
 $rsv_status = KsuCode::RSV_STATUS;
 $rsv_status[0] = '全て';

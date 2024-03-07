@@ -20,7 +20,7 @@ if (count($rows)>0){
 $row= (new Member)->getDetail($mbr_id);
 
 if ($staff and $row ) {  
-    echo '<h3 class="text-primary">「'. $row['ja_name'].'」教育職員情報</h3>' . PHP_EOL;
+    echo '<h3 class="text-primary">「'. $row['ja_name'].'」教職員情報</h3>' . PHP_EOL;
     echo '<table class="table table-hover">' . PHP_EOL;
     echo '<tr><th width="20%">会員ID</th><td>' . $row['sid'] . '</td></tr>' . PHP_EOL;
     echo '<tr><th>ログインID</th><td>' . $row['uid'] . '</td></tr>' . PHP_EOL;

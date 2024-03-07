@@ -11,7 +11,7 @@ use aic\models\Util;
 $data = $_POST;
 $rsv_id = $data['id'];
 $rsv = [
-    'id'=>0, 'code'=>'', 'instrument_id'=>0, 'apply_mid'=>0, 'master_mid'=>0,
+    'id'=>0, 'code'=>'', 'instrument_id'=>0, 'apply_mid'=>0, 'master_mid'=>0,'process_status'=>1,
     'purpose'=>'','other_num'=>0, 'other_user'=>'', 'stime'=>'','etime'=>'','sample_name'=>'','sample_state'=>1,
     'xray_chk'=>0, 'xray_num'=>'', 'memo'=>'',
 ];
