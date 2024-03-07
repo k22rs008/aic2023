@@ -46,9 +46,9 @@ if (isset($_POST['uid'], $_POST['pass'])){
                 $new_user = true;
                 $login_member = (new User)->addLdapUser($ldap_info);
                 echo '<h3 class="text-info">新規ユーザでログイン成功しました！</h3>';
+                echo '<a href="?do=aic_home" class="btn btn-primary">先へ進む</a>';
                 echo Html::toList($ldap_info, User::LDAP_NAMES); 
-                echo '<p class="text-primary">上記のアカウントがシステムに登録されました。</p>';
-                echo '<a href="?do=aic_home" class="btn btn-primary">続く</a>';
+                echo '<p class="text-primary">上記の項目が会員情報として登録されました。</p>';
             }
         }
     }
