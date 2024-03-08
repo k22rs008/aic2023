@@ -56,18 +56,16 @@ class Util {
             return null;
         }
         // Transfer value => probility
-        $_values = array_values($prob_items);  
-        $_total = array_sum($_values);    
-        $_prob = array_map(fn($v):float=>$v/$_total, $_values);
-        $new_items = array_combine($keys, $_prob);  // print_r($new_items);
+        $sum = array_sum($prob_items);    
+        $new_items = array_map(fn($v):float=>$v/$sum, $prob_items);
         
         // Generate combined keys of size $n, e.g.,
         // ['J','Q', 'K', 'A'] => [['J','Q'],['Q','K'],['K','A']]
         $comb_keys = self::combination($keys, $n);    // print_r($comb_keys);
         $comb_values = [];
-        foreach ($comb_keys as $i=>$key){
-            $comb_prob = array_map(fn($a):float=>$new_items[$a], $key);
-            $comb_values[$i] = array_product( $comb_prob);
+        foreach ($comb_keys as $i=>$comb_key){
+            $comb_prob = array_map(fn($a):float=>$new_items[$a], $comb_key);
+            $comb_values[$i] = array_product($comb_prob);
         }  // print_r($comb_values);
         
         // Randomly choose one combined key with combined probability 
