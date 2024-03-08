@@ -19,4 +19,4 @@ if (!in_array($requested_action, ['rsv_excel']))
 include('src/' . $requested_action . '.php'); //指定されたファイルを読み込む
 
 if (! in_array($requested_action, ['rsv_excel']))
-  include('src/views/bs4_footer.php');;  
+  include('src/views/bs4_footer.php');  
