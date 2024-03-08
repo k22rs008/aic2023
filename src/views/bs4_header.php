@@ -45,7 +45,7 @@ $app_name = '総合機器センター機器設備予約システム';
  <span class="navbar-toggler-icon"></span>
  </button>
 
- <div class="collapse navbar-collapse">
+ <div class="collapse navbar-collapse" id="navbarsExample09">
  <ul class="navbar-nav mr-auto">
  <li class="nav-item active">
  <a class="nav-link" href="index.php"><i class="material-icons">home</i><span class="sr-only">(current)</span></a>
