@@ -25,6 +25,7 @@ if ($_FILES['imgfile']['size'] > 0){
             $img = imagecreatefromgif($img_file); break;
     }
     if (isset($img)){
+        unlink($webp_file);
         imagepalettetotruecolor($img);
         imagealphablending($img, true);
         imagesavealpha($img, true);

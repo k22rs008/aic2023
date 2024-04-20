@@ -28,6 +28,8 @@ $url = "img/instrument/{$inst_id}.webp";
 if (!@GetImageSize($url)){
     $url = 'img/dummy-image-square1.webp' ; 
 }
+$url .= '?' . time();
+
 ?>
 <img src="<?=$url?>" height="240" width="320" class="m-1 rounded">
 <form method="post" action="?do=inst_save" enctype="multipart/form-data">

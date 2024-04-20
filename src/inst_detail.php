@@ -14,7 +14,9 @@ if ($row) {
     $url = 'img/instrument/'. $inst_id .'.webp';
     if (!@GetImageSize($url)){
         $url = 'img/dummy-image-square1.webp' ; 
-    }   
+    }
+    $url .= '?' . time();
+    
     echo '<p><img src="'. $url . '" height="240" width="320" class="rounded"></p>' . PHP_EOL;
     echo '<h3 class="text-primary">'. $row['fullname'].'</h3>' . PHP_EOL;
     echo '<table class="table table-hover">' . PHP_EOL;

@@ -27,7 +27,8 @@ $groups = [['id'=>$inst_id, 'content'=>$fname]];
 $url = 'img/instrument/'. $inst_id .'.webp';
 if (!@GetImageSize($url)){
   $url = 'img/dummy-image-square1.webp' ; 
-}   
+}
+$url .= '?' . time();
 echo '<p><img src="'. $url .'" height="240px" width="320px" class="m-1 rounded"></p>' . PHP_EOL;
 echo '<h3 class="">'. $fname.'</h3>' . PHP_EOL;
 echo '<p>' .$instrument['detail'].'</p>' . PHP_EOL;
