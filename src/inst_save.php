@@ -10,6 +10,7 @@ $id = (new Instrument)->write($_POST);
 
 $inst_id = $_POST['id'] > 0 ? $_POST['id'] : $id;
 $webp_name = $inst_id . '.webp';
+$width = 480;
 $upload_dir = 'img/instrument/';
 if ($_FILES['imgfile']['size'] > 0){
     $img_file = $_FILES['imgfile']['tmp_name'];
@@ -26,6 +27,7 @@ if ($_FILES['imgfile']['size'] > 0){
     }
     if (isset($img)){
         unlink($webp_file);
+        $img = imagescale($img, $width);
         imagepalettetotruecolor($img);
         imagealphablending($img, true);
         imagesavealpha($img, true);
